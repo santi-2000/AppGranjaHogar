@@ -45,15 +45,15 @@ export default function HomeScreen() {
         </View>
 
         <View className="mb-4">
-          <LinkHome icon={<BoxIcon/>} directory={"/inventary"} text={"Inventario"} />
+          <LinkHome icon={<BoxIcon/>} directory={"/inventory"} text={"Inventario"} />
         </View>
 
         <View className="mb-4">
-          <LinkHome icon={<ClipboardIcon/>} directory={"/inventary"} text={"Reportes"} />
+          <LinkHome icon={<ClipboardIcon/>} directory={"/reports"} text={"Reportes"} />
         </View>
 
         <View className="mb-4">
-          <LinkHome icon={<GridIcon/>} directory={"/inventory"} text={"Catalogo"} />
+          <LinkHome icon={<GridIcon/>} directory={"/catalog"} text={"Catalogo"} />
         </View>
 
         <Link className="mb-5" href="/settings">
