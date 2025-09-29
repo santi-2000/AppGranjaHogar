@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "my-expo-app",
-    "slug": "my-expo-app",
+     "name": "granja-hogar",
+    "slug": "granja-hogar",
+    "scheme": "granja-hogar",
     "version": "1.0.0",
 
     "web": {
@@ -9,10 +10,14 @@
     },
 
     "experiments": {
-      "tsconfigPaths": true
+      "tsconfigPaths": true,
+      "typedRoutes": true,
+      "reactCompiler": true
     },
 
-    "plugins": [],
+    "plugins": [
+      "expo-router"
+    ],
 
     "orientation": "portrait",
     "icon": "./assets/icon.png",
