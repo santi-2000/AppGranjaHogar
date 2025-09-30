@@ -2,22 +2,30 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
 import TitleBar from '../../components/TitleBar';
+import BoxIcon from '../../components/icons/BoxIcon';
+import LinkHome from '../../components/home/LinkHome';
+import UsersIcon from '../../components/icons/UsersIcon';
+import KeyIcon from '../../components/icons/KeyIcon';
+import LogoutIcon from '../../components/icons/LogoutIcon';
 
 export default function SettingsScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Ajustes"} />
 
-      <View className="bg-blue-400 w-90 p-4">
-        <Text className="text-3xl will-change-variable">Ajustes</Text>
+      <View className="p-4">
 
-        <Link className="mb-5" href="/settings/profile">
-          <Text>Mi perfil</Text>
-        </Link>
+        <View className="mb-4">
+          <LinkHome icon={<UsersIcon />} directory={"/settings/manage-users"} text={"Gestión de usuarios"} />
+        </View>
 
-        <Link className="mb-5" href="/settings/manage-users">
-          <Text>Gestión de usuarios</Text>
-        </Link>
+        <View className="mb-4">
+          <LinkHome icon={<KeyIcon />} directory={"/inventory"} text={"Cambiar contraseña"} />
+        </View>
+
+        <View className="mb-4">
+          <LinkHome icon={<LogoutIcon />} directory={"/"} text={"Cerrar sesión"} />
+        </View>
       </View>
     </SafeAreaView>
   );
