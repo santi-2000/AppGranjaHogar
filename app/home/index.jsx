@@ -30,7 +30,7 @@ export default function HomeScreen() {
         </View>
 
         <View className="mb-4">
-          <NotificationsHome icon={<InfoIcon/>}/>
+          <NotificationsHome icon={ <InfoIcon/>} />
         </View>
 
         <View className="flex-row flex-wrap mb-4">

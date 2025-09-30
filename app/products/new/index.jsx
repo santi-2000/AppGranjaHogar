@@ -1,17 +1,15 @@
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
-import TitleBar from '../../components/TitleBar';
+import TitleBar from '../../../components/TitleBar';
 
-export default function InventaryScreen() {
+export default function NewProductScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
-      <TitleBar title={"Inventario"} />
-
-      <View className="bg-white w-full rounded-full">
-        <Text>Buscar producto</Text>
+      <TitleBar title={"Nueva Entrada"} />
+      <View className="p-6">
+        <Text className="text-2xl">new producto</Text>
       </View>
-      
     </SafeAreaView>
   );
 }
