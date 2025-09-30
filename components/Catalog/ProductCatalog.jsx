@@ -1,11 +1,11 @@
 import { Link } from "expo-router";
 import { View, Text, Pressable } from "react-native";
-import ArrowRight from "../icons/ArrowRight";
-import AddIcon from "../icons/AddIcon";
+import ArrowRight from "../Icons/ArrowRight";
+import AddIcon from "../Icons/AddIcon";
 
-import ChevronUpIcon from "../icons/ChevronUpIcon";
-import ChevronDownIcon from "../icons/ChevronDownIcon";
-import TrashIcon from "../icons/TrashIcon";
+import ChevronUpIcon from "../Icons/ChevronUpIcon";
+import ChevronDownIcon from "../Icons/ChevronDownIcon";
+import TrashIcon from "../Icons/TrashIcon";
 
 import { useState } from "react";
 

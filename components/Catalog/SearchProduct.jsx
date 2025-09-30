@@ -1,9 +1,9 @@
 import { Link } from "expo-router";
 import { View, Text, Pressable, TextInput } from "react-native";
-import ArrowRight from "../icons/ArrowRight";
-import AddIcon from "../icons/AddIcon";
-import SearchIcon from '../../components/icons/SearchIcon';
-import CloseIcon from '../../components/icons/CloseIcon';
+import ArrowRight from "../Icons/ArrowRight";
+import AddIcon from "../Icons/AddIcon";
+import SearchIcon from '../../components/Icons/SearchIcon';
+import CloseIcon from '../../components/Icons/CloseIcon';
 
 
 export default function SearchProduct() {

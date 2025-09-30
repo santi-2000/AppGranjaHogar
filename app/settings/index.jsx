@@ -2,11 +2,11 @@ import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
 import TitleBar from '../../components/TitleBar';
-import BoxIcon from '../../components/icons/BoxIcon';
-import LinkHome from '../../components/home/LinkHome';
-import UsersIcon from '../../components/icons/UsersIcon';
-import KeyIcon from '../../components/icons/KeyIcon';
-import LogoutIcon from '../../components/icons/LogoutIcon';
+import BoxIcon from '../../components/Icons/BoxIcon';
+import LinkHome from '../../components/Home/LinkHome';
+import UsersIcon from '../../components/Icons/UsersIcon';
+import KeyIcon from '../../components/Icons/KeyIcon';
+import LogoutIcon from '../../components/Icons/LogoutIcon';
 
 export default function SettingsScreen() {
   return (
