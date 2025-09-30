@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import ArrowRightBarIcon from "./icons/ArrowRighBartIcon";
+import ArrowRightBarIcon from "./Icons/ArrowRighBartIcon";
 import Avatar from "./Profile/Avatar";
 import { useRouter } from "expo-router";
 

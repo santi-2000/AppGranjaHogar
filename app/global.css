@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.border-main {
+    border-color: #D9D9D9;
+}
+
+.bg-button-main {
+    background: #00568F;
+}
