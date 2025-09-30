@@ -1,17 +1,17 @@
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
-import LinkHome from '../../components/home/LinkHome';
-import CreateHome from '../../components/home/CreateHome';
+import LinkHome from '../../components/Home/LinkHome';
+import CreateHome from '../../components/Home/CreateHome';
 import { Svg, Path } from 'react-native-svg'
-import FolderPlusIcon from '../../components/icons/FolderPlusIcon';
-import FolderMinusIcon from '../../components/icons/FolderMinusIcon';
-import { IconCalendar } from '../../components/icons/BoxIcon';
-import BoxIcon from '../../components/icons/BoxIcon';
-import ClipboardIcon from '../../components/icons/ClipboardIcon';
-import GridIcon from '../../components/icons/GridIcon';
-import NotificationsHome from '../../components/home/NotificationsHome';
-import InfoIcon from '../../components/icons/InfoIcon';
+import FolderPlusIcon from '../../components/Icons/FolderPlusIcon';
+import FolderMinusIcon from '../../components/Icons/FolderMinusIcon';
+import { IconCalendar } from '../../components/Icons/BoxIcon';
+import BoxIcon from '../../components/Icons/BoxIcon';
+import ClipboardIcon from '../../components/Icons/ClipboardIcon';
+import GridIcon from '../../components/Icons/GridIcon';
+import NotificationsHome from '../../components/Home/NotificationsHome';
+import InfoIcon from '../../components/Icons/InfoIcon';
 import Avatar from '../../components/Profile/Avatar';
 import React, { useState } from 'react';
 

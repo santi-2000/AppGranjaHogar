@@ -2,7 +2,7 @@ import { Text, View, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
 import TitleBar from '../../components/TitleBar';
-import ArrowRightBarIcon from "../../components/icons/ArrowRighBartIcon";
+import ArrowRightBarIcon from "../../components/Icons/ArrowRighBartIcon";
 
 export default function InventaryScreen() {
   return (
