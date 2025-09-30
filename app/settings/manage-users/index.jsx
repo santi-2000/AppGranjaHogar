@@ -17,11 +17,15 @@ export default function ManageUsersScreen() {
       </View>
 
       <View className="mb-2">
-          <LinkUsers bg={"#25F86D"} width={50} height={50} directory={"/settings/manage-users/1"} text={"Ana Maria"} />
+          <LinkUsers width={50} height={50} directory={"/settings/manage-users/edit-user/0"} text={"Yahir Tapia"} />
+      </View>
+
+      <View className="mb-2">
+          <LinkUsers bg={"#0f8d3dff"} width={50} height={50} directory={"/settings/manage-users/edit-user/1"} text={"Ana Maria"} />
       </View>
     
       <View className="mb-2">
-          <LinkUsers bg={"#25F86D"} width={50} height={50} directory={"/settings/manage-users/1"} text={"Ana Maria"} />
+          <LinkUsers bg={"#4F3A95"} width={50} height={50} directory={"/settings/manage-users/edit-user/2"} text={"Jared Marquez"} />
       </View>
 
     </View>
