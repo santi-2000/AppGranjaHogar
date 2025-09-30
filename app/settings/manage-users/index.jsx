@@ -1,8 +1,8 @@
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import UserPlus from '../../../components/icons/UserPlus';
+import UserPlus from '../../../components/Icons/UserPlus';
 import TitleBar from '../../../components/TitleBar';
-import LinkHome from '../../../components/home/LinkHome';
+import LinkHome from '../../../components/Home/LinkHome';
 import LinkUsers from '../../../components/Users/LinkUsers';
 
 export default function ManageUsersScreen() {

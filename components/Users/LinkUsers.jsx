@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import { Link } from "expo-router";
 import { Svg, Path } from 'react-native-svg'
-import MoreHorizontal from '../icons/MoreHorizontal.jsx';
+import MoreHorizontal from '../Icons/MoreHorizontal.jsx';
 import Avatar from '../Profile/Avatar.jsx';
 
 export default function LinkUsers({ bg, width, height, directory, text, email }) {

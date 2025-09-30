@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { View, Text, Pressable } from "react-native";
-import ArrowRight from "../icons/ArrowRight";
-import AddIcon from "../icons/AddIcon";
+import ArrowRight from "../Icons/ArrowRight";
+import AddIcon from "../Icons/AddIcon";
 
 
 export default function NewProduct() {
