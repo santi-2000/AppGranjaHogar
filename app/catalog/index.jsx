@@ -184,9 +184,6 @@ const DATA = [
   }
 ]
 
-
-
-
 export default function CatalogScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>

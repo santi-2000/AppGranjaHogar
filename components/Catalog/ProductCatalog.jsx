@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { View, Text, Pressable } from "react-native";
 import ArrowRight from "../Icons/ArrowRight";
 import AddIcon from "../Icons/AddIcon";
@@ -12,6 +12,7 @@ import { useState } from "react";
 
 export default function ProductCatalog({ data }) {
     const [isOpen, setIsOpen] = useState()
+    const router = useRouter()
 
     return (
         <Pressable onPress={() => setIsOpen(!isOpen)} className="justify-between items-center" >
@@ -40,7 +41,9 @@ export default function ProductCatalog({ data }) {
                             <Text className="ml-2">Eliminar</Text>
                         </Pressable>
 
-                         <Pressable className="flex-row rounded-2xl bg-[#00568F] px-6 py-3 justify-center items-center">
+                         <Pressable
+                         onPress={() => router.push(`/products/edit/${data.id}`)}
+                         className="flex-row rounded-2xl bg-[#00568F] px-6 py-3 justify-center items-center">
                             <Text className="text-white">Editar</Text>
                         </Pressable>
                     </View>

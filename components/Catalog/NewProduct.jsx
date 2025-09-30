@@ -6,7 +6,7 @@ import AddIcon from "../Icons/AddIcon";
 
 export default function NewProduct() {
     return (
-        <Link className="justify-between items-center " href={"/settings"}>
+        <Link className="justify-between items-center " href={"/products/new"}>
             <View className="py-4 px-3 w-full flex-row justify-between bg-white rounded-2xl items-center">
                 <View className="flex-row items-center">
                     <AddIcon/>

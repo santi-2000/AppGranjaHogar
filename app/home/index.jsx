@@ -63,9 +63,6 @@ export default function HomeScreen() {
           <LinkHome icon={<GridIcon/>} directory={"/catalog"} text={"Catalogo"} />
         </View>
 
-        <Link className="mb-5" href="/settings">
-          <Text>settings</Text>
-        </Link>
       </View>
        </View>
 

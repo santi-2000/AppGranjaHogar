@@ -20,7 +20,7 @@ export default function SettingsScreen() {
         </View>
 
         <View className="mb-4">
-          <LinkHome icon={<KeyIcon />} directory={"/inventory"} text={"Cambiar contraseña"} />
+          <LinkHome icon={<KeyIcon />} directory={"/settings/change-password"} text={"Cambiar contraseña"} />
         </View>
 
         <View className="mb-4">

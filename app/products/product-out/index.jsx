@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import TitleBar from '../../../components/TitleBar';
 import QuantitySectionOut from "../../../components/Products/Out/QuantitySectionOut";
 import DepartamentSectionOut from "../../../components/Products/Out/DepartamentSectionOut";
+import ButtonRounded from "../../../components/Form/ButtonRounded";
 
 export default function OutScreen() {
   return (
@@ -23,14 +24,10 @@ export default function OutScreen() {
         </View>
       </View>
       <View className="px-4 pb-6">
-        <Pressable
-          className="bg-[#00568F] rounded-full py-4"
-          onPress={() => router.push("/reporte")}
-        >
-          <Text className="text-center text-white font-bold text-lg">
-            Registrar
-          </Text>
-        </Pressable>
+        <ButtonRounded
+          text={"Registrar"}
+          action={() => router.push("/reporte")}
+        />
       </View>
     </SafeAreaView>
   );
