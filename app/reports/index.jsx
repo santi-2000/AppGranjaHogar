@@ -1,15 +1,48 @@
-import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from "expo-router";
-import TitleBar from '../../components/TitleBar';
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
+import TitleBar from "../../components/TitleBar";
+import ButtonGreen from "../../components/Buttons/greenButton";
+import ButtonBlue from "../../components/Buttons/blueButton";
+import CalendarCard from "../../components/calendar/CalendarCard";
+import ReportOption from "../../components/ReportOption/ReportOption";
+import Subtitle from "../../components/Text/Text";
 export default function ReportsScreen() {
   return (
-    <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
-      <TitleBar title={"Reportes"} />
-      <View className="bg-blue-400 w-90 p-4">
-        <Text className="text-3xl will-change-variable">Reportes</Text>
+    <SafeAreaView className="flex-1 bg-[#F2F3F5]">
+      <TitleBar title="Reportes"/>
 
+        <Subtitle size={16} color="#666" textAlign="center">
+          Selecciona el periodo de reporte
+        </Subtitle>
+
+      <View className="flex-1 px-4">
+        <CalendarCard />
+        <View className="mt-4">
+          <ReportOption label="Agregar inventario actual" 
+                        style={{marginLeft: 12}}/>
+          <ReportOption label="Agregar salidas de productos" 
+                        style={{marginLeft: 12}}/>
+          <ReportOption label="Agregar entradas de productos" 
+                        style={{marginLeft: 12}}/>
+                        
+        </View>
+
+        <View className="mt-8 space-y-3">
+          <ButtonGreen
+            label="Generar archivo de Excel"
+            className="rounded-full"
+            textSize={18}
+            onPress={() => console.log("Excel generado")}
+          />
+          </View>
+          <View className="mt-2.5">
+          <ButtonBlue
+            label="Generar reporte PDF"
+            className="rounded-full"
+            textSize={18}
+            onPress={() => console.log("PDF generado")}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
