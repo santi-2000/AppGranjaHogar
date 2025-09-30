@@ -10,7 +10,7 @@ export default function LinkUsers({ bg, width, height, directory, text, email })
             <Link href={directory}>
                 <View className="w-full flex-row justify-between items-center">
                     <View className="flex-row items-center">
-                        {Avatar({ title: text[0], bg: bg, width: width, height: height })}
+                        <Avatar title={text[0]} bg={bg} width={width} height={height} directory={directory} />
                         <View className="ml-4">
                         <Text className="mb-1 font-semibold">{text}</Text>
                         <Text className="text-sm text-second">{email}</Text>
