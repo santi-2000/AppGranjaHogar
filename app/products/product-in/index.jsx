@@ -17,7 +17,7 @@ export default function InScreen() {
   const [expirationDate, setExpirationDate] = useState('');
 
   const handleRegister = () => {
-    // Handle registration logic here
+    
     console.log('Registering new entry:', {
       selectedProduct,
       quantityValue,
@@ -32,15 +32,15 @@ export default function InScreen() {
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Nueva Entrada"} />
       
-      <View className="flex-1 px-6">
-        {/* Product Selection Section */}
-        <View className="mb-6">
-          <Text className="text-lg font-medium text-gray-800 mb-3">
+      <View className= "flex-1 px-6">
+        {/*seleccionar producto*/}
+        <View className= "mb-6">
+          <Text className= "text-lg font-medium text-gray-800 mb-3">
             Seleccione un producto
           </Text>
           
-          {/* Product Dropdown */}
-          <View className="bg-white rounded-xl px-4 py-4 mb-3">
+          {/*dropdown*/}
+          <View className= "bg-white rounded-xl px-4 py-4 mb-3">
             <View className="flex-row justify-between items-center">
               <Text className="text-gray-500">
                 {selectedProduct || 'Value'}
@@ -49,7 +49,7 @@ export default function InScreen() {
             </View>
           </View>
           
-          {/* Create New Product Button */}
+          {/*ir a crear nuevo producto*/}
           <Link href="/products/new" asChild>
             <Pressable className="bg-white rounded-xl px-4 py-4 flex-row items-center justify-between">
               <View className="flex-row items-center">
@@ -65,13 +65,13 @@ export default function InScreen() {
           </Link>
         </View>
 
-        {/* Quantity Section */}
+        {/*cantidad*/}
         <View className="bg-white rounded-xl p-4 mb-6">
           <Text className="text-lg font-medium text-gray-800 mb-4">
             Cantidad
           </Text>
           
-          {/* Value Input */}
+          {/*vakor num */}
           <View className="mb-3">
             <TextInput
               className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
@@ -82,7 +82,7 @@ export default function InScreen() {
             />
           </View>
           
-          {/* Unit Dropdown */}
+          {/*unit dropdown */}
           <View className="bg-gray-50 rounded-xl px-4 py-4">
             <View className="flex-row justify-between items-center">
               <Text className="text-gray-500">
@@ -93,7 +93,7 @@ export default function InScreen() {
           </View>
         </View>
 
-        {/* Donation Toggle and Cost Section */}
+        {/* donación */}
         <View className="bg-white rounded-xl p-4 mb-6">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-lg font-medium text-gray-800">
@@ -107,7 +107,7 @@ export default function InScreen() {
             />
           </View>
           
-          {/* Cost Input */}
+          {/* costo */}
           <TextInput
             className={`rounded-xl px-4 py-4 ${
               isDonation ? 'bg-gray-200' : 'bg-gray-50'
@@ -116,11 +116,11 @@ export default function InScreen() {
             placeholderTextColor="#9CA3AF"
             value={cost}
             onChangeText={setCost}
-            editable={!isDonation}
+            editable={isDonation}
           />
         </View>
 
-        {/* Expiration Date Section */}
+        {/* fecha caducidad */}
         <View className="bg-white rounded-xl p-4 mb-8">
           <Text className="text-lg font-medium text-gray-800 mb-4">
             Fecha de caducidad
@@ -135,7 +135,7 @@ export default function InScreen() {
           />
         </View>
 
-        {/* Register Button */}
+        {/* registrar */}
         <View className="mb-6">
           <ButtonRounded 
             action={handleRegister}
