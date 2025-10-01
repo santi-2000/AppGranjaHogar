@@ -7,6 +7,7 @@ import AddIcon from '../../../components/Icons/AddIcon';
 import ChevronDownIcon from '../../../components/Icons/ChevronDownIcon';
 import ArrowRight from '../../../components/Icons/ArrowRight';
 import ButtonRounded from '../../../components/Form/ButtonRounded';
+import UnitDropdown from '../../../components/Products/In/ValueDropdown';
 
 export default function InScreen() {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -29,25 +30,25 @@ export default function InScreen() {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}  edges={['bottom', 'left', 'right']} >
       <TitleBar title={"Nueva Entrada"} />
       
       <View className= "flex-1 px-6">
         {/*seleccionar producto*/}
         <View className= "mb-6">
-          <Text className= "text-lg font-medium text-gray-800 mb-3">
+          <Text className= "text-2xl font-medium text-gray-800 mb-3">
             Seleccione un producto
           </Text>
-          
-          {/*dropdown*/}
-          <View className= "bg-white rounded-xl px-4 py-4 mb-3">
-            <View className="flex-row justify-between items-center">
-              <Text className="text-gray-500">
-                {selectedProduct || 'Value'}
-              </Text>
-              <ChevronDownIcon />
-            </View>
-          </View>
+
+        <View className="bg-white rounded-xl p-4 mb-6">
+        <UnitDropdown
+              selectedValue={selectedProduct}
+              setSelectedValue={setSelectedProduct}
+              options={["Manzana", "Pera", "Naranja", "Arroz", "Frijoles", "Papel Higiénico", "Jabón de manos"]}
+        />
+        </View>
+
+
           
           {/*ir a crear nuevo producto*/}
           <Link href="/products/new" asChild>
@@ -65,33 +66,31 @@ export default function InScreen() {
           </Link>
         </View>
 
-        {/*cantidad*/}
-        <View className="bg-white rounded-xl p-4 mb-6">
-          <Text className="text-lg font-medium text-gray-800 mb-4">
-            Cantidad
-          </Text>
-          
-          {/*vakor num */}
-          <View className="mb-3">
-            <TextInput
-              className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
-              placeholder="Valor"
-              placeholderTextColor="#9CA3AF"
-              value={quantityValue}
-              onChangeText={setQuantityValue}
+        {/* cantidad + unidad en la misma fila */}
+      <View className="bg-white rounded-xl p-4 mb-6">
+         <Text className="text-lg font-medium text-gray-800 mb-4">
+          Cantidad                      Unidad
+        </Text> 
+
+       <View className="flex-row space-x-4 items-center">
+          <TextInput
+            className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
+            placeholder="Valor"
+            placeholderTextColor="#9CA3AF"
+           value={quantityValue}
+           onChangeText={setQuantityValue}
+           keyboardType="numeric"
+             style={{ flex: 0.4 }}
             />
-          </View>
-          
-          {/*unit dropdown */}
-          <View className="bg-gray-50 rounded-xl px-4 py-4">
-            <View className="flex-row justify-between items-center">
-              <Text className="text-gray-500">
-                {selectedUnit || 'Unidad'}
-              </Text>
-              <ChevronDownIcon />
-            </View>
-          </View>
-        </View>
+     <View style={{ flex: 0.6 }}>
+      <UnitDropdown
+        selectedValue={selectedUnit}
+        setSelectedValue={setSelectedUnit}
+        options={["gr", "kg", "ml", "litros", "cajas"]}
+       />
+       </View>
+      </View>
+     </View>
 
         {/* donación */}
         <View className="bg-white rounded-xl p-4 mb-6">
@@ -116,7 +115,7 @@ export default function InScreen() {
             placeholderTextColor="#9CA3AF"
             value={cost}
             onChangeText={setCost}
-            editable={isDonation}
+            editable={!isDonation}
           />
         </View>
 
