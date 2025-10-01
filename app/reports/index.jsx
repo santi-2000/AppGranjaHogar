@@ -1,4 +1,3 @@
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View } from "react-native";
 import TitleBar from "../../components/TitleBar";
@@ -7,16 +6,7 @@ import ButtonBlue from "../../components/Buttons/blueButton";
 import CalendarCard from "../../components/calendar/CalendarCard";
 import ReportOption from "../../components/ReportOption/ReportOption";
 import Subtitle from "../../components/Text/Text";
-
 export default function ReportsScreen() {
-  const [range, setRange] = useState({ start: new Date(2024, 5, 10), end: new Date(2024, 5, 26) });
-  const [includeInventory, setIncludeInventory] = useState(true);
-  const [includeOut, setIncludeOut] = useState(true);
-  const [includeIn, setIncludeIn] = useState(true);
-
-  const onExcel = () => Alert.alert("Excel", "Aquí disparas la generación del archivo de Excel.");
-  const onPdf = () => Alert.alert("PDF", "Aquí disparas la generación del reporte PDF.");
-
   return (
     <SafeAreaView className="flex-1 bg-[#F2F3F5]">
       <TitleBar title="Reportes"/>
@@ -54,7 +44,6 @@ export default function ReportsScreen() {
           />
         </View>
       </View>
-
     </SafeAreaView>
   );
 }
