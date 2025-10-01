@@ -10,7 +10,7 @@ export default function OutScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1, justifyContent: "space-between" }}>
       <View>
-        <TitleBar title={"Nueva Entrada"} />
+        <TitleBar title={"Nueva Salida"} />
 
         <View className="p-4">
           <View className="mb-4">
