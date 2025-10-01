@@ -1,20 +1,25 @@
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
-import LinkHome from '../../components/home/LinkHome';
-import CreateHome from '../../components/home/CreateHome';
+import LinkHome from '../../components/Home/LinkHome';
+import CreateHome from '../../components/Home/CreateHome';
 import { Svg, Path } from 'react-native-svg'
-import FolderPlusIcon from '../../components/icons/FolderPlusIcon';
-import FolderMinusIcon from '../../components/icons/FolderMinusIcon';
-import { IconCalendar } from '../../components/icons/BoxIcon';
-import BoxIcon from '../../components/icons/BoxIcon';
-import ClipboardIcon from '../../components/icons/ClipboardIcon';
-import GridIcon from '../../components/icons/GridIcon';
-import NotificationsHome from '../../components/home/NotificationsHome';
-import InfoIcon from '../../components/icons/InfoIcon';
+import FolderPlusIcon from '../../components/Icons/FolderPlusIcon';
+import FolderMinusIcon from '../../components/Icons/FolderMinusIcon';
+import { IconCalendar } from '../../components/Icons/BoxIcon';
+import BoxIcon from '../../components/Icons/BoxIcon';
+import ClipboardIcon from '../../components/Icons/ClipboardIcon';
+import GridIcon from '../../components/Icons/GridIcon';
+import NotificationsHome from '../../components/Home/NotificationsHome';
+import InfoIcon from '../../components/Icons/InfoIcon';
 import Avatar from '../../components/Profile/Avatar';
+import React, { useState } from 'react';
 
 export default function HomeScreen() {
+  const [isOpen, setIsOpen] = useState(false);
+      const toggleSection = () => {
+      setIsOpen(!isOpen);
+      };
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <View className="w-full flex-1 p-6">
@@ -30,8 +35,9 @@ export default function HomeScreen() {
         </View>
 
         <View className="mb-4">
-          <NotificationsHome icon={<InfoIcon/>}/>
+          <NotificationsHome icon={<InfoIcon/>} isOpen={isOpen} toggleSection={toggleSection}/>
         </View>
+       <View className={`${isOpen ? 'hidden' : ''}`}>
 
         <View className="flex-row flex-wrap mb-4">
           <View className="w-1/2 pr-2">
@@ -41,6 +47,7 @@ export default function HomeScreen() {
           <View className="w-1/2 pl-2">
             <CreateHome icon={<FolderMinusIcon />} directory={"/products/product-out"} text={"Nueva Salida"} />
           </View>
+
 
         </View>
 
@@ -56,10 +63,9 @@ export default function HomeScreen() {
           <LinkHome icon={<GridIcon/>} directory={"/catalog"} text={"Catalogo"} />
         </View>
 
-        <Link className="mb-5" href="/settings">
-          <Text>settings</Text>
-        </Link>
       </View>
+       </View>
+
     </SafeAreaView>
   );
 }

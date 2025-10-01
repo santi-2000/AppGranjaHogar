@@ -1,7 +1,7 @@
 import { Text, View } from 'react-native';
 import { Link } from "expo-router";
 import { Svg, Path } from 'react-native-svg'
-import ArrowRight from '../icons/ArrowRight';
+import ArrowRight from '../Icons/ArrowRight';
 
 export default function LinkHome({ icon, directory, text }) {
     return (
