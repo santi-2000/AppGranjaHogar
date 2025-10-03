@@ -4,6 +4,7 @@ import TitleBar from '../../../../components/TitleBar';
 import ValueSection from "../../../../components/Products/ProductEditCreat/value";
 import PerishableSection from "../../../../components/Products/ProductEditCreat/Perishable";
 import Categorysection from "../../../../components/Products/ProductEditCreat/Category";
+import StockSection from "../../../../components/Products/ProductEditCreat/Stock";
 import UnirSection from "../../../../components/Products/ProductEditCreat/PosisibleUnits";
 import ButtonRounded from "../../../../components/Form/ButtonRounded";
 
@@ -20,6 +21,7 @@ export default function EditProductScreen() {
         <PerishableSection />
         <Categorysection />
         <UnirSection />
+        <StockSection />
         <View className="mt-8">
           <ButtonRounded text="Guardar cambios" action={() => { }} />
         </View>
