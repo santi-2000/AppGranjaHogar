@@ -4,10 +4,10 @@ import { Link } from "expo-router";
 import { useState } from 'react';
 import TitleBar from '../../../components/TitleBar';
 import AddIcon from '../../../components/Icons/AddIcon';
-import ChevronDownIcon from '../../../components/Icons/ChevronDownIcon';
 import ArrowRight from '../../../components/Icons/ArrowRight';
 import ButtonRounded from '../../../components/Form/ButtonRounded';
 import UnitDropdown from '../../../components/Products/In/ValueDropdown';
+import SearchableDropdown from '../../../components/Products/In/SearchableDropdown';
 
 export default function InScreen() {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -36,19 +36,25 @@ export default function InScreen() {
       <View className= "flex-1 px-6">
         {/*seleccionar producto*/}
         <View className= "mb-6">
-          <Text className= "text-2xl font-medium text-gray-800 mb-3">
-            Seleccione un producto
-          </Text>
-
-        <View className="bg-white rounded-xl p-4 mb-6">
-        <UnitDropdown
-              selectedValue={selectedProduct}
-              setSelectedValue={setSelectedProduct}
-              options={["Manzana", "Pera", "Naranja", "Arroz", "Frijoles", "Papel Higiénico", "Jabón de manos"]}
-        />
-        </View>
-
-
+            <View className="bg-white rounded-xl p-4 mb-6">
+              <Text className= "text-2xl font-medium text-gray-800 mb-3">
+                Seleccione un producto:
+                </Text>              
+              <SearchableDropdown
+                selectedValue={selectedProduct}
+                setSelectedValue={setSelectedProduct}
+                options={[
+                  "Manzana",
+                  "Pera",
+                  "Platano",
+                  "Naranja",
+                  "Arroz",
+                  "Frijoles",
+                  "Papel Higiénico",
+                  "Jabón de manos"
+                  ]}
+                  />
+            </View>
           
           {/*ir a crear nuevo producto*/}
           <Link href="/products/new" asChild>
@@ -66,7 +72,7 @@ export default function InScreen() {
           </Link>
         </View>
 
-        {/* cantidad + unidad en la misma fila */}
+        {/* cantidad y unidaad */}
       <View className="bg-white rounded-xl p-4 mb-6">
          <Text className="text-lg font-medium text-gray-800 mb-4">
           Cantidad                      Unidad
