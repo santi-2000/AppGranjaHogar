@@ -6,3 +6,5 @@ export class ProductCatalogVO {
         this.unit = dbProduct.unit_id;
     }
 }
+
+

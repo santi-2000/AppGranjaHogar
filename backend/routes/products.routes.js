@@ -1,10 +1,12 @@
 import { Router } from "express"
 import { check, param } from "express-validator" 
-import { getCatalog, createProduct, deleteProduct } from "../controllers/products.controller.js"
+import { getCatalog, getProductQuantity, getInventory, createProduct, deleteProduct } from "../controllers/products.controller.js"
 
 const router = Router()
 
 router.get("/catalog", getCatalog)
+router.get("/inventory", getInventory)
+router.get("/:id/quantity", [param('id').isInt().withMessage('ID must be a number')], getProductQuantity)
 
 router.post("/create", [
     check("category_id", "Category ID debería ser un número").isNumeric(),

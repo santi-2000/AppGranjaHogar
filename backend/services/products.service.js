@@ -1,6 +1,8 @@
 import db from "../models/index.js"
-import { getCatalogModel, createProductModel, deleteProductModel } from "../models/products.model.js";
+import { getCatalogModel, getProductQuantityModel, getInventoryModel, createProductModel, deleteProductModel } from "../models/products.model.js";
 import { ProductCatalogVO } from "../valueObjects/products/productCatalog.vo.js";
+import { ProductQuantityVO } from "../valueObjects/products/ProductQuantity.vo.js";
+import { ProductInventoryVO } from "../valueObjects/products/ProductInventory.vo.js";
 import { ProductVO } from "../valueObjects/products/product.vo.js";
 
 export const getCatalogService = async () => {
@@ -11,6 +13,23 @@ export const getCatalogService = async () => {
     
     return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
 }
+
+export const getProductQuantityService = async (id) => {
+    const product = await getProductQuantityModel(id);
+    
+    if (!product) {
+        throw new Error('Product not found');
+    }
+    
+    return new ProductQuantityVO(product);
+}
+
+export const getInventoryService = async () => {
+    const products = await getInventoryModel();
+    
+    return products.map(product => new ProductInventoryVO(product));
+}
+
 
 export const createProductService = async (category_id, unit_id, name, perishable, min_stock, max_stock) => {
     const [ result ] = await createProductModel(category_id, unit_id, name, perishable, min_stock, max_stock)
