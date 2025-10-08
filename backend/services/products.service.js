@@ -1,10 +1,13 @@
-import { CatalogVO } from "../valueObjects/products.vo.js"
 import db from "../models/index.js"
 import { getCatalogModel } from "../models/products.model.js";
+import { ProductCatalogVO } from "../valueObjects/products/ProductCatalog.vo.js";
 
 export const getCatalogService = async () => {
     const [ rows ] = await getCatalogModel()
-    const catalog = new CatalogVO([ rows ]);
 
-    return catalog;
+    if (!rows || !Array.isArray(rows)) {
+        return [];
+    }
+    
+    return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
 }
