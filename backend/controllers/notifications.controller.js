@@ -1,17 +1,17 @@
-const notificationService = require('../services/notification.service');
+import { addNotificationService, getNotificationsService, getNotificationByIdService,  } from '../services/notifications.service.js';
 
-const createNotification = async (req, res) => {
+export const createNotification = async (req, res) => {
     try {
-        const newNotification = await notificationService.addNotification(req.body);
+        const newNotification = await addNotificationService(req.body);
         res.status(201).json(newNotification);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-const getNotifications = async (req, res) => {
+export const getNotifications = async (req, res) => {
     try {
-        const notifications = await notificationService.getNotifications();
+        const notifications = await getNotificationsService();
         res.json(notifications);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener las notificaciones.' });
@@ -19,10 +19,10 @@ const getNotifications = async (req, res) => {
 
 };
 
-const getNotificationById = async (req, res) => {
+export const getNotificationById = async (req, res) => {
     try {
         const { id } = req.params;
-        const notification = await notificationService.getNotificationById(id);
+        const notification = await getNotificationByIdService(id);
         res.json(notification);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -30,19 +30,13 @@ const getNotificationById = async (req, res) => {
 
 };
 
-const deleteNotification = async (req, res) => {
+export const deleteNotification = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await notificationService.removeNotification(id);
+        const result = await removeNotificationService(id);
         res.json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-module.exports = {
-    createNotification,
-    getNotifications,
-    getNotificationById,
-    deleteNotification
-};
