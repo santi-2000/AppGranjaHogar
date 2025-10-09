@@ -1,7 +1,7 @@
 import db from "./index.js";
 
 //CREATE
-const createNotifications = async (data) => {
+export const createNotificationModel = async (data) => {
     const { product_id, product_entry_id, content, notification_type } = data;
     const [result] = await db.query(
         'INSERT INTO notifications (product_id, product_entry_id, content, notification_type, created_at) VALUES (?, ?, ?, ?, NOW());',
@@ -11,7 +11,7 @@ const createNotifications = async (data) => {
 };
 
 //READ ALL
-const getAllNotifications = async () => {
+export const getAllNotificationsModel = async () => {
     const [rows] = await db.query(
         'SELECT n.* , p.name AS product_name FROM notifications n LEFT JOIN products p on n.product_id = p.id ORDER BY n.created_at DESC;'
     );
@@ -19,7 +19,7 @@ const getAllNotifications = async () => {
 };
 
 //READ ONE
-const getNotificationById = async (id) => {
+export const getNotificationByIdModel = async (id) => {
     const [rows] = await db.query(
         'SELECT * FROM notifications WHERE id = ?;', [id]
     );
@@ -27,16 +27,10 @@ const getNotificationById = async (id) => {
 };
 
 //DELETE
-const deleteNotificationById = async (id) => {
+export const deleteNotificationByIdModel = async (id) => {
     const [result] = await db.query(
         'DELETE FROM notifications WHERE id = ?;', [id]
     );
     return result.affectedRows;
 };
 
-module.exports = {
-    createNotifications,
-    getAllNotifications,
-    getNotificationById,
-    deleteNotificationById
-};
