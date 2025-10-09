@@ -1,4 +1,5 @@
 import { ProductOutModel } from "../models/productOuts.model.js";
+import { ProductOutVO } from "../valueObjects/products/productOuts.vo.js";
 
 export const ProductOutService = {
   async getAll() {
