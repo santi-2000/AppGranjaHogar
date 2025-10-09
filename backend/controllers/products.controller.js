@@ -1,4 +1,4 @@
-import { getCatalogService, getProductQuantityService, getInventoryService} from "../services/products.service.js";
+import { getCatalogService, getProductQuantityService, getInventoryService, createProductService, deleteProductService } from "../services/products.service.js";
 import { validationResult } from 'express-validator'
 
 export const getCatalog = async (req, res) => {
