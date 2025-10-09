@@ -58,6 +58,3 @@ export const deleteProductService = async (id) => {
 
     return { success: true, message: "Product deleted successfully" };
 }
-
-
-
