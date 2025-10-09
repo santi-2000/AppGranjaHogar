@@ -4,6 +4,20 @@ export const postReportInventoryModel = async () => {
     return await db.query('SELECT * FROM products');
 }
 
+export const postReportModel = async (userId, initialDate, endDate) => {
+    const sql = `
+    INSERT INTO reports (user_id, initial_date, end_date) VALUES (?, ?, ?);
+    `
+    return await db.query(sql, [userId, initialDate, endDate]);
+}
+
+export const postReportIncludeModel = async (reportId, includeId) => {
+    const sql = `
+    INSERT INTO report_includes (report_id, include_id) VALUES (?, ?);
+    `
+    return await db.query(sql, [reportId, includeId]);
+}
+
 
 export const postReportOutsModel = async (initialDate, endDate) => {
     const sql = `

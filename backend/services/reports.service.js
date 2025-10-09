@@ -1,11 +1,11 @@
 import PDFDocument from "pdfkit"
 import ExcelJS from "exceljs"
-import { postReportEntriesModel, postReportInventoryModel, postReportOutsModel } from "../models/reports.model.js";
+import { postReportEntriesModel, postReportIncludeModel, postReportInventoryModel, postReportModel, postReportOutsModel } from "../models/reports.model.js";
 import { ProductReportVO } from "../valueObjects/reports/productReport.vo.js";
 import { ProductEntrieReportVO } from "../valueObjects/reports/productEntrieReport.vo.js";
 import { ProductOutReportVO } from "../valueObjects/reports/productOutReport.vo.js";
 
-export const postReportXLSXService = async (initialDate, endDate, type, res) => {
+export const postReportXLSXService = async (res, userId, initialDate, endDate, type) => {
 
     res.setHeader(
         'Content-Type',
@@ -15,6 +15,7 @@ export const postReportXLSXService = async (initialDate, endDate, type, res) => 
         'Content-Disposition',
         'attachment; filename=' + `${initialDate}to${endDate}.xlsx`
     );
+
     const workbook = new ExcelJS.Workbook();
 
     if (type.includes(1)) {
@@ -151,10 +152,17 @@ export const postReportXLSXService = async (initialDate, endDate, type, res) => 
 
     await workbook.xlsx.write(res);
 
+    const [report] = await postReportModel(userId, initialDate, endDate);
+
+
+    if (type.includes(1)) await postReportIncludeModel(report.insertId, 1);
+    if (type.includes(2)) await postReportIncludeModel(report.insertId, 2);
+    if (type.includes(3)) await postReportIncludeModel(report.insertId, 3);
+
     return res.end();
 }
 
-export const postReportPDFService = async (res, initialDate, endDate, type) => {
+export const postReportPDFService = async (res, userId, initialDate, endDate, type) => {
     const doc = new PDFDocument({ size: 'LETTER', margin: 50 });
     doc.pipe(res);
     res.setHeader('Content-Type', 'application/pdf');
@@ -273,6 +281,13 @@ export const postReportPDFService = async (res, initialDate, endDate, type) => {
             data: inventory
         });
     }
+    
+    const [report] = await postReportModel(userId, initialDate, endDate);
+
+
+    if (type.includes(1)) await postReportIncludeModel(report.insertId, 1);
+    if (type.includes(2)) await postReportIncludeModel(report.insertId, 2);
+    if (type.includes(3)) await postReportIncludeModel(report.insertId, 3);
 
     return doc.end();
 }

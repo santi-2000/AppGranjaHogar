@@ -8,3 +8,5 @@ export class ProductCatalogVO {
         Object.freeze(this);
     }
 }
+
+

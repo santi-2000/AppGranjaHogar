@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator'
 import { postReportPDFService, postReportXLSXService } from "../services/reports.service.js";
+import db from "../models/index.js"
 
 export const postReportXLSX = async (req, res) => {
   try {
@@ -8,8 +9,8 @@ export const postReportXLSX = async (req, res) => {
     if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
 
     const { initialDate, endDate, type } = req.body;
-
-    await postReportXLSXService(initialDate, endDate, type, res);
+    
+    await postReportXLSXService(res, 1, initialDate, endDate, type);
 
   } catch (error) {
     console.log(error);
@@ -25,7 +26,7 @@ export const postReportPDF = async (req, res) => {
 
     const { initialDate, endDate, type } = req.body;
 
-    await postReportPDFService(res, initialDate, endDate, type)
+    await postReportPDFService(res, 1, initialDate, endDate, type)
 
   } catch (error) {
     console.log(error);
