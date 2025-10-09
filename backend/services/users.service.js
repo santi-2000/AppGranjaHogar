@@ -2,9 +2,10 @@ import bcrypt from "bcryptjs";
 import { UsersModel } from "../models/users.model.js";
 import { Password } from "../valueObjects/users/Password.js";
 
-export const createUserService = async ({ name, last_name, password }) => {
+export const createUserService = async ({ name, last_name, username, password }) => {
   const cleanName = String(name ?? "").trim();
   const cleanLast = String(last_name ?? "").trim();
+  const cleanUser = String(username ?? "").trim();
 
   if (!cleanName || cleanName.length < 2) {
     const e = new Error("name mínimo 2 caracteres");
@@ -25,6 +26,7 @@ export const createUserService = async ({ name, last_name, password }) => {
   const created = await UsersModel.create({
     name: cleanName,
     last_name: cleanLast,
+    username: cleanUser,
     passwordHash
   });
 

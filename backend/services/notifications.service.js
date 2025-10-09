@@ -1,4 +1,4 @@
-import NotificationVO from '../valueObjects/notification.vo.js';
+import NotificationVO from '../valueObjects/notifications/notification.vo.js';
 import { createNotificationModel, getAllNotificationsModel, getNotificationByIdModel, deleteNotificationByIdModel } from '../models/notifications.model.js';
 
 export const addNotificationService = async (data) => {
@@ -15,7 +15,7 @@ export const addNotificationService = async (data) => {
 
 export const getNotificationsService = async () => {
     const rows = await getAllNotificationsModel();
-    return data.map(n => new NotificationVO(
+    return rows.map(n => new NotificationVO(
         n.id,
         n.product_id,
         n.product_entry_id,
@@ -33,8 +33,8 @@ export const getNotificationByIdService = async (id) => {
 };
 
 export const removeNotificationService = async (id) => {
-    const affectedRows = await deleteNotificationModel(id);
-    if (!affected) throw new Error('Notificación no encontrada o ya eliminada.');
+    const affectedRows = await deleteNotificationByIdModel(id);
+    if (!affectedRows) throw new Error('Notificación no encontrada o ya eliminada.');
     return { message: 'Notificación eliminada exitosamente.' };
 };
 
