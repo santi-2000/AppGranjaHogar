@@ -19,6 +19,6 @@ export const createProductModel = async (category_id, unit_id, name, perishable,
 }
 
 export const deleteProductModel = async (id) => {
-    const sql = 'DELETE FROM products WHERE id = ?';
+    const sql = 'UPDATE products SET deleted_at = CURRENT_TIMESTAMP, is_active = FALSE WHERE id = ?';
     return await db.query(sql, [id]);
 }  
