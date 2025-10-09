@@ -9,5 +9,15 @@ export const UsersModel = {
     const params = [name, username, last_name, passwordHash];
     const [result] = await db.query(sql, params);
     return result;
+  },
+
+  async delete(id) {
+    const sql = `DELETE FROM users WHERE id = ?`;
+    const [result] = await db.query(sql, [id]);
+    return result;
+  },
+
+  async logout() {
+    return { success: true };
   }
 };

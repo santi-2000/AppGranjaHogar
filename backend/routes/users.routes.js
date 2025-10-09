@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { body } from "express-validator";
-import { createUser } from "../controllers/users.controller.js";
+import { body, param } from "express-validator";
+import { createUser, deleteUser, logoutUser } from "../controllers/users.controller.js";
 
 const router = Router();
 
@@ -13,5 +13,15 @@ router.post(
   ],
   createUser
 );
+
+router.delete(
+  "/:id",
+  [
+    param("id").isInt().withMessage("ID debe ser un número entero")
+  ],
+  deleteUser
+);
+
+router.post("/logout", logoutUser);
 
 export default router;
