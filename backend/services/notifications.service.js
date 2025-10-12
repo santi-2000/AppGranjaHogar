@@ -1,8 +1,8 @@
-const NotificationVO = require('../valueObjects/notifications.vo');
-const notificationsModel = require('../models/notifications.model');
+import NotificationVO from '../valueObjects/notifications/notification.vo.js';
+import { createNotificationModel, getAllNotificationsModel, getNotificationByIdModel, deleteNotificationByIdModel } from '../models/notifications.model.js';
 
-const addNotification = async (data) => {
-    const id = await notificationsModel.createNotification(data);
+export const addNotificationService = async (data) => {
+    const id = await createNotificationModel(data);
     return new NotificationVO(
         id,
         data.product_id,
@@ -13,9 +13,9 @@ const addNotification = async (data) => {
     );
 };
 
-const getNotifications = async () => {
-    const rows = await notificationModel.getAllNotifications();
-    return data.map(n => new NotificationVO(
+export const getNotificationsService = async () => {
+    const rows = await getAllNotificationsModel();
+    return rows.map(n => new NotificationVO(
         n.id,
         n.product_id,
         n.product_entry_id,
@@ -26,21 +26,15 @@ const getNotifications = async () => {
     ));
 };
 
-const getNotificationById = async (id) => {
-    const row = await notificationsModel.getNotificationById(id);
+export const getNotificationByIdService = async (id) => {
+    const row = await getNotificationByIdModel(id);
     if (!row) throw new Error('Notificación no encontrada.');
     return new NotificationVO(row.id, row.product_id, row.product_entry_id, row.content, row.notification_type, row.created_at);
 };
 
-const removeNotification = async (id) => {
-    const affectedRows = await notificationsModel.deleteNotification(id);
-    if (!affected) throw new Error('Notificación no encontrada o ya eliminada.');
+export const removeNotificationService = async (id) => {
+    const affectedRows = await deleteNotificationByIdModel(id);
+    if (!affectedRows) throw new Error('Notificación no encontrada o ya eliminada.');
     return { message: 'Notificación eliminada exitosamente.' };
 };
 
-module.exports = {
-    addNotification,
-    getNotifications,
-    getNotificationById,
-    removeNotification
-};

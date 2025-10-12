@@ -5,8 +5,6 @@ import { getCatalog, getProductQuantity, getInventory, createProduct, deleteProd
 const router = Router()
 
 router.get("/catalog", getCatalog)
-router.get("/inventory", getInventory)
-router.get("/:id/quantity", [param('id').isInt().withMessage('ID must be a number')], getProductQuantity)
 
 router.post("/create", [
     check("category_id", "Category ID debería ser un número").isNumeric(),
@@ -20,5 +18,7 @@ router.post("/create", [
 router.delete("/delete/:id", [
     param("id", "Product ID debería ser un número").isNumeric()
 ], deleteProduct)   
+router.get("/inventory", getInventory)
+router.get("/:id/quantity", [param('id').isInt().withMessage('ID must be a number')], getProductQuantity)
 
 export default router

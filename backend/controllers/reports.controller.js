@@ -5,8 +5,8 @@ import db from "../models/index.js"
 export const postReportXLSX = async (req, res) => {
   try {
     let result = validationResult(req);
+    if (result.errors.length > 0) throw new BadRequestError(result);
 
-    if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
 
     const { initialDate, endDate, type } = req.body;
     
