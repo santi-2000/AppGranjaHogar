@@ -7,8 +7,8 @@ export const UpdateProduct = async (req, res) => {
       
       try {
     
-        const user = await ProductEditService(req.body);
-        return res.status(201).json({ ok: true, message: "Producto actualizado", user });
+        const product = await ProductEditService(req.body, req.params.id);
+        return res.status(201).json({ ok: true, message: "Producto actualizado", product });
     
       } catch (err) {
     
