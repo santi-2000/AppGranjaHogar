@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { ProductEditService } from "../services/productEdit.service";
+import { ProductEditService } from "../services/productEdit.service.js";
 
 export const UpdateProduct = async (req, res) => {
     const errors = validationResult(req);

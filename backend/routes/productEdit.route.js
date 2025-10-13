@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { check, param } from "express-validator"
-import { UpdateProduct } from "../controllers/productEdit.controller"
+import { UpdateProduct } from "../controllers/productEdit.controller.js"
 
 const router = Router()
 
