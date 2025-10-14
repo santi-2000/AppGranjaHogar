@@ -1,8 +1,18 @@
 import { Router } from "express";
-import { body } from "express-validator";
-import { createUser } from "../controllers/users.controller.js";
+import { body,check } from "express-validator";
+import { createUser, postLogin, postLogout } from "../controllers/users.controller.js";
 
 const router = Router();
+
+router.post("/login",[
+    check("username").isLength().withMessage("El username no es válido"),
+    check("password").isLength({min:8}).withMessage("La contraseña debe tener al menos 8 caracteres"),
+    check("username").notEmpty().withMessage("El username es requerido"),
+    check("password").notEmpty().withMessage("La contraseña es requerida"),
+
+], postLogin)
+
+router.post("/logout", postLogout)
 
 router.post(
   "/nuevo",
