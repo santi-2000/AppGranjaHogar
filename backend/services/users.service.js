@@ -1,6 +1,20 @@
 import bcrypt from "bcryptjs";
-import { UsersModel } from "../models/users.model.js";
+import { loginModel, UsersModel } from "../models/users.model.js";
 import { Password } from "../valueObjects/users/Password.js";
+import { BadRequestError } from "../utils/error.util.js";
+import jwt from 'jsonwebtoken'
+
+
+export const loginService = async (req) => {
+  const [rowsUsername] = await loginModel(req.body.username);
+    if (rowsUsername.length === 0) throw new BadRequestError("Datos Incorrectos");
+
+    const validationPassword = await bcrypt.compare(req.body.password, rowsUsername[0].password_hash)
+    if (!validationPassword) throw new BadRequestError("Contraseña incorrecta");
+
+    const token = jwt.sign({ id: rowsUsername[0].id }, process.env.SESSION_PASSWORD, { expiresIn: "365d" });
+    req.session.token = token;
+}
 
 export const createUserService = async ({ name, last_name, username, password }) => {
   const cleanName = String(name ?? "").trim();

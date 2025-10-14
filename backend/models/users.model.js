@@ -1,5 +1,10 @@
 import db from "../models/index.js"
 
+export const loginModel = async (username) => {
+    const sql = `SELECT * FROM users WHERE username = ?`
+    return await db.query(sql, [username]);
+}
+
 export const UsersModel = {
   async create({ name, last_name, username, passwordHash }) {
     const sql = `
