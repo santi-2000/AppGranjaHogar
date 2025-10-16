@@ -44,7 +44,3 @@ export const deleteUserService = async (id) => {
   
   return { message: "Usuario eliminado exitosamente" };
 };
-
-export const logoutUserService = async () => {
-  return { message: "Sesión cerrada exitosamente" };
-};

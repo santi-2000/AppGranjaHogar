@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
-import { createUser, deleteUser, logoutUser } from "../controllers/users.controller.js";
+import { createUser, deleteUser } from "../controllers/users.controller.js";
 
 const router = Router();
 
@@ -21,7 +21,4 @@ router.delete(
   ],
   deleteUser
 );
-
-router.post("/logout", logoutUser);
-
 export default router;

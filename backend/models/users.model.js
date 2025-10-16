@@ -12,12 +12,9 @@ export const UsersModel = {
   },
 
   async delete(id) {
-    const sql = `DELETE FROM users WHERE id = ?`;
+    const sql = `UPDATE users SET is_active = FALSE WHERE id = ? AND is_active = TRUE`;
     const [result] = await db.query(sql, [id]);
     return result;
   },
-
-  async logout() {
-    return { success: true };
-  }
+  
 };
