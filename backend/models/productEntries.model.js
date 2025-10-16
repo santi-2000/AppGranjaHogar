@@ -32,7 +32,18 @@ export class ProductEntriesModel {
   }
 
   static async getById(id) {
-    const [rows] = await db.query("SELECT * FROM product_entries WHERE id = ?", [id]);
-    return rows[0];
+    const [rows] = await db.query(`
+    SELECT 
+      pe.*, 
+      p.name AS product_name, 
+      u.name AS unit_name
+    FROM product_entries pe
+    JOIN products p ON pe.product_id = p.id
+    JOIN units u ON pe.unit_id = u.id
+    WHERE pe.id = ?
+    `,
+    [id]
+  );
+  return rows[0];
   }
 }

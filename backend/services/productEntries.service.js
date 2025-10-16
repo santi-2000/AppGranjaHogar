@@ -1,9 +1,9 @@
-import { productEntryVO } from "../valueObjects/products/productEntry.vo.js";
-import { productEntriesModel } from "../models/productEntries.model.js";
+import { ProductEntryVO } from "../valueObjects/products/productEntries.vo.js";
+import { ProductEntriesModel } from "../models/productEntries.model.js";
 
 export class ProductEntriesService {
   static async create(data) {
-    const entryVO = new ProductEntryVO(data); //valida y normaliza
+    const entryVO = new ProductEntryVO(data);
     const id = await ProductEntriesModel.create(entryVO);
     return { id, ...entryVO };
   }
