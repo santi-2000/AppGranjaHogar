@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body,check } from "express-validator";
-import { createUser, postLogin, postLogout } from "../controllers/users.controller.js";
+import { createUser, postLogin, postLogout, updatePassword } from "../controllers/users.controller.js";
 
 const router = Router();
 
@@ -25,5 +25,14 @@ router.post(
   createUser
 );
 
+router.put(
+  "/update-password",
+  [
+    body("currentPassword").isString().notEmpty().withMessage("La contraseña actual es requerida"),
+    body("newPassword").isString().isLength({ min: 8 }).withMessage("La nueva contraseña debe tener al menos 8 caracteres"),
+    body("confirmPassword").isString().notEmpty().withMessage("La confirmación de contraseña es requerida")
+  ],
+  updatePassword
+);
 
 export default router;
