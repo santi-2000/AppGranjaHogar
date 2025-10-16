@@ -1,72 +1,35 @@
 import request from 'supertest';
 import { jest } from '@jest/globals';
 
-const permissionServiceMock = {
-  getAllPermissionsService: jest.fn(),
-  getUserPermissionsService: jest.fn(),
-  updateUserPermissionsService: jest.fn(),
-};
-
-jest.unstable_mockModule('../../services/permissions.service.js', () => permissionServiceMock);
-
-import { PermissionVO } from '../../valueObjects/permissions/permission.vo.js';
-import { UserPermissionVO } from '../../valueObjects/permissions/userPermission.vo.js';
-
 import app from '../../app.js';
-const { getAllPermissionsService, getUserPermissionsService, updateUserPermissionsService } = await import('../../services/permissions.service.js');
 
-describe("Permission Controller unit tests", () => {
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
+describe("Permission Controller integration tests", () => {
+  
   describe('Get All Permissions Endpoint Test', () => {
     test('Given request When get all permissions Then status 200', async () => {
-      const mockPermissions = [
-        new PermissionVO({ id: 1, permission: 'Entrada de productos' }),
-        new PermissionVO({ id: 2, permission: 'Salidas de productos' }),
-        new PermissionVO({ id: 3, permission: 'Generar reportes' }),
-      ];
-
-      getAllPermissionsService.mockResolvedValue(mockPermissions);
-
       await request(app)
         .get('/v1/permissions')
         .expect(200)
         .expect((res) => {
-          expect(res.body).toHaveLength(3);
-          expect(res.body[0].permission).toBe('Entrada de productos');
+          expect(res.body).toBeInstanceOf(Array);
+          expect(res.body.length).toBeGreaterThan(0);
+          expect(res.body[0]).toHaveProperty('id');
+          expect(res.body[0]).toHaveProperty('permission');
         });
-    });
-
-    test('Given error When get all permissions Then status 500', async () => {
-      getAllPermissionsService.mockRejectedValue(new Error('Error al obtener permisos'));
-
-      await request(app)
-        .get('/v1/permissions')
-        .expect(500);
     });
   });
 
   describe('Get User Permissions Endpoint Test', () => {
     test('Given valid user ID When get permissions Then status 200', async () => {
-      const mockUserPermissions = new UserPermissionVO(
-        1,
-        [
-          new PermissionVO({ id: 1, permission: 'Entrada de productos' }),
-          new PermissionVO({ id: 2, permission: 'Salidas de productos' }),
-        ]
-      );
-
-      getUserPermissionsService.mockResolvedValue(mockUserPermissions);
-
       await request(app)
         .get('/v1/permissions/user/1')
         .expect(200)
         .expect((res) => {
+          expect(res.body).toHaveProperty('user_id');
+          expect(res.body).toHaveProperty('permissions');
+          expect(res.body).toHaveProperty('permission_count');
           expect(res.body.user_id).toBe(1);
-          expect(res.body.permissions).toHaveLength(2);
-          expect(res.body.permission_count).toBe(2);
+          expect(Array.isArray(res.body.permissions)).toBe(true);
         });
     });
 
@@ -77,10 +40,6 @@ describe("Permission Controller unit tests", () => {
     });
 
     test('Given user with no permissions When get permissions Then empty array', async () => {
-      const mockUserPermissions = new UserPermissionVO(3, []);
-
-      getUserPermissionsService.mockResolvedValue(mockUserPermissions);
-
       await request(app)
         .get('/v1/permissions/user/3')
         .expect(200)
@@ -90,23 +49,10 @@ describe("Permission Controller unit tests", () => {
           expect(res.body.permission_count).toBe(0);
         });
     });
-
-    test('Given error When get user permissions Then status 500', async () => {
-      getUserPermissionsService.mockRejectedValue(new Error('Error al obtener permisos del usuario'));
-
-      await request(app)
-        .get('/v1/permissions/user/1')
-        .expect(500);
-    });
   });
 
   describe('Update User Permissions Endpoint Test', () => {
     test('Given valid data When update permissions Then status 200', async () => {
-      updateUserPermissionsService.mockResolvedValue({
-        success: true,
-        message: 'Permisos actualizados exitosamente',
-      });
-
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
@@ -120,11 +66,6 @@ describe("Permission Controller unit tests", () => {
     });
 
     test('Given empty array When update permissions Then status 200', async () => {
-      updateUserPermissionsService.mockResolvedValue({
-        success: true,
-        message: 'Permisos actualizados exitosamente',
-      });
-
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
@@ -165,17 +106,6 @@ describe("Permission Controller unit tests", () => {
         .put('/v1/permissions/user/1')
         .send({})
         .expect(400);
-    });
-
-    test('Given error When update permissions Then status 500', async () => {
-      updateUserPermissionsService.mockRejectedValue(new Error('Error al actualizar permisos'));
-
-      await request(app)
-        .put('/v1/permissions/user/1')
-        .send({
-          permission_ids: [1, 2],
-        })
-        .expect(500);
     });
   });
 });

@@ -17,11 +17,10 @@ router.get("/user/:user_id", [
 router.put("/user/:user_id", [
     param("user_id", "User ID debe ser un número").isNumeric(),
     body("permission_ids", "Permission IDs debe ser un array")
-        .isArray()
-        .optional({ nullable: true }),
+        .exists().withMessage("Permission IDs es requerido")
+        .isArray().withMessage("Permission IDs debe ser un array"),
     body("permission_ids.*", "Cada Permission ID debe ser un número")
-        .isNumeric()
-        .optional()
+        .isNumeric().withMessage("Cada Permission ID debe ser un número")
 ], updateUserPermissions);
 
 export default router;
