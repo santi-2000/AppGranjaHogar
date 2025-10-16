@@ -18,18 +18,6 @@ export const ProductOutModel = {
        VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
       [user_id, product_id, reason_id, department_id, unit_id, quantity, notes]
     );
-    return result.insertId;
-  },
-
-  async update(id, data) {
-    const { reason_id, department_id, unit_id, quantity, notes } = data;
-    await pool.query(
-      `UPDATE product_outs SET reason_id=?, department_id=?, unit_id=?, quantity=?, notes=? WHERE id=?`,
-      [reason_id, department_id, unit_id, quantity, notes, id]
-    );
-  },
-
-  async remove(id) {
-    await pool.query('DELETE FROM product_outs WHERE id = ?', [id]);
+    return result;
   }
 };
