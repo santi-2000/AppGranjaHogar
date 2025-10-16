@@ -11,6 +11,7 @@ import productOutsRouter from "./routes/productOuts.routes.js"
 import productsRouter from "./routes/products.routes.js"
 import reportsRouter from "./routes/reports.routes.js"
 import usersRouter from "./routes/users.routes.js"
+import permissionsRouter from "./routes/permissions.routes.js"
 import morgan from "morgan";
 
 import dotenv from 'dotenv';
@@ -62,5 +63,6 @@ app.use("/v1/productOuts", productOutsRouter)
 app.use("/v1/products", productsRouter)
 app.use("/v1/reports", reportsRouter)
 app.use("/v1/users", usersRouter)
+app.use("/v1/permissions", permissionsRouter)
 
 export default app
