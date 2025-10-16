@@ -10,16 +10,16 @@ const router = Router();
 
 router.get("/", getAllPermissions);
 
-router.get("/user/:user_id", [
-    param("user_id", "User ID debe ser un número").isNumeric()
+router.get("/user/:id", [
+    param("id", "User ID debe ser un número").isNumeric()
 ], getUserPermissions);
 
-router.put("/user/:user_id", [
-    param("user_id", "User ID debe ser un número").isNumeric(),
-    body("permission_ids", "Permission IDs debe ser un array")
+router.put("/user/:id", [
+    param("id", "User ID debe ser un número").isNumeric(),
+    body("permission-ids", "Permission IDs debe ser un array")
         .exists().withMessage("Permission IDs es requerido")
         .isArray().withMessage("Permission IDs debe ser un array"),
-    body("permission_ids.*", "Cada Permission ID debe ser un número")
+    body("permission-ids.*", "Cada Permission ID debe ser un número")
         .isNumeric().withMessage("Cada Permission ID debe ser un número")
 ], updateUserPermissions);
 
