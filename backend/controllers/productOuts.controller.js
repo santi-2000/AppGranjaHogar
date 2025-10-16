@@ -1,36 +1,39 @@
 import { ProductOutService } from "../services/productOuts.service.js";
-import { validationResult } from 'express-validator';
+import { validationResult } from "express-validator";
 
 export const ProductOutController = {
   async getAll(req, res) {
     try {
-      const data = await ProductOutService.getAll();
-      res.json(data);
+      const result = await ProductOutService.getAll();
+      res.status(200).json(result);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      console.error(err);
+      res.status(500).json({ success: false, message: err.message });
     }
   },
 
   async getById(req, res) {
     try {
-      const data = await ProductOutService.getById(req.params.id);
-      res.json(data);
+      const result = await ProductOutService.getById(req.params.id);
+      res.status(200).json(result);
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      console.error(err);
+      res.status(404).json({ success: false, message: err.message });
     }
   },
 
   async create(req, res) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, errors: errors.array() });
     }
 
     try {
-      const id = await ProductOutService.create(req.body);
-      res.status(201).json({ message: 'Producto de salida creado' });
+      const result = await ProductOutService.create(req.body);
+      res.status(201).json(result);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      console.error(err);
+      res.status(500).json({ success: false, message: err.message });
     }
-  }
+  },
 };
