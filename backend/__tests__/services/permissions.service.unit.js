@@ -4,14 +4,14 @@ import { UserPermissionVO } from '../../valueObjects/permissions/userPermission.
 
 const getAllPermissionsModelMock = jest.fn();
 const getUserPermissionsModelMock = jest.fn();
-const deleteUserPermissionsModelMock = jest.fn();  // ← NUEVO
-const insertUserPermissionsModelMock = jest.fn();  // ← NUEVO
+const deleteUserPermissionsModelMock = jest.fn();
+const insertUserPermissionsModelMock = jest.fn();
 
 jest.unstable_mockModule('../../models/permissions.model.js', () => ({
   getAllPermissionsModel: getAllPermissionsModelMock,
   getUserPermissionsModel: getUserPermissionsModelMock,
-  deleteUserPermissionsModel: deleteUserPermissionsModelMock,  // ← NUEVO
-  insertUserPermissionsModel: insertUserPermissionsModelMock,  // ← NUEVO
+  deleteUserPermissionsModel: deleteUserPermissionsModelMock,
+  insertUserPermissionsModel: insertUserPermissionsModelMock,
 }));
 
 const { getAllPermissionsService, getUserPermissionsService, updateUserPermissionsService } = await import('../../services/permissions.service.js');

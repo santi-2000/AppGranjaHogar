@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { check, param, body } from "express-validator";
+import { param, body } from "express-validator";
 import {
     getAllPermissions,
     getUserPermissions,
