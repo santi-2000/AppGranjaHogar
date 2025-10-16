@@ -2,8 +2,12 @@ import request from 'supertest';
 
 import app from '../../app.js';
 
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  process.exit(0);
+});
+
 describe("Permission Controller integration tests", () => {
-  
   describe('Get All Permissions Endpoint Test', () => {
     test('Given request When get all permissions Then status 200', async () => {
       await request(app)
@@ -55,7 +59,7 @@ describe("Permission Controller integration tests", () => {
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
-          permission_ids: [1, 2, 3],
+          "permission-ids": [1, 2, 3],
         })
         .expect(200)
         .expect((res) => {
@@ -68,7 +72,7 @@ describe("Permission Controller integration tests", () => {
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
-          permission_ids: [],
+          "permission-ids": [],
         })
         .expect(200);
     });
@@ -77,7 +81,7 @@ describe("Permission Controller integration tests", () => {
       await request(app)
         .put('/v1/permissions/user/invalid')
         .send({
-          permission_ids: [1, 2],
+          "permission-ids": [1, 2],
         })
         .expect(400);
     });
@@ -86,7 +90,7 @@ describe("Permission Controller integration tests", () => {
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
-          permission_ids: 'not-an-array',
+          "permission-ids": 'not-an-array',
         })
         .expect(400);
     });
@@ -95,7 +99,7 @@ describe("Permission Controller integration tests", () => {
       await request(app)
         .put('/v1/permissions/user/1')
         .send({
-          permission_ids: [1, 'invalid', 3],
+          "permission-ids": [1, 'invalid', 3],
         })
         .expect(400);
     });

@@ -22,6 +22,9 @@ export const deleteUserPermissionsModel = async (user_id) => {
 }
 
 export const insertUserPermissionsModel = async (user_id, permission_ids) => {
+    if (permission_ids.length === 0) {
+        return [{ affectedRows: 0 }];
+    }
     const values = permission_ids.map(id => [user_id, id]);
     return await db.query('INSERT INTO user_permissions (user_id, permission_id) VALUES ?', [values]);
 }

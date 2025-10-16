@@ -18,9 +18,9 @@ export const getAllPermissions = async (req, res) => {
 export const getUserPermissions = async (req, res) => {
     try {
         let result = validationResult(req);
-        if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
+        if (!result.isEmpty()) return res.status(400).json({ success: false, error: result.array() });
         
-        const { user_id } = req.params;
+        const user_id = req.params.id;
         const permissions = await getUserPermissionsService(user_id);
         
         res.json(permissions);
@@ -33,10 +33,10 @@ export const getUserPermissions = async (req, res) => {
 export const updateUserPermissions = async (req, res) => {
     try {
         let result = validationResult(req);
-        if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
+        if (!result.isEmpty()) return res.status(400).json({ success: false, error: result.array() });
         
-        const { user_id } = req.params;
-        const { permission_ids } = req.body;
+        const user_id = req.params.id;
+        const permission_ids = req.body['permission-ids'];
         
         const updateResult = await updateUserPermissionsService(user_id, permission_ids);
         
