@@ -168,7 +168,7 @@ export const postReportPDFService = async (res, userId, initialDate, endDate, ty
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=${initialDate}to${endDate}.pdf`);
 
-    doc.image('assets/logos/main-logo.png', 50, 15, { width: 95 })
+    doc.image('assets/logos/main-logo.png', 50, 30, { width: 95 })
 
     doc.fontSize(24).font('Helvetica-Bold').text('Reporte', { align: 'center' });
     doc.fontSize(15).text(`Granja Hogar`, { align: 'center' });

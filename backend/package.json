@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand"
   },
   "type": "module",
   "dependencies": {
@@ -11,12 +12,15 @@
     "express-mysql-session": "^3.0.3",
     "express-session": "^1.18.2",
     "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.15.1",
     "pdfkit": "^0.17.2"
   },
   "devDependencies": {
     "dotenv": "^17.2.3",
     "morgan": "^1.10.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "jest": "^29.6.2",
+    "supertest": "^7.0.0"
   }
 }
