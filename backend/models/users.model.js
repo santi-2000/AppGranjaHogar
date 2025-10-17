@@ -31,5 +31,12 @@ export const UsersModel = {
     const sql = `SELECT * FROM users WHERE id = ?`;
     const [rows] = await db.query(sql, [userId]);
     return rows[0];
-  }
+  }, 
+
+  async delete(id) {
+    const sql = `UPDATE users SET is_active = FALSE WHERE id = ? AND is_active = TRUE`;
+    const [result] = await db.query(sql, [id]);
+    return result;
+  },
+  
 };
