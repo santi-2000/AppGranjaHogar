@@ -5,6 +5,8 @@ import TitleBar from '../../components/TitleBar';
 import NewProduct from '../../components/Catalog/NewProduct';
 import SearchProduct from '../../components/Catalog/SearchProduct';
 import ProductCatalog from '../../components/Catalog/ProductCatalog';
+import useGetCatalog from '../../hooks/useGetCatalog.jsx';
+import { useEffect } from 'react';
 
 const DATA = [
   {
@@ -185,6 +187,12 @@ const DATA = [
 ]
 
 export default function CatalogScreen() {
+  const { fetchCatalog, catalog, error } = useGetCatalog();
+
+  useEffect(() => {
+    fetchCatalog();
+  }, []);
+
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Catálogo"} />
@@ -199,10 +207,9 @@ export default function CatalogScreen() {
         </View>
 
         <FlatList
-          data={DATA}
+          data={catalog}
           renderItem={({ item }) => <ProductCatalog data={item} />}
           keyExtractor={item => item.id} />
-
       </View>
 
 

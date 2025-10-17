@@ -2,6 +2,7 @@ import express from "express";
 import session from "express-session";
 import mysql from "mysql2/promise";
 import ExpressMySqlSession from "express-mysql-session";
+import cors from "cors";
 
 import logsRouter from "./routes/logs.routes.js"
 import notificationsRouter from "./routes/notifications.routes.js"
@@ -40,6 +41,14 @@ const sessionStore = new mysqlStore({}, connection);
 const app = express()
 
 app.use(morgan("dev"))
+app.use(
+  cors({
+    origin: ["*"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  })
+);
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));

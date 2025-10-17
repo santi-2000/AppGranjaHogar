@@ -13,6 +13,7 @@ web-build/
 
 package-lock.json
 
+.env
 
 ios
 android
