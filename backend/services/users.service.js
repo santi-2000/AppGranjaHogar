@@ -41,33 +41,28 @@ export const createUserService = async ({ name, last_name, username, password })
 };
 
 export const updatePasswordService = async ({ userId, currentPassword, newPassword, confirmPassword }) => {
-  // Crear VO para validar los datos de entrada
   const passwordUpdateVO = new PasswordUpdate({
     currentPassword,
     newPassword,
     confirmPassword
   });
 
-  // Validar que el usuario existe
   const user = await UsersModel.getUserById(userId);
   if (!user) {
     throw Object.assign(new Error("Usuario no encontrado"), { code: "USER_NOT_FOUND" });
   }
 
-  // Validar contraseña actual
   const isCurrentPasswordValid = await bcrypt.compare(passwordUpdateVO.getCurrentPassword(), user.password_hash);
   if (!isCurrentPasswordValid) {
     throw Object.assign(new Error("La contraseña actual es incorrecta"), { code: "INVALID_CURRENT_PASSWORD" });
   }
 
-  // Crear VO para la nueva contraseña (validación adicional)
   const newPassVO = new Password(passwordUpdateVO.getNewPassword());
   
-  // Generar hash para la nueva contraseña
   const salt = await bcrypt.genSalt(10);
   const newPasswordHash = await bcrypt.hash(newPassVO.value, salt);
 
-  // Actualizar contraseña en la base de datos
+  
   const result = await UsersModel.updatePassword({
     userId,
     newPasswordHash

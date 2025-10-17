@@ -59,13 +59,11 @@ export const updatePassword = async (req, res) => {
   if (!errors.isEmpty()) return res.status(400).json({ ok: false, errors: errors.array() });
 
   try {
-    // Obtener el ID del usuario desde la sesión (asumiendo que está autenticado)
     const token = req.session?.token;
     if (!token) {
       return res.status(401).json({ ok: false, message: "No autorizado" });
     }
 
-    // Decodificar el token para obtener el ID del usuario
     const decoded = jwt.verify(token, process.env.SESSION_PASSWORD);
     const userId = decoded.id;
 
@@ -81,7 +79,6 @@ export const updatePassword = async (req, res) => {
     return res.status(200).json({ ok: true, message: result.message });
 
   } catch (err) {
-    // Manejar errores de validación del VO
     if (err.message.includes("contraseña") || err.message.includes("Password")) {
       return res.status(400).json({ ok: false, message: err.message });
     }
