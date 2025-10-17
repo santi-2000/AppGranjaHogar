@@ -10,7 +10,6 @@ export class PasswordUpdate {
   }
 
   validateInputs(currentPassword, newPassword, confirmPassword) {
-    // Validar que todos los campos estén presentes
     if (!currentPassword || typeof currentPassword !== "string") {
       throw new Error("La contraseña actual es requerida");
     }
@@ -23,17 +22,14 @@ export class PasswordUpdate {
       throw new Error("La confirmación de contraseña es requerida");
     }
 
-    // Validar longitud mínima
     if (newPassword.length < 8) {
       throw new Error("La nueva contraseña debe tener al menos 8 caracteres");
     }
 
-    // Validar que las contraseñas coincidan
     if (newPassword !== confirmPassword) {
       throw new Error("Las contraseñas nuevas no coinciden");
     }
 
-    // Validar que la nueva contraseña sea diferente a la actual
     if (currentPassword === newPassword) {
       throw new Error("La nueva contraseña debe ser diferente a la actual");
     }
