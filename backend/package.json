@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "exceljs": "^4.4.0",
     "express": "^5.1.0",
@@ -18,9 +19,9 @@
   },
   "devDependencies": {
     "dotenv": "^17.2.3",
+    "jest": "^29.6.2",
     "morgan": "^1.10.1",
     "nodemon": "^3.1.10",
-    "jest": "^29.6.2",
     "supertest": "^7.0.0"
   }
 }

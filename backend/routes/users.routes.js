@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body,check } from "express-validator";
+import { body,check, param } from "express-validator";
 import { createUser, postLogin, postLogout, updatePassword, deleteUser } from "../controllers/users.controller.js";
 
 const router = Router();
