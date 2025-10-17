@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body,check } from "express-validator";
-import { createUser, postLogin, postLogout, updatePassword } from "../controllers/users.controller.js";
+import { createUser, postLogin, postLogout, updatePassword, deleteUser } from "../controllers/users.controller.js";
 
 const router = Router();
 
@@ -35,4 +35,11 @@ router.put(
   updatePassword
 );
 
+router.delete(
+  "/:id",
+  [
+    param("id").isInt().withMessage("ID debe ser un número entero")
+  ],
+  deleteUser
+);
 export default router;

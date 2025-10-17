@@ -79,3 +79,15 @@ export const updatePasswordService = async ({ userId, currentPassword, newPasswo
 
   return { success: true, message: "Contraseña actualizada exitosamente" };
 };
+
+export const deleteUserService = async (id) => {
+  const [result] = await UsersModel.delete(id);
+  
+  if (!result || !result.affectedRows) {
+    const e = new Error("Usuario no encontrado o no se pudo eliminar");
+    e.code = "NOT_FOUND";
+    throw e;
+  }
+  
+  return { message: "Usuario eliminado exitosamente" };
+};
