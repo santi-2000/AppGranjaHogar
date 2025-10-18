@@ -3,6 +3,7 @@ import { loginModel, UsersModel } from "../models/users.model.js";
 import { Password } from "../valueObjects/users/Password.js";
 import { PasswordUpdate } from "../valueObjects/users/PasswordUpdate.js";
 import { BadRequestError } from "../utils/error.util.js";
+import { UserVO } from "../valueObjects/users/user.vo.js";
 import jwt from 'jsonwebtoken'
 
 
@@ -13,7 +14,7 @@ export const loginService = async (req) => {
     const validationPassword = await bcrypt.compare(req.body.password, rowsUsername[0].password_hash)
     if (!validationPassword) throw new BadRequestError("Contraseña incorrecta");
 
-    const token = jwt.sign({ id: rowsUsername[0].id }, process.env.SESSION_PASSWORD, { expiresIn: "365d" });
+    const token = jwt.sign({ id: rowsUsername[0].id }, process.env.JWT_SECRET, { expiresIn: "365d" });
     req.session.token = token;
 }
 
