@@ -41,6 +41,9 @@ export const getInventory = async (req, res) => {
 }
 
 export const createProduct = async (req, res) => {
+
+    console.log("Creating product with data:", req.body);
+    
     try {
         let result = validationResult(req);
 

@@ -7,12 +7,12 @@ const router = Router()
 router.get("/catalog", getCatalog)
 
 router.post("/create", [
-    check("category_id", "Category ID debería ser un número").isNumeric(),
-    check("unit_id", "Unit ID debería ser un número").isNumeric(),
+    check("category_id", "Category ID debería ser un número").isNumeric().notEmpty(),
+    check("unit_id", "Unit ID debería ser un número").isNumeric().notEmpty(),
     check("name", "Name debería ser un string y es necesario").isString().notEmpty(),
-    check("perishable", "Perishable debe ser booleano").isBoolean(),
-    check("min_stock", "Min stock debería ser un número").isNumeric(),
-    check("max_stock", "Max stock debería ser un número").isNumeric()
+    check("perishable", "Perishable debe ser booleano").isBoolean().notEmpty(),
+    check("min_stock", "Min stock debería ser un número").isNumeric().notEmpty(),
+    check("max_stock", "Max stock debería ser un número").isNumeric().notEmpty()
 ], createProduct)
 
 router.delete("/delete/:id", [
