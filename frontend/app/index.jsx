@@ -1,9 +1,12 @@
 import "./global.css"
-import { Text, View, TextInput, Image, Pressable } from "react-native";
-import { Link } from "expo-router";
-
+import { Text, View, TextInput, Image, Pressable, Touchable } from "react-native";
+import useLogin from "../hooks/useLogin";
+import InputText from "../components/Form/InputText";
 
 export default function App() {
+
+const { login, setLoginData, loginData, error, handleChange } = useLogin();
+
 
   return (
     <View className="flex-1 justify-center bg-[#F2F3F5]">
@@ -24,16 +27,16 @@ export default function App() {
         <View className="border border-[0.5px] border-gray-300 rounded-xl mt-5 p-4">
           <View className="my-2">
             <Text className="my-2">Usuario</Text>
-            <TextInput className={styles.textInput} placeholder="esquips" ></TextInput>
+            <InputText className={styles.textInput} placeholder="Usuario" onChange={(v) => handleChange('username', v)} ></InputText>
           </View>
           <View className="my-2">
             <Text className="my-2">Contraseña</Text>
-            <TextInput className={styles.textInput} placeholder="***"></TextInput>
+            <InputText className={styles.textInput} placeholder="***" onChange={(v) => handleChange('password', v)}></InputText>
           </View>
           
-          <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+          <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
             <Text className="text-white text-center">Iniciar sesión</Text>
-          </Link>
+          </Pressable>
         </View>
       </View>
     </View>
