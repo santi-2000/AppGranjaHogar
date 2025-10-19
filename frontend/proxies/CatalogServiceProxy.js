@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '@env';
-import { CatalogVO } from '../valueobjects/CatalogVO';
+import { CatalogVO } from '../valueobjects/products/CatalogVO';
 
 const CatalogProxy = () => {
     async function getCatalog() {

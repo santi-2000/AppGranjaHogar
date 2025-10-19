@@ -6,17 +6,15 @@ const useGetCatalog = () => {
     const [error, setError] = useState('');
     const { getCatalog } = CatalogProxy();
 
-    function fetchCatalog() {
-        setError('');
-
-        getCatalog()
-            .then(catalog => {
-                setCatalog(catalog);
-            })
-            .catch(error => {
-                setError(error.message);
-                console.log(error.message);
-            });
+    async function fetchCatalog() {
+        try {
+            setError('');
+            const catalog = await getCatalog();
+            setCatalog(catalog);
+        } catch (error) {
+            setError(error.message);
+            console.log(error.message);
+        }
     }
 
     return { fetchCatalog, catalog, setCatalog, error }
