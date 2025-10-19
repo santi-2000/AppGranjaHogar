@@ -57,7 +57,7 @@ export default function ProductCatalog({ data }) {
                     </View>
                 </View>
                 <View className={`${isOpen ? "" : "hidden"} justify-start ml-3 mt-4`}>
-                    <Text>Tipo: {data.type}</Text>
+                    <Text>Perecedero: {data.type ? "Sí" : "No"}</Text>
                     <Text>Categoría: {data.category}</Text>
                     <Text>Unidad: {data.unit}</Text>
                     

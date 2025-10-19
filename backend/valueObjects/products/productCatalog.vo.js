@@ -3,8 +3,8 @@ export class ProductCatalogVO {
         this.id = dbProduct.id;
         this.name = dbProduct.name;
         this.perishable = Boolean(dbProduct.is_perishable);
-        this.category = dbProduct.category_id;
-        this.unit = dbProduct.unit_id;
+        this.category = dbProduct.category;
+        this.unit = dbProduct.unit;
         
         Object.freeze(this);
     }
