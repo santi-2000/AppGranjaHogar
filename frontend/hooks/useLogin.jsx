@@ -17,9 +17,7 @@ const usePostLogin = () => {
         setLoading(true);
         setError(null);
         try {
-            const loginVO = new LoginVO(loginData);
-            await postLogin(loginVO);
-
+            
             console.log("Sesión Iniciada")
             router.push('/home');
         } catch (err) {
