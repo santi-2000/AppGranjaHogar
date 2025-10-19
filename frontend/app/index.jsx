@@ -2,6 +2,7 @@ import "./global.css"
 import { Text, View, TextInput, Image, Pressable, Touchable } from "react-native";
 import useLogin from "../hooks/useLogin";
 import InputText from "../components/Form/InputText";
+import { Link } from "expo-router";
 
 export default function App() {
 
@@ -33,10 +34,14 @@ const { login, setLoginData, loginData, error, handleChange } = useLogin();
             <Text className="my-2">Contraseña</Text>
             <InputText className={styles.textInput} placeholder="***" onChange={(v) => handleChange('password', v)}></InputText>
           </View>
-          
-          <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+
+          <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
             <Text className="text-white text-center">Iniciar sesión</Text>
-          </Pressable>
+          </Link>
+          
+          {/* <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+            <Text className="text-white text-center">Iniciar sesión</Text>
+          </Pressable> */}
         </View>
       </View>
     </View>

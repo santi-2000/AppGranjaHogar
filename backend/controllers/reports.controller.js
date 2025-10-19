@@ -21,6 +21,7 @@ export const postReportXLSX = async (req, res) => {
 export const postReportPDF = async (req, res) => {
   try {
     let result = validationResult(req);
+    console.log(req.body)
 
     if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
 
