@@ -62,11 +62,6 @@ export default function App() {
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-
-          
-        </View>
-      </View>
-    </View>
   );
 }
 
