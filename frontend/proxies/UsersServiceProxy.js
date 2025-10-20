@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@env';
 
-const LoginProxy = () => {
+const UsersServiceProxy = () => {
     async function postLogin(LoginVO) {
         const response = await fetch(API_BASE_URL + '/v1/users/login', {
             method: 'POST',
@@ -52,10 +52,34 @@ const LoginProxy = () => {
 
         const data = await response.json();
 
-        return data;
+        return data;  
+    }
+    async function deleteUser(userId) {
+        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+            method: 'DELETE',
+            credentials: 'include',
+        });
+      
+        if (!response.ok) {
+            if (response.status === 400) {
+               const errorData = await response.json();
+               throw new Error(errorData.message || 'Request invalido');
+            } else if (response.status === 404) {
+                throw new Error('Usuario no encontrado');
+            } else if (response.status === 500) {
+                throw new Error('Error interno del servidor');
+             } else if (response.status === 503) {
+                throw new Error('Servicio no disponible');
+            } else {
+                throw new Error('Error desconocido');
+            }
+        }
+       
+        const data = await response.json();
+        return data.ok;
     }
 
-    return { postLogin, postVerify };
+    return { postLogin, postVerify, deleteUser };
 };
-
-export default LoginProxy;
+            
+export default UsersServiceProxy;
