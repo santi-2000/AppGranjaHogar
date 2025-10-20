@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body,check, param } from "express-validator";
-import { createUser, postLogin, postLogout, updatePassword, deleteUser } from "../controllers/users.controller.js";
+import { createUser, postLogin, postLogout, updatePassword, deleteUser, postVerify } from "../controllers/users.controller.js";
 
 const router = Router();
 
@@ -11,6 +11,8 @@ router.post("/login",[
     check("password").notEmpty().withMessage("La contraseña es requerida"),
 
 ], postLogin)
+
+router.post("/verify", postVerify)
 
 router.post("/logout", postLogout)
 
