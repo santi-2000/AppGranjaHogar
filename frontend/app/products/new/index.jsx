@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView, TextInput } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TitleBar from '../../../components/TitleBar';
 import ValueSection from "../../../components/Products/ProductEditCreat/value";
@@ -20,7 +20,6 @@ export default function NewProductScreen() {
     unit_id: null,
     min_stock: 0,
     max_stock: 0,
-    actual_stock: 0,
   });
 
   const handleChange = (key, value) => {
@@ -56,20 +55,6 @@ export default function NewProductScreen() {
           onChangeMin={(v) => handleChange('min_stock', v)}
           onChangeMax={(v) => handleChange('max_stock', v)}
         />
-
-        <View className="mt-4">
-          <Text className="text-lg font-semibold mb-2">Stock inicial</Text>
-          <View className="bg-white border border-gray-300 rounded-lg p-3">
-            <Text className="text-gray-600 mb-2">Cantidad inicial en inventario</Text>
-            <TextInput
-              className="text-lg font-semibold"
-              value={productData.actual_stock.toString()}
-              onChangeText={(v) => handleChange('actual_stock', parseInt(v) || 0)}
-              keyboardType="numeric"
-              placeholder="0"
-            />
-          </View>
-        </View>
 
         <View className="mt-8">
           <ButtonRounded 

@@ -7,7 +7,6 @@ export class ProductVO {
         this.unit_id = dbProduct.unit_id;
         this.min_stock = dbProduct.min_stock;
         this.max_stock = dbProduct.max_stock;
-        this.actual_stock = dbProduct.actual_stock || 0;
     }
 }
 
