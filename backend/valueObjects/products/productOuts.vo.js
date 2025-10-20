@@ -19,5 +19,7 @@ export class ProductOutVO {
     this.quantity = quantity;
     this.notes = notes || null;
     this.created_at = created_at ? new Date(created_at).toLocaleString() : null;
+
+    Object.freeze(this);
   }
 }

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import TitleBar from '../../../../../components/TitleBar';
 import ButtonRounded from '../../../../../components/Form/ButtonRounded';
+import useDeleteUser from '../../../../../hooks/useDeleteUser';
 
 const roles = [
   { label: 'Administrador', value: 'admin' },
@@ -20,6 +21,7 @@ const defaultPermissionsByRole = {
 export default function EditUserScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { deleteUser, loading, error } = useDeleteUser();
 
   const mockById = {
     '0': { name: 'Yahir Alfredo Tapia Sifuentes', email: 'yahir.tapia@granjahogar.com', role: 'admin' },
@@ -48,11 +50,27 @@ export default function EditUserScreen() {
     router.back();
   };
 
-  const handleDelete = () => {
-    Alert.alert('Eliminar Usuario', 'Esta acción no se puede deshacer.', [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => { console.log('Eliminar usuario', { id }); router.back(); } },
-    ]);
+  const handleDeleteConfirm = () => {
+    Alert.alert(
+      "¿Estás seguro?", 
+      "Esta acción no se puede deshacer.", 
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Eliminación cancelada"),
+          style: "cancel" 
+        },
+        {
+          text: "Sí, eliminar",
+          onPress: async () => {
+            await deleteUser(id);
+            router.back();
+          },
+          style: "destructive" 
+        }
+      ],
+      { cancelable: true } 
+    );
   };
 
   return (
@@ -60,7 +78,7 @@ export default function EditUserScreen() {
       <TitleBar title={"Editar permisos"} />
       <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 24 }}>
         <View className="bg-white rounded-2xl p-4" style={cardShadow}>
-          <Pressable onPress={handleDelete} className="self-start mb-4 border border-gray-300 rounded-lg px-3 py-2 flex-row items-center">
+          <Pressable onPress={handleDeleteConfirm} className="self-start mb-4 border border-gray-300 rounded-lg px-3 py-2 flex-row items-center">
             <Text className="text-red-600 mr-2">🗑️</Text>
             <Text className="text-gray-900">Eliminar Usuario</Text>
           </Pressable>

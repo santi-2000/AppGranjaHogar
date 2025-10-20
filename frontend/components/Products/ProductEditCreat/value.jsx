@@ -1,7 +1,6 @@
 import { View, Text, TextInput } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 
-export default function ValueSection() {
+export default function ValueSection({ value, onChange }) {
     return (
         <View>
             <View className="bg-white p-4 rounded-2xl border border-main">
@@ -10,7 +9,8 @@ export default function ValueSection() {
                     <TextInput
                         placeholder="Manzana"
                         className="text-gray-700"
-                        value={undefined}
+                        value={value}
+                        onChangeText={onChange}
                         editable={true}
                     />
                 </View>

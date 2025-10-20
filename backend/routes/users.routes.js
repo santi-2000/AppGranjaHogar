@@ -1,45 +1,53 @@
 import { Router } from "express";
-import { body,check, param } from "express-validator";
-import { createUser, postLogin, postLogout, updatePassword, deleteUser } from "../controllers/users.controller.js";
+import { body, check, param } from "express-validator";
+import { usersController } from "../controllers/users.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/login",[
-    check("username").isLength().withMessage("El username no es válido"),
-    check("password").isLength({min:8}).withMessage("La contraseña debe tener al menos 8 caracteres"),
-    check("username").notEmpty().withMessage("El username es requerido"),
-    check("password").notEmpty().withMessage("La contraseña es requerida"),
+router.post("/login", [
+  body("username").isLength().withMessage("El username no es válido").notEmpty().withMessage("El username es requerido").trim().escape().toLowerCase(),
+  body("password").isLength({ min: 8 }).withMessage("La contraseña debe tener al menos 8 caracteres").notEmpty().withMessage("La contraseña es requerida"),
+  validate
+],
+  usersController.postLogin
+)
 
-], postLogin)
-
-router.post("/logout", postLogout)
+router.post("/verify",
+  usersController.postVerify
+)
 
 router.post(
-  "/nuevo",
+  "/new",
   [
-    body("name").trim().isLength({ min: 2 }).withMessage("name mínimo 2 caracteres"),
-    body("last_name").trim().isLength({ min: 2 }).withMessage("last_name mínimo 2 caracteres"),
-    body("username").trim().isLength({ min: 3 }).withMessage("username mínimo 3 caracteres"),
-    body("password").isString().isLength({ min: 8 }).withMessage("password mínimo 8 caracteres")
+    authMiddlewareLogged,
+    body("name").trim().isLength({ min: 2 }).withMessage("name mínimo 2 caracteres").trim().escape().toLowerCase(),
+    body("last_name").trim().isLength({ min: 2 }).withMessage("last_name mínimo 2 caracteres").trim().escape().toLowerCase(),
+    body("username").trim().isLength({ min: 3 }).withMessage("username mínimo 3 caracteres").trim().escape().toLowerCase(),
+    body("password").isString().isLength({ min: 8 }).withMessage("password mínimo 8 caracteres"),
+    validate
   ],
-  createUser
+  usersController.createUser
 );
 
-router.put(
-  "/update-password",
-  [
-    body("currentPassword").isString().notEmpty().withMessage("La contraseña actual es requerida"),
-    body("newPassword").isString().isLength({ min: 8 }).withMessage("La nueva contraseña debe tener al menos 8 caracteres"),
-    body("confirmPassword").isString().notEmpty().withMessage("La confirmación de contraseña es requerida")
-  ],
-  updatePassword
+router.put("/update-password", [
+  authMiddlewareLogged,
+  body("currentPassword").isString().notEmpty().withMessage("La contraseña actual es requerida"),
+  body("newPassword").isString().isLength({ min: 8 }).withMessage("La nueva contraseña debe tener al menos 8 caracteres"),
+  body("confirmPassword").isString().notEmpty().withMessage("La confirmación de contraseña es requerida"),
+  validate
+],
+  usersController.updatePassword
 );
 
 router.delete(
   "/:id",
   [
-    param("id").isInt().withMessage("ID debe ser un número entero")
+    authMiddlewareLogged,
+    param("id").isInt().withMessage("ID debe ser un número entero"),
+    validate
   ],
-  deleteUser
+  usersController.deleteUser
 );
 export default router;

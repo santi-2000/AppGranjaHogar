@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 
-export default function ReportOption({ label, style }) {
+export default function ReportOption({ label, style, onPress = () => {}, onCheck = () => {}, onUncheck = () => {} }) {
   const [checked, setChecked] = useState(false);
 
   return (
     <Pressable
-      onPress={() => setChecked(!checked)}
+      onPress={() => {
+        setChecked(!checked);
+        if (!checked) {
+          onCheck();
+        } else {
+          onUncheck();
+        }
+        onPress();
+      }}
       style={{
         paddingVertical: 8,
       }}

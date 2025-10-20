@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { check, param } from "express-validator" 
-import { postReportPDF, postReportXLSX } from "../controllers/reports.controller.js"
+import { reportsController } from "../controllers/reports.controller.js"
+import { validate } from "../middlewares/validator.middleware.js"
 
 const router = Router()
 
@@ -11,7 +12,8 @@ router.post("/pdf",[
         if (!value.every(item => typeof item === 'number')) throw new Error("El tipo debe ser un arreglo de numeros");
         return true;
     }),
-], postReportPDF)
+    validate
+], reportsController.postReportPDF)
 
 router.post("/xlsx",[
     check("initialDate").notEmpty().withMessage("La fecha inicial no puede estar vacía").isISO8601().withMessage("La fecha inicial debe ser una fecha válida"),
@@ -20,6 +22,7 @@ router.post("/xlsx",[
         if (!value.every(item => typeof item === 'number')) throw new Error("El tipo debe ser un arreglo de numeros");
         return true;
     }),
-], postReportXLSX)
+    validate
+], reportsController.postReportXLSX)
 
 export default router

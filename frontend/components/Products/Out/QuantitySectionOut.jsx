@@ -1,20 +1,14 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useUnits } from "../../../hooks/useUnits";
 
-export default function QuantitySectionOut() {
+export default function QuantitySectionOut({ quantity, setQuantity, unitId, setUnitId}) {
+
+    const { data, loading, error } = useUnits();
+    const unitsArray = Array.isArray(data) ? data : [];
+
     return (
         <View>
-            <View className="mb-4">
-                <Text className="text-gray-700 mb-2">Seleccione un producto</Text>
-                <View className="bg-white rounded-xl h-12 justify-center border border-main">
-                    <Picker selectedValue="">
-                        <Picker.Item label="Seleccione..." value="" />
-                        <Picker.Item label="Arroz" value="arroz" />
-                        <Picker.Item label="Frijoles" value="frijoles" />
-                        <Picker.Item label="Leche" value="leche" />
-                    </Picker>
-                </View>
-            </View>
             <View className="p-4 space-y-6 bg-white rounded-2xl border border-main">
 
                 <View className="">
@@ -24,15 +18,26 @@ export default function QuantitySectionOut() {
                             placeholder="Valor"
                             keyboardType="numeric"
                             className="w-full border border-main rounded-xl h-12 p-3 mr-4"
+                            value={String(quantity)}
+                            onChangeText={setQuantity}
                         />
                     </View>
                     <View className="w-full text-gray-700 rounded-xl border border-main h-12 justify-center ">
-                        <Picker style={{color: ""}} selectedValue="">
-                            <Picker.Item label="Unidad" value="" />
-                            <Picker.Item label="Kg" value="kg" />
-                            <Picker.Item label="L" value="l" />
-                            <Picker.Item label="Pieza" value="pieza" />
+                        {loading ? (
+                            <ActivityIndicator size="small" color="#999"/>
+                        ) : error ? (
+                            <Text className="text-red-700 mb-2" >{error}</Text>
+                        ) : (
+                        <Picker 
+                        selectedValue={unitId} 
+                        onValueChange={(itemValue) => setUnitId(itemValue)}
+                        >
+                            <Picker.Item label="Seleccione..." value={null} />
+                            {unitsArray.map((unit) => (
+                                <Picker.Item key={unit.id} label={unit.name} value={unit.id} />
+                            ))}
                         </Picker>
+                        )}
                     </View>
                 </View>
 
