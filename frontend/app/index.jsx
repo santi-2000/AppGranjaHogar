@@ -40,6 +40,7 @@ export default function App() {
                   <InputText
                     className={styles.textInput}
                     placeholder="Usuario"
+                    value={loginData.username || ''}
                     onChange={(v) => handleChange('username', v)}
                   />
                 </View>
@@ -49,6 +50,7 @@ export default function App() {
                     className={styles.textInput}
                     placeholder="***"
                     secureTextEntry={true}
+                    value={loginData.password || ''}
                     onChange={(v) => handleChange('password', v)}
                   />
                 </View>
