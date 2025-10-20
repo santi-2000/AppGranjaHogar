@@ -32,6 +32,7 @@ export default function ProductCatalog({ data }) {
                     text: "Sí, eliminar",
                     onPress: async () => {
                         await deleteProduct(data.id);
+                        router.replace('/catalog');
                     },
                     style: "destructive" 
                 }
