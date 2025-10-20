@@ -1,7 +1,12 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useUnits } from "../../../hooks/useUnits";
 
 export default function QuantitySectionOut({ quantity, setQuantity, unitId, setUnitId}) {
+
+    const { data, loading, error } = useUnits();
+    const unitsArray = Array.isArray(data) ? data : [];
+
     return (
         <View>
             <View className="p-4 space-y-6 bg-white rounded-2xl border border-main">
@@ -18,18 +23,21 @@ export default function QuantitySectionOut({ quantity, setQuantity, unitId, setU
                         />
                     </View>
                     <View className="w-full text-gray-700 rounded-xl border border-main h-12 justify-center ">
+                        {loading ? (
+                            <ActivityIndicator size="small" color="#999"/>
+                        ) : error ? (
+                            <Text className="text-red-700 mb-2" >{error}</Text>
+                        ) : (
                         <Picker 
-                            style={{color: ""}} 
-                            selectedValue={unitId}
-                            onValueChange={(itemValue, itemIndex) => {
-                                setUnitId(itemValue);
-                            }} 
+                        selectedValue={unitId} 
+                        onValueChange={(itemValue) => setUnitId(itemValue)}
                         >
-                            <Picker.Item label="Unidad" value={null} />
-                            <Picker.Item label="Masa (Kg)" value={1} />
-                            <Picker.Item label="volumen (L)" value={2} />
-                            <Picker.Item label="Piezas (Pcs)" value={3} />
+                            <Picker.Item label="Seleccione..." value={null} />
+                            {unitsArray.map((unit) => (
+                                <Picker.Item key={unit.id} label={unit.name} value={unit.id} />
+                            ))}
                         </Picker>
+                        )}
                     </View>
                 </View>
 
