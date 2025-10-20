@@ -4,7 +4,7 @@ import { useState } from "react";
 import { router } from "expo-router";
 import TitleBar from "../../../components/TitleBar";
 import QuantitySectionOut from "../../../components/Products/Out/QuantitySectionOut";
-import DepartamentSectionOut from "../../../components/Products/Out/DepartamentSectionOut";
+import DepartmentSectionOut from "../../../components/Products/Out/DepartmentSectionOut";
 import ButtonRounded from "../../../components/Form/ButtonRounded";
 import OutReason from "../../../components/Products/Out/OutReason";
 import OutNotes from "../../../components/Products/Out/OutNotes";
@@ -21,15 +21,6 @@ export default function OutScreen() {
   const [departmentId, setDepartmentId] = useState(null);
   const [reasonId, setReasonId] = useState(null);
   const [notes, setNotes] = useState("");
-
-  const resetForm = () => {
-    setSelectedProduct(null);
-    setQuantity("");
-    setUnitId(null);
-    setDepartmentId(null);
-    setReasonId(null);
-    setNotes("");
-  };
 
   const handleRegister = async () => {
     try {
@@ -87,7 +78,7 @@ export default function OutScreen() {
             />
           </View>
           <View className="mb-4">
-            <DepartamentSectionOut
+            <DepartmentSectionOut
               departmentId={departmentId}
               setDepartmentId={setDepartmentId}
             />
