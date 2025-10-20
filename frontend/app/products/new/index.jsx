@@ -9,6 +9,7 @@ import StockSection from "../../../components/Products/ProductEditCreat/Stock";
 import UnirSection from "../../../components/Products/ProductEditCreat/PosisibleUnits";
 import ButtonRounded from "../../../components/Form/ButtonRounded";
 import useCreateProduct from '../../../hooks/useCreateProduct';
+import { useRouter } from 'expo-router';
 
 export default function NewProductScreen() {
   const { createProduct, loading, error } = useCreateProduct();
@@ -64,7 +65,11 @@ export default function NewProductScreen() {
           />
         </View>
 
-        {error && <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text>}
+
+
+        {error &&
+        <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> 
+        }
       </ScrollView>
     </SafeAreaView>
   );
