@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ProductOutsProxy } from "../proxies/productOuts.proxy";
+import { ProductOutsProxy } from "../proxies/POP.js"; // Le cambie el nombre para seguir los estándares, 
+// pero como solo son mayusculas no lo detecta como un cambio por algo de memoria. Ahorita lo cambio al bueno.
 
 export const useProductOuts = () => {
   const [loading, setLoading] = useState(false);
