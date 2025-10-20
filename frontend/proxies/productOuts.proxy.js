@@ -1,22 +1,22 @@
 import {API_BASE_URL} from '@env';
-import {GRANJA_HOGAR_VERSION} from '@env';
+import {API_VERSION} from '@env';
 import {PRODUCT_OUTS_ENDPOINT} from '@env';
 
 export const ProductOutsProxy = {
   async getAll() {
-    const res = await fetch(`${API_BASE_URL}${GRANJA_HOGAR_VERSION}${PRODUCT_OUTS_ENDPOINT}`);
+    const res = await fetch(`${API_BASE_URL}/v1/product-outs`);
     if (!res.ok) throw new Error("Error al obtener las salidas");
     return res.json();
   },
 
   async getById(id) {
-    const res = await fetch(`${API_BASE_URL}${GRANJA_HOGAR_VERSION}${PRODUCT_OUTS_ENDPOINT}/${id}`);
+    const res = await fetch(`${API_BASE_URL}/v1/product-outs${id}`);
     if (!res.ok) throw new Error("Salida no encontrada");
     return res.json();
   },
 
     async create(data) {
-    const res = await fetch(`${API_BASE_URL}${GRANJA_HOGAR_VERSION}${PRODUCT_OUTS_ENDPOINT}`, {
+    const res = await fetch(`${API_BASE_URL}/v1/product-outs`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
