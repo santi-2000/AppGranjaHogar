@@ -13,6 +13,10 @@ import productsRouter from "./routes/products.routes.js"
 import reportsRouter from "./routes/reports.routes.js"
 import usersRouter from "./routes/users.routes.js"
 import permissionsRouter from "./routes/permissions.routes.js"
+import reasonsRouter from "./routes/reasons.routes.js"
+import unitsRouter from "./routes/units.routes.js"
+import departmentsRouter from "./routes/departments.routes.js"
+
 import morgan from "morgan";
 
 import dotenv from 'dotenv';
@@ -73,5 +77,8 @@ app.use("/v1/products", productsRouter)
 app.use("/v1/reports", reportsRouter)
 app.use("/v1/users", usersRouter)
 app.use("/v1/permissions", permissionsRouter)
+app.use("/v1/reasons", reasonsRouter)
+app.use("/v1/units", unitsRouter)
+app.use("/v1/departments", departmentsRouter)
 
 export default app
