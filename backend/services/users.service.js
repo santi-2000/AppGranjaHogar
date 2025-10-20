@@ -14,8 +14,21 @@ export const loginService = async (req) => {
     const validationPassword = await bcrypt.compare(req.body.password, rowsUsername[0].password_hash)
     if (!validationPassword) throw new BadRequestError("Contraseña incorrecta");
 
-    const token = jwt.sign({ id: rowsUsername[0].id }, process.env.JWT_SECRET, { expiresIn: "365d" });
-    req.session.token = token;
+    const token = jwt.sign({ 
+      id: rowsUsername[0].id, 
+      username: rowsUsername[0].username, 
+      name: rowsUsername[0].name, 
+      last_name: rowsUsername[0].last_name 
+    }, process.env.JWT_SECRET, { expiresIn: "365d" });
+    return token;
+}
+
+export const verifyService = async (token) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) throw new BadRequestError();
+    return user
+  });
+
 }
 
 export const createUserService = async ({ name, last_name, username, password }) => {
