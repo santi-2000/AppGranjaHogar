@@ -1,6 +1,5 @@
 import { validationResult } from 'express-validator'
 import { postReportPDFService, postReportXLSXService } from "../services/reports.service.js";
-import db from "../models/index.js"
 
 export const postReportXLSX = async (req, res) => {
   try {

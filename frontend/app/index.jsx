@@ -2,6 +2,7 @@ import "./global.css"
 import { Text, View, TextInput, Image, Platform, Pressable, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import useLogin from "../hooks/useLogin";
 import InputText from "../components/Form/InputText";
+import { Link } from "expo-router";
 
 export default function App() {
   const { login, setLoginData, loginData, error, handleChange } = useLogin();
@@ -47,9 +48,13 @@ export default function App() {
                   />
                 </View>
 
-                <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
-                  <Text className="text-white text-center">Iniciar sesión</Text>
-                </Pressable>
+                <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+            <Text className="text-white text-center">Iniciar sesión</Text>
+          </Link>
+          
+          {/* <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+            <Text className="text-white text-center">Iniciar sesión</Text>
+          </Pressable> */}
 
               </View>
             </View>
@@ -57,6 +62,11 @@ export default function App() {
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
+
+          
+        </View>
+      </View>
+    </View>
   );
 }
 

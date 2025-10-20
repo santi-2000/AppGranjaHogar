@@ -1,11 +1,18 @@
 import db from "./index.js"
 
 export const getCatalogModel = async () => {
-    return await db.query('SELECT * FROM products');
+    const sql = `
+    SELECT products.id, products.name, categories.name AS category, units.name AS unit, products.perishable, products.min_stock, products.max_stock, products.actual_stock
+    FROM products AS products
+    JOIN categories AS categories ON products.category_id = categories.id
+    JOIN units AS units ON products.unit_id = units.id
+    WHERE is_active = ?
+    `;
+    return await db.query(sql, [true]);
 }
 
 export const getProductQuantityModel = async (id) => {
-    const [rows] = await db.query('SELECT name, actual_stock, unit_id FROM products WHERE id = ?', [id]);
+    const [rows] = await db.query(`SELECT name, actual_stock, unit_id FROM products WHERE id = ? AND is_active = ?`, [id, true]);
     return rows[0];
 }
 export const getInventoryModel = async () => {
