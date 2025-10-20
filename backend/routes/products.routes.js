@@ -19,6 +19,6 @@ router.delete("/delete/:id", [
     param("id", "Product ID debería ser un número").isNumeric()
 ], deleteProduct)   
 router.get("/inventory", getInventory)
-router.get("/:id/quantity", [param('id').isInt().withMessage('ID must be a number')], getProductQuantity)
+router.get("/:id/quantity", [param('id').isInt().withMessage('ID tiene que ser un numero')], getProductQuantity)
 
 export default router

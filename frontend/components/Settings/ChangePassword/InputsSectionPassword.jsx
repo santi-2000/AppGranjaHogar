@@ -1,24 +1,38 @@
 import { View, Text, TextInput } from "react-native";
 
-export default function InputsSectionPassword() {
+export default function InputsSectionPassword({ passwordData, onChange }) {
 
     return (
         <View className="bg-white rounded-2xl p-4">
             <View className="my-2">
-                <Text className="my-2">Correo electrónico</Text>
-                <TextInput className={styles.textInput} placeholder="ejemplo@granjahogar.com"></TextInput>
-            </View>
-            <View className="my-2">
-                <Text className="my-2">Contraseña</Text>
-                <TextInput className={styles.textInput} placeholder="•••••••••••"></TextInput>
+                <Text className="my-2">Contraseña actual</Text>
+                <TextInput 
+                    className={styles.textInput} 
+                    placeholder="•••••••••••"
+                    value={passwordData.currentPassword}
+                    onChangeText={(value) => onChange('currentPassword', value)}
+                    secureTextEntry={true}
+                />
             </View>
             <View className="my-2">
                 <Text className="my-2">Nueva contraseña</Text>
-                <TextInput className={styles.textInput} placeholder="•••••••••••"></TextInput>
+                <TextInput 
+                    className={styles.textInput} 
+                    placeholder="•••••••••••"
+                    value={passwordData.newPassword}
+                    onChangeText={(value) => onChange('newPassword', value)}
+                    secureTextEntry={true}
+                />
             </View>
             <View className="my-2">
                 <Text className="my-2">Confirmar nueva contraseña</Text>
-                <TextInput className={styles.textInput} placeholder="•••••••••••"></TextInput>
+                <TextInput 
+                    className={styles.textInput} 
+                    placeholder="•••••••••••"
+                    value={passwordData.confirmPassword}
+                    onChangeText={(value) => onChange('confirmPassword', value)}
+                    secureTextEntry={true}
+                />
             </View>
         </View>
     )

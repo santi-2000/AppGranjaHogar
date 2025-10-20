@@ -79,7 +79,34 @@ const UsersServiceProxy = () => {
         return data.ok;
     }
 
-    return { postLogin, postVerify, deleteUser };
+    async function putUpdatePassword(PasswordUpdateVO) {
+        const response = await fetch(API_BASE_URL + '/v1/users/update-password', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(PasswordUpdateVO)
+        });
+
+        if (!response.ok) {
+            if (response.status === 400) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Datos inválidos');
+            } else if (response.status === 401) {
+                throw new Error('No autorizado');
+            } else if (response.status === 500) {
+                throw new Error('Error interno del servidor');
+            } else {
+                throw new Error('Error desconocido');
+            }
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
+    return { postLogin, postVerify, deleteUser, putUpdatePassword };
 };
             
 export default UsersServiceProxy;
