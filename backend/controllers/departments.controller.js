@@ -1,6 +1,5 @@
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 import { departmentsService } from "../services/departments.service.js";
-import { validationResult } from "express-validator";
 
 export class DepartmentsController {
   constructor() {

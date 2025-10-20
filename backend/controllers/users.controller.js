@@ -21,7 +21,7 @@ class UserController {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
 
-    if (!token) return AppError("Token no proporcionado", 401);
+    if (!token) throw new AppError("Token no proporcionado", 401);
     const user = await usersService.verify({ token });
 
     res.send(user);

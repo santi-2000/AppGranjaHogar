@@ -1,4 +1,3 @@
-import { validationResult } from 'express-validator';
 import { permissionsService } from "../services/permissions.service.js";
 import { catchAsync } from '../middlewares/catchAsync.middleware.js';
 

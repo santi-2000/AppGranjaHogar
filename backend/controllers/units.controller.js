@@ -1,5 +1,4 @@
 import { unitsService } from "../services/units.service.js";
-import { validationResult } from "express-validator";
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 
 export class UnitsController {
