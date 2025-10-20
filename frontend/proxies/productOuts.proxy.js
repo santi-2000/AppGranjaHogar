@@ -1,6 +1,4 @@
 import {API_BASE_URL} from '@env';
-import {API_VERSION} from '@env';
-import {PRODUCT_OUTS_ENDPOINT} from '@env';
 
 export const ProductOutsProxy = {
   async getAll() {
