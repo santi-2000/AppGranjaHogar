@@ -37,7 +37,7 @@ app.use(express.urlencoded({extended: true}));
 app.use("/v1/departments", departmentsRouter)
 app.use("/v1/notifications", notificationsRouter)
 app.use("/v1/permissions", permissionsRouter)
-app.use("/v1/productEntries", productEntriesRouter)
+app.use("/v1/product-entries", productEntriesRouter)
 app.use("/v1/product-outs", productOutsRouter)
 app.use("/v1/products", productsRouter)
 app.use("/v1/reasons", reasonsRouter)

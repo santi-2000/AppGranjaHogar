@@ -7,7 +7,7 @@ import { authMiddlewareLogged } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.post("/create-entry", [
+router.post("/new", [
     authMiddlewareLogged,
     body("product_id").notEmpty().isInt().withMessage("product_id es obligatorio y debe ser un número entero"),
     body("user_id").notEmpty().isInt().withMessage("user_id es obligatorio y debe ser un número entero"),
@@ -24,7 +24,7 @@ router.post("/create-entry", [
     validate
 ],
     productEntriesController.createEntry)
-router.get("/entries", authMiddlewareLogged, productEntriesController.getAllEntries)
+router.get("/", authMiddlewareLogged, productEntriesController.getAllEntries)
 
 router.get("/:id", [
     authMiddlewareLogged,
