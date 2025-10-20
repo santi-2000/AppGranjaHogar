@@ -1,48 +1,32 @@
 import { validationResult } from 'express-validator';
-import {
-    getAllPermissionsService,
-    getUserPermissionsService,
-    updateUserPermissionsService
-} from "../services/permissions.service.js";
+import { permissionsService } from "../services/permissions.service.js";
+import { catchAsync } from '../middlewares/catchAsync.middleware.js';
 
-export const getAllPermissions = async (req, res) => {
-    try {
-        const permissions = await getAllPermissionsService();
-        res.json(permissions);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "Error": "Error al obtener permisos" });
+export class PermissionsController {
+    constructor() {
+        this.getAllPermissions = catchAsync(this.getAllPermissions.bind(this));
+        this.getUserPermissions = catchAsync(this.getUserPermissions.bind(this));
+        this.updateUserPermissions = catchAsync(this.updateUserPermissions.bind(this));
     }
-}
 
-export const getUserPermissions = async (req, res) => {
-    try {
-        let result = validationResult(req);
-        if (!result.isEmpty()) return res.status(400).json({ success: false, error: result.array() });
-        
+    async getAllPermissions(req, res) {
+        const permissions = await permissionsService.getAllPermissions();
+        res.json(permissions);
+    }
+    async getUserPermissions(req, res) {
         const user_id = req.params.id;
-        const permissions = await getUserPermissionsService(user_id);
-        
-        res.json(permissions);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "Error": "Error al obtener permisos del usuario" });
-    }
-}
+        const permissions = await permissionsService.getUserPermissions(user_id);
 
-export const updateUserPermissions = async (req, res) => {
-    try {
-        let result = validationResult(req);
-        if (!result.isEmpty()) return res.status(400).json({ success: false, error: result.array() });
-        
+        res.json(permissions);
+    }
+    async updateUserPermissions(req, res) {
         const user_id = req.params.id;
         const permission_ids = req.body['permission-ids'];
-        
-        const updateResult = await updateUserPermissionsService(user_id, permission_ids);
-        
+
+        const updateResult = await permissionsService.updateUserPermissions(user_id, permission_ids);
+
         res.json(updateResult);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ "Error": "Error al actualizar permisos" });
     }
 }
+
+export const permissionsController = new PermissionsController();

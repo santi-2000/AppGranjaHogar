@@ -1,37 +1,30 @@
-import { ProductEntriesService } from "../services/productEntries.service.js";
+import { catchAsync } from "../middlewares/catchAsync.middleware.js";
+import { productEntriesService } from "../services/productEntries.service.js";
 
 export class ProductEntriesController {
-  static async createEntry(req, res) {
-    try {
-      const newEntry = await ProductEntriesService.create(req.body);
-      res.status(201).json({
-        message: "Entrada registrada correctamente",
-        data: newEntry,
-      });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
+  constructor() {
+    this.createEntry = catchAsync(this.createEntry.bind(this));
+    this.getAllEntries = catchAsync(this.getAllEntries.bind(this));
+    this.getEntryById = catchAsync(this.getEntryById.bind(this));
   }
 
-  static async getAllEntries(req, res) {
-    try {
-      const entries = await ProductEntriesService.getAll();
-      res.status(200).json(entries);
-    } catch (error) {
-      console.error(" Error al obtener entradas:", error);
-      res.status(500).json({
-        message: "Error al obtener las entradas de productos",
-        error: error.message,
-      });
-    }
+  async createEntry(req, res) {
+    const newEntry = await productEntriesService.create(req.body);
+    res.status(201).json({
+      message: "Entrada registrada correctamente",
+      data: newEntry,
+    });
   }
 
-  static async getEntryById(req, res) {
-    try {
-      const entry = await ProductEntriesService.getById(req.params.id);
-      res.status(200).json(entry);
-    } catch (error) {
-      res.status(404).json({ error: error.message });
-    }
+  async getAllEntries(req, res) {
+    const entries = await productEntriesService.getAll();
+    res.status(200).json(entries)
+  }
+
+  async getEntryById(req, res) {
+    const entry = await productEntriesService.getById(req.params.id);
+    res.status(200).json(entry);
   }
 }
+
+export const productEntriesController = new ProductEntriesController();

@@ -1,39 +1,28 @@
-import { ProductOutService } from "../services/productOuts.service.js";
+import { catchAsync } from "../middlewares/catchAsync.middleware.js";
+import { productOutService } from "../services/productOuts.service.js";
 import { validationResult } from "express-validator";
 
-export const ProductOutController = {
+export class ProductOutController {
+  constructor() {
+    this.getAll = catchAsync(this.getAll.bind(this));
+    this.getById = catchAsync(this.getById.bind(this));
+    this.create = catchAsync(this.create.bind(this));
+  }
+
   async getAll(req, res) {
-    try {
-      const result = await ProductOutService.getAll();
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
+    const result = await productOutService.getAll();
+    res.status(200).json(result);
+  }
 
   async getById(req, res) {
-    try {
-      const result = await ProductOutService.getById(req.params.id);
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json({ success: false, message: err.message });
-    }
-  },
+    const result = await productOutService.getById(req.params.id);
+    res.status(200).json(result);
+  }
 
   async create(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
+    const result = await productOutService.create(req.body);
+    res.status(201).json(result)
+  }
+}
 
-    try {
-      const result = await ProductOutService.create(req.body);
-      res.status(201).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
-};
+export const productOutController = new ProductOutController();

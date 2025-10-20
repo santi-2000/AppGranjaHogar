@@ -1,35 +1,41 @@
 import { Router } from "express";
-import { check, param } from "express-validator";
-import {
-    createNotification,
-    getNotifications,
-    getNotificationById,
-    deleteNotification,
-} from "../controllers/notifications.controller.js";
+import { body, check, param } from "express-validator";
+import { notificationController } from "../controllers/notifications.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
 router.post(
     "/",
     [
-        check("product_id", "El ID del producto es obligatorio").isInt(),
-        check("content", "El contenido de la notificación es obligatorio").notEmpty(),
+        authMiddlewareLogged,
+        body("product_id").isInt().withMessage("El ID del producto debe ser un número entero"),
+        body("content").notEmpty().withMessage("El contenido de la notificación no puede estar vacío"),
+        validate
     ],
-    createNotification   
+    notificationController.createNotification
 );
 
-router.get("/", getNotifications);
+router.get("/", authMiddlewareLogged, notificationController.getNotifications);
 
 router.get(
     "/:id",
-    [param("id", "El ID de la notificación es obligatorio").isInt()],
-    getNotificationById
+    [
+        authMiddlewareLogged,
+        param("id", "El ID de la notificación es obligatorio").notEmpty().isInt().withMessage("El ID de la notificación debe ser un número entero"),
+        validate
+    ],
+    notificationController.getNotificationById
 );
 
 router.delete(
     "/:id",
-    [param("id", "El ID de la notificación es obligatorio").isInt()],
-    deleteNotification
+    [
+        param("id", "El ID de la notificación es obligatorio").isInt().withMessage("El ID de la notificación debe ser un número entero"),
+        validate
+    ],
+    notificationController.deleteNotification
 );
 
 

@@ -18,4 +18,13 @@ export class NotFoundError extends ApiError {
   }
 }
 
-export default { ApiError, BadRequestError, NotFoundError };
+export class AppError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.status = `${statusCode}`.startsWith('4') ? 'Fallido' : 'Error';
+    this.isOperational = true;
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}

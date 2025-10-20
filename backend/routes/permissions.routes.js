@@ -1,26 +1,28 @@
 import { Router } from "express";
 import { param, body } from "express-validator";
-import {
-    getAllPermissions,
-    getUserPermissions,
-    updateUserPermissions
-} from "../controllers/permissions.controller.js";
+import { permissionsController } from "../controllers/permissions.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", getAllPermissions);
+router.get("/", authMiddlewareLogged, permissionsController.getAllPermissions);
 
 router.get("/user/:id", [
-    param("id", "User ID debe ser un número").isNumeric()
-], getUserPermissions);
+    authMiddlewareLogged,
+    param("id", "User ID debe ser un número").notEmpty().isInt(),
+    validate
+], permissionsController.getUserPermissions);
 
 router.put("/user/:id", [
-    param("id", "User ID debe ser un número").isNumeric(),
+    authMiddlewareLogged,
+    param("id", "User ID debe ser un número").notEmpty().isInt(),
     body("permission-ids", "Permission IDs debe ser un array")
-        .exists().withMessage("Permission IDs es requerido")
+        .exists().notEmpty().withMessage("Permission IDs es requerido")
         .isArray().withMessage("Permission IDs debe ser un array"),
     body("permission-ids.*", "Cada Permission ID debe ser un número")
-        .isNumeric().withMessage("Cada Permission ID debe ser un número")
-], updateUserPermissions);
+        .notEmpty().isInt().withMessage("Cada Permission ID debe ser un número"),
+    validate
+], permissionsController.updateUserPermissions);
 
 export default router;

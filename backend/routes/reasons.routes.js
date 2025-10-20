@@ -1,18 +1,21 @@
 import express from "express"
 import { check, param } from "express-validator"
-import { ReasonsController } from "../controllers/reasons.controller.js";
+import { reasonsController } from "../controllers/reasons.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
 
 const router = express.Router();
 
-
-router.get('/', ReasonsController.getAll);
+router.get('/', reasonsController.getAll);
 
 router.get('/:id',
-  [param('id').isInt().withMessage('id must be an integer')],
-  ReasonsController.getById
+  [
+    param('id').isInt().withMessage('id must be an integer'),
+    validate
+  ],
+  reasonsController.getById
 );
 
-router.post('/', ReasonsController.create);
+router.post('/', reasonsController.create);
 
 
 export default router

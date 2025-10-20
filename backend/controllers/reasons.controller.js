@@ -1,39 +1,28 @@
-import { ReasonsService } from "../services/reasons.service.js";
+import { catchAsync } from "../middlewares/catchAsync.middleware.js";
+import { reasonsService } from "../services/reasons.service.js";
 import { validationResult } from "express-validator";
 
-export const ReasonsController = {
+export class ReasonsController {
+  constructor() {
+    this.getAll = catchAsync(this.getAll.bind(this));
+    this.getById = catchAsync(this.getById.bind(this));
+    this.create = catchAsync(this.create.bind(this));
+  }
+
   async getAll(req, res) {
-    try {
-      const result = await ReasonsService.getAll();
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
+    const result = await reasonsService.getAll();
+    res.status(200).json(result);
+  }
 
   async getById(req, res) {
-    try {
-      const result = await ReasonsService.getById(req.params.id);
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json({ success: false, message: err.message });
-    }
-  },
+    const result = await reasonsService.getById(req.params.id);
+    res.status(200).json(result);
+  }
 
   async create(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
-    try {
-      const result = await ReasonsService.create(req.body);
-      res.status(201).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
+    const result = await reasonsService.create(req.body);
+    res.status(201).json(result);
+  }
 };
+
+export const reasonsController = new ReasonsController();

@@ -1,60 +1,37 @@
-import { validationResult } from 'express-validator'
-import { addNotificationService, getNotificationsService, getNotificationByIdService, } from '../services/notifications.service.js';
-import { BadRequestError } from '../utils/error.util.js';
+import { notificationService } from '../services/notifications.service.js';
+import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 
-export const createNotification = async (req, res) => {
-    try {
-        let validResult = validationResult(req);
-        if (validResult.errors.length > 0) throw new BadRequestError(validResult.formatWith(({ msg }) => msg).array().join(', '));
+export class NotificationController {
+    constructor() {
+        this.createNotification = catchAsync(this.createNotification.bind(this));
+        this.getNotifications = catchAsync(this.getNotifications.bind(this));
+        this.getNotificationById = catchAsync(this.getNotificationById.bind(this));
+    }
 
-        const newNotification = await addNotificationService(req.body);
+    async createNotification(req, res) {
+        const newNotification = await  notificationService.addNotification(req.body);
         res.status(201).json(newNotification);
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ message: error.message });
-    }
-};
+    };
 
-export const getNotifications = async (req, res) => {
-    try {
-        let validResult = validationResult(req);
-        if (validResult.errors.length > 0) throw new BadRequestError(validResult.formatWith(({ msg }) => msg).array().join(', '));
-
-        const notifications = await getNotificationsService();
+    async getNotifications(req, res) {
+        const notifications = await notificationService.getNotifications();
         res.json(notifications);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: 'Error al obtener las notificaciones.' });
-    }
 
-};
+    };
 
-export const getNotificationById = async (req, res) => {
-    try {
-        let validResult = validationResult(req);
-        if (validResult.errors.length > 0) throw new BadRequestError(validResult.formatWith(({ msg }) => msg).array().join(', '));
-
+    async getNotificationById(req, res) {
         const { id } = req.params;
-        const notification = await getNotificationByIdService(id);
+        const notification = await notificationService.getNotificationById(id);
         res.json(notification);
-    } catch (error) {
-        console.log(error);
-        res.status(404).json({ message: error.message });
-    }
 
-};
+    };
 
-export const deleteNotification = async (req, res) => {
-    try {
-        let validResult = validationResult(req);
-        if (validResult.errors.length > 0) throw new BadRequestError(validResult.formatWith(({ msg }) => msg).array().join(', '));
-
+    async deleteNotification(req, res) {
         const { id } = req.params;
-        const result = await removeNotificationService(id);
+        const result = await notificationService.removeNotification(id);
         res.json(result);
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({ message: error.message });
-    }
-};
+    };
 
+}
+
+export const notificationController = new NotificationController();

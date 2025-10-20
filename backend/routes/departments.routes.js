@@ -1,18 +1,23 @@
 import express from "express"
 import { check, param } from "express-validator"
-import { DepartmentsController } from "../controllers/departments.controller.js";
+import { departmentsController } from "../controllers/departments.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-
-router.get('/', DepartmentsController.getAll);
+router.get('/', departmentsController.getAll);
 
 router.get('/:id',
-  [param('id').isInt().withMessage('id must be an integer')],
-  DepartmentsController.getById
+  [
+    authMiddlewareLogged,
+    param('id').isInt().withMessage('id debe de ser un número entero'),
+    validate
+  ],
+  departmentsController.getById
 );
 
-router.post('/', DepartmentsController.create);
+router.post('/', authMiddlewareLogged, departmentsController.create);
 
 
 export default router
