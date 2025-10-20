@@ -3,10 +3,15 @@ import { Text, View, TextInput, Image, Platform, Pressable, ScrollView, Keyboard
 import useLogin from "../hooks/useLogin";
 import InputText from "../components/Form/InputText";
 import { Link } from "expo-router";
+import { useEffect } from "react";
 
 export default function App() {
-  const { login, setLoginData, loginData, error, handleChange } = useLogin();
+  const { login, setLoginData, loginData, error, handleChange, verify } = useLogin();
 
+  useEffect(() => {
+    verify();
+  }, [])
+  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -48,13 +53,13 @@ export default function App() {
                   />
                 </View>
 
-                <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+                {/* <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
             <Text className="text-white text-center">Iniciar sesión</Text>
-          </Link>
-          
-          {/* <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
-            <Text className="text-white text-center">Iniciar sesión</Text>
-          </Pressable> */}
+          </Link> */}
+
+                <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+                  <Text className="text-white text-center">Iniciar sesión</Text>
+                </Pressable>
 
               </View>
             </View>
@@ -62,6 +67,7 @@ export default function App() {
         </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
+
   );
 }
 

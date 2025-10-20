@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import { createUserService, loginService, updatePasswordService, deleteUserService } from "../services/users.service.js";
+import { createUserService, loginService, updatePasswordService, deleteUserService, verifyService } from "../services/users.service.js";
 import db from "../models/index.js"
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcryptjs";
@@ -13,9 +13,24 @@ export const postLogin = async (req, res) => {
 
     if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
 
-    await loginService(req);
+    const token = await loginService(req);
 
-    res.json("Sesión Iniciada")
+    res.json({ token })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send('Error iniciando sesión');
+  }
+}
+
+export const postVerify = async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.split(' ')[1];
+    
+    if (!token) return res.sendStatus(401);
+    await verifyService(token);
+
+    res.send(true)
   } catch (error) {
     console.log(error)
     res.status(500).send('Error iniciando sesión');
@@ -82,7 +97,7 @@ export const updatePassword = async (req, res) => {
     if (err.message.includes("contraseña") || err.message.includes("Password")) {
       return res.status(400).json({ ok: false, message: err.message });
     }
-    
+
     if (err.code === "USER_NOT_FOUND") {
       return res.status(404).json({ ok: false, message: err.message });
     }
@@ -101,7 +116,7 @@ export const updatePassword = async (req, res) => {
 export const deleteUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ ok: false, errors: errors.array() });
-  
+
   try {
     const { id } = req.params;
     const result = await deleteUserService(id);
@@ -109,7 +124,7 @@ export const deleteUser = async (req, res) => {
 
   } catch (err) {
     if (err.code === "NOT_FOUND") return res.status(404).json({ ok: false, message: err.message });
-    
+
     console.error("deleteUser error:", err);
     return res.status(500).json({ ok: false, message: "Error interno del servidor" });
   }

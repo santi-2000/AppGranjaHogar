@@ -5,6 +5,11 @@ export const loginModel = async (username) => {
     return await db.query(sql, [username]);
 }
 
+export const verifyModel = async (username) => {
+    const sql = `SELECT * FROM users WHERE username = ? AND is_active = TRUE`
+    return await db.query(sql, [username]);
+}
+
 export const UsersModel = {
   async create({ name, last_name, username, passwordHash }) {
     const sql = `
