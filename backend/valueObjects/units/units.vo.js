@@ -1,16 +1,8 @@
 export class UnitsVO {
-  constructor({
-    id,
-    name
-  }) {
-    if (typeof id !== 'number' || id <= 0) {
-      throw new Error("id inválido")
-    }
-    if (typeof name !== 'string') {
-      throw new Error("nombre inválido")
-    }
-    
+  constructor({ id, name }) {  
     this.id = id;
     this.name = name;
+
+    Object.freeze(this);
   }
 }

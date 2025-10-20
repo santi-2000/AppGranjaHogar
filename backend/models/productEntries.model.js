@@ -1,7 +1,7 @@
 import db from "../models/index.js";
 
-export class ProductEntriesModel {
-  static async create(entry) {
+class ProductEntriesModel {
+  async create(entry) {
     const [result] = await db.query(
       `INSERT INTO product_entries 
       (product_id, user_id, unit_id, is_donation, quantity, cost, exp_date, created_at)
@@ -20,7 +20,7 @@ export class ProductEntriesModel {
     return result.insertId;
   }
 
-  static async getAll() {
+  async getAll() {
     const [rows] = await db.query(`
       SELECT pe.*, p.name AS product_name, u.name AS unit_name
       FROM product_entries pe
@@ -31,7 +31,7 @@ export class ProductEntriesModel {
     return rows;
   }
 
-  static async getById(id) {
+  async getById(id) {
     const [rows] = await db.query(`
     SELECT 
       pe.*, 
@@ -47,3 +47,5 @@ export class ProductEntriesModel {
   return rows[0];
   }
 }
+
+export const productEntriesModel = new ProductEntriesModel();

@@ -1,55 +1,73 @@
-import db from "../models/index.js"
-import { getCatalogModel, getProductQuantityModel, getInventoryModel, createProductModel, deleteProductModel } from "../models/products.model.js";
+import { productsModel } from "../models/products.model.js";
 import { ProductCatalogVO } from "../valueObjects/products/productCatalog.vo.js";
 import { ProductQuantityVO } from "../valueObjects/products/productQuantity.vo.js";
 import { ProductInventoryVO } from "../valueObjects/products/productInventory.vo.js";
 import { ProductVO } from "../valueObjects/products/product.vo.js";
+import { AppError } from "../utils/error.util.js";
 
-export const getCatalogService = async () => {
-    const [ rows ] = await getCatalogModel()
+class ProductService {
+    async getCatalog() {
+        const [rows] = await productsModel.getCatalog()
+        if (!rows || !Array.isArray(rows)) return [];
 
-    if (!rows || !Array.isArray(rows)) return [];
-    
-    return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
-}
-
-export const getProductQuantityService = async (id) => {
-    const product = await getProductQuantityModel(id);
-    
-    if (!product) {
-        throw new Error('Product not found');
+        return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
     }
-    
-    return new ProductQuantityVO(product);
+
+    async getProductQuantity(id) {
+        const product = await productsModel.getProductQuantity(id);
+        if (!product) throw new AppError('Product not found');
+
+        return new ProductQuantityVO(product);
+    }
+
+    async getInventory() {
+        const products = await productsModel.getInventory();
+        return products.map(product => new ProductInventoryVO(product));
+    }
+
+    async addProduct(category_id, unit_id, name, perishable, min_stock, max_stock) {
+        const [result] = await productsModel.createProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
+
+        if (!result || !result.insertId) throw new AppError('Product could not be created');
+
+        const newProduct = new ProductVO({
+            category_id,
+            unit_id,
+            name,
+            perishable,
+            min_stock,
+            max_stock,
+        });
+
+        return { success: true, message: "Product created successfully", product: newProduct };
+    }
+
+    async removeProduct(id) {
+        const [result] = await productsModel.deleteProduct(id);
+
+        if (!result || !result.affectedRows) throw new AppError('Product could not be deleted');
+
+        return { success: true, message: "Product deleted successfully" };
+    }
+
+    async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active }, productId) {
+        const existingProduct = await productsModel.getById(productId);
+        if (!existingProduct) throw new AppError('Producto no encontrado');
+        
+
+        const updatedProduct = await productsModel.update(productId, {
+            category_id,
+            unit_id,
+            name,
+            perishable,
+            min_stock,
+            max_stock,
+            actual_stock,
+            is_active
+        });
+
+        return new ProductVO(updatedProduct);
+    }
 }
 
-export const getInventoryService = async () => {
-    const products = await getInventoryModel();
-    
-    return products.map(product => new ProductInventoryVO(product));
-}
-
-export const createProductService = async (category_id, unit_id, name, perishable, min_stock, max_stock) => {
-    const [ result ] = await createProductModel(category_id, unit_id, name, perishable, min_stock, max_stock)
-
-    if (!result || !result.insertId) return { success: false, message: "Product could not be created" };
-
-    const newProduct = new ProductVO({
-        category_id,
-        unit_id,
-        name,
-        perishable,
-        min_stock,
-        max_stock,
-    });
-
-    return { success: true, message: "Product created successfully", product: newProduct };
-}
-
-export const deleteProductService = async (id) => {
-    const [ result ] = await deleteProductModel(id)
-
-    if (!result || !result.affectedRows) return { success: false, message: "Product could not be deleted" };
-    
-    return { success: true, message: "Product deleted successfully" };
-}
+export const productService = new ProductService();

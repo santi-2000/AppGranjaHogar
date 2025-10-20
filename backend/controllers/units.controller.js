@@ -1,39 +1,27 @@
-import { UnitsService } from "../services/units.service.js";
+import { unitsService } from "../services/units.service.js";
 import { validationResult } from "express-validator";
+import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 
-export const UnitsController = {
+export class UnitsController {
+  constructor() {
+    this.getAll = catchAsync(this.getAll.bind(this));
+    this.getById = catchAsync(this.getById.bind(this));
+    this.create = catchAsync(this.create.bind(this));
+  }
   async getAll(req, res) {
-    try {
-      const result = await UnitsService.getAll();
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
+    const result = await unitsService.getAll();
+    res.status(200).json(result);
+  }
 
   async getById(req, res) {
-    try {
-      const result = await UnitsService.getById(req.params.id);
-      res.status(200).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(404).json({ success: false, message: err.message });
-    }
-  },
+    const result = await unitsService.getById(req.params.id);
+    res.status(200).json(result);
+  }
 
   async create(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
-    try {
-      const result = await UnitsService.create(req.body);
-      res.status(201).json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false, message: err.message });
-    }
-  },
+    const result = await unitsService.create(req.body);
+    res.status(201).json(result);
+  }
 };
+
+export const unitsController = new UnitsController();

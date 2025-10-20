@@ -6,5 +6,7 @@ export default class NotificationVO {
     this.content = content;
     this.notification_type = notification_type;
     this.created_at = created_at;
+
+    Object.freeze(this);
   }
 }

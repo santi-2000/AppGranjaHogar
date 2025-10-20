@@ -1,18 +1,23 @@
 import express from "express"
 import { check, param } from "express-validator"
-import { ProductOutController } from "../controllers/productOuts.controller.js";
+import { productOutController } from "../controllers/productOuts.controller.js";
+import { validate } from "../middlewares/validator.middleware.js";
+import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-
-router.get('/', ProductOutController.getAll);
+router.get('/', authMiddlewareLogged, productOutController.getAll);
 
 router.get('/:id',
-  [param('id').isInt().withMessage('id must be an integer')],
-  ProductOutController.getById
+  [
+    authMiddlewareLogged,
+    param('id').notEmpty().isInt().withMessage('id tiene que ser un número entero'),
+    validate
+  ],
+  productOutController.getById
 );
 
-router.post('/', ProductOutController.create);
+router.post('/', authMiddlewareLogged, productOutController.create);
 
 
 export default router
