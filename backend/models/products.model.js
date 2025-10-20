@@ -20,9 +20,9 @@ export const getInventoryModel = async () => {
     return rows;
 }
 
-export const createProductModel = async (category_id, unit_id, name, perishable, min_stock, max_stock) => {
-    const sql = 'INSERT INTO products (category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, 0, NOW(), NOW())';
-    return await db.query(sql, [category_id, unit_id, name, perishable, min_stock, max_stock]);
+export const createProductModel = async (category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock = 0) => {
+    const sql = 'INSERT INTO products (category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())';
+    return await db.query(sql, [category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock]);
 }
 
 export const deleteProductModel = async (id) => {

@@ -29,8 +29,8 @@ export const getInventoryService = async () => {
     return products.map(product => new ProductInventoryVO(product));
 }
 
-export const createProductService = async (category_id, unit_id, name, perishable, min_stock, max_stock) => {
-    const [ result ] = await createProductModel(category_id, unit_id, name, perishable, min_stock, max_stock)
+export const createProductService = async (category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock = 0) => {
+    const [ result ] = await createProductModel(category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock)
 
     if (!result || !result.insertId) return { success: false, message: "Product could not be created" };
 
@@ -41,6 +41,7 @@ export const createProductService = async (category_id, unit_id, name, perishabl
         perishable,
         min_stock,
         max_stock,
+        actual_stock,
     });
 
     return { success: true, message: "Product created successfully", product: newProduct };

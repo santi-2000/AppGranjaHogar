@@ -49,9 +49,9 @@ export const createProduct = async (req, res) => {
 
         if (result.errors.length > 0) return res.status(400).json({ success: false, error: result });
 
-        const { category_id, unit_id, name, perishable, min_stock, max_stock } = req.body;
+        const { category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock } = req.body;
 
-        const creationResult = await createProductService(category_id, unit_id, name, perishable, min_stock, max_stock);
+        const creationResult = await createProductService(category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock || 0);
 
         if (!creationResult.success) {
             return res.status(500).json(creationResult);
