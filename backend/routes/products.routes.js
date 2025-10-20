@@ -2,12 +2,14 @@ import { Router } from "express"
 import { body, param } from "express-validator"
 import { productsController } from "../controllers/products.controller.js"
 import { validate } from "../middlewares/validator.middleware.js"
+import { authAuthorizePermissions, authMiddlewareLogged } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.get("/catalog", productsController.getCatalog)
+router.get("/catalog", authMiddlewareLogged, productsController.getCatalog)
 
 router.post("/create", [
+    authAuthorizePermissions("edit_catalog"),
     body("category_id").isNumeric().isInt().notEmpty().withMessage("Category ID es requerido tiene que ser un número"),
     body("unit_id").isNumeric().isInt().notEmpty().withMessage("Unit ID es requerido tiene que ser un número"),
     body("name").isString().notEmpty().trim().escape().toLowerCase().withMessage("Name es requerido y debe ser un texto"),
@@ -20,6 +22,7 @@ router.post("/create", [
 )
 
 router.delete("/delete/:id", [
+    authAuthorizePermissions("edit_catalog"),
     param("id", "Product ID debería ser un número").isNumeric().isInt(),
     validate
 ],
@@ -29,6 +32,7 @@ router.delete("/delete/:id", [
 router.put(
     "/editar/:id",
     [
+        authAuthorizePermissions("edit_catalog"),
         param("id").isInt().withMessage("ID debe ser un número entero"),
         body("name").notEmpty().withMessage("El nombre es requerido").trim().escape().toLowerCase(),
         body("category_id").notEmpty().isInt().withMessage("category_id debe ser un número entero"),
@@ -43,9 +47,10 @@ router.put(
     productsController.UpdateProduct
 )
 
-router.get("/inventory", productsController.getInventory)
+router.get("/inventory", authMiddlewareLogged, productsController.getInventory)
 
 router.get("/:id/quantity", [
+    authMiddlewareLogged,
     param('id').isInt().withMessage('ID tiene que ser un numero'),
     validate
 ],

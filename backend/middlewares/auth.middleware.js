@@ -1,7 +1,7 @@
 import { AppError } from "../utils/error.util.js";
 import jwt from "jsonwebtoken";
 
-export const authorizeRoles = (...allowedRoles) => {
+export const authAuthorizePermissions = (...allowedPermissions) => {
   return (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader?.split(' ')[1];
@@ -11,11 +11,13 @@ export const authorizeRoles = (...allowedRoles) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) return next(new AppError("Token inválido", 403));
       req.user = user;
-      const userRoles = req.user.roles || [];
-  
-      const hasRole = userRoles.some(role => allowedRoles.includes(role));
+      
+      const userPermissions = req.user.permissions || [];
+      const allowedPermissionsIntegrated = [...allowedPermissions, "admin"];
 
-      if (!hasRole) return next(new AppError("No tienes permisos suficientes", 403));
+      const hasPermission = userPermissions.some(permission => allowedPermissionsIntegrated.includes(permission));
+
+      if (!hasPermission) return next(new AppError("No tienes permisos suficientes", 403));
 
       next();
     });

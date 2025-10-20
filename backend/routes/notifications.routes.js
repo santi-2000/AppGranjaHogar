@@ -32,6 +32,7 @@ router.get(
 router.delete(
     "/:id",
     [
+        authMiddlewareLogged,
         param("id", "El ID de la notificación es obligatorio").isInt().withMessage("El ID de la notificación debe ser un número entero"),
         validate
     ],

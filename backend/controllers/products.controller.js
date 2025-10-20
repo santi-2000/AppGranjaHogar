@@ -1,5 +1,5 @@
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
-import { productService } from "../services/products.service.js";
+import { productsService } from "../services/products.service.js";
 
 class ProductsController {
     constructor() {
@@ -18,30 +18,30 @@ class ProductsController {
 
     async getProductQuantity(req, res) {
         const { id } = req.params;
-        const result = await productService.getProductQuantity(id);
+        const result = await productsService.getProductQuantity(id);
         res.json(result);
     }
     async getInventory(req, res) {
-        const result = await productService.getInventory();
+        const result = await productsService.getInventory();
         res.json(result);
     }
 
     async createProduct(req, res) {
         const { category_id, unit_id, name, perishable, min_stock, max_stock } = req.body;
-        const result = await productService.addProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
+        const result = await productsService.addProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
         res.json(result);
     }
 
     async deleteProduct(req, res) {
         const { id } = req.params;
-        const result = await productService.removeProduct(id);
+        const result = await productsService.removeProduct(id);
         res.json(result);
     }
 
     async UpdateProduct (req, res) {
         const { id } = req.params;
         const updateData = req.body;
-        const result = await productService.editProduct(updateData, id);
+        const result = await productsService.editProduct(updateData, id);
         res.json(result);
     }
 

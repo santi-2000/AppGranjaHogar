@@ -5,7 +5,7 @@ import { ProductInventoryVO } from "../valueObjects/products/productInventory.vo
 import { ProductVO } from "../valueObjects/products/product.vo.js";
 import { AppError } from "../utils/error.util.js";
 
-class ProductService {
+class ProductsService {
     async getCatalog() {
         const [rows] = await productsModel.getCatalog()
         if (!rows || !Array.isArray(rows)) return [];
@@ -70,4 +70,4 @@ class ProductService {
     }
 }
 
-export const productService = new ProductService();
+export const productsService = new ProductsService();

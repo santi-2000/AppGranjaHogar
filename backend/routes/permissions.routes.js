@@ -2,20 +2,20 @@ import { Router } from "express";
 import { param, body } from "express-validator";
 import { permissionsController } from "../controllers/permissions.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
-import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
+import { authAuthorizePermissions, authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router.get("/", authMiddlewareLogged, permissionsController.getAllPermissions);
 
 router.get("/user/:id", [
-    authMiddlewareLogged,
+    authAuthorizePermissions("manage-users"),
     param("id", "User ID debe ser un número").notEmpty().isInt(),
     validate
 ], permissionsController.getUserPermissions);
 
 router.put("/user/:id", [
-    authMiddlewareLogged,
+    authAuthorizePermissions("manage-users"),
     param("id", "User ID debe ser un número").notEmpty().isInt(),
     body("permission-ids", "Permission IDs debe ser un array")
         .exists().notEmpty().withMessage("Permission IDs es requerido")

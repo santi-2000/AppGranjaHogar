@@ -13,15 +13,14 @@ export class UsersService {
     const validationPassword = await bcrypt.compare(password, rowsUsername[0].password_hash)
     if (!validationPassword) throw new AppError("Contraseña incorrecta");
 
-    const userPermissions = await usersModel.userPermissions(rowsUsername[0].id);
-    rowsUsername[0].permissions = userPermissions.map(p => p.permission);
+    const [userPermissions] = await usersModel.userPermissions(rowsUsername[0].id);
+    const permissions = userPermissions.map(r => r.permission);
 
-    console.log("USER PERMISSIONS:", rowsUsername[0].permissions);
-    
     const token = jwt.sign({
       id: rowsUsername[0].id,
       username: rowsUsername[0].username,
       name: rowsUsername[0].name,
+      permissions: permissions,
       last_name: rowsUsername[0].last_name
     }, process.env.JWT_SECRET, { expiresIn: "365d" });
 
@@ -34,7 +33,7 @@ export class UsersService {
     return user
   }
 
-  async createUser({ name, last_name, username, password }) {
+  async createUser({ name, last_name, username, password, roles }) {
     const passVO = new PasswordVO(password);
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(passVO.value, salt);
@@ -43,8 +42,11 @@ export class UsersService {
       name,
       last_name,
       username,
+      roles,
       passwordHash
     });
+
+    await usersModel.addPermissionsToUser(created.insertId, roles);
 
     return created;
   };

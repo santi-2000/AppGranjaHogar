@@ -6,7 +6,7 @@ import { authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.get('/', departmentsController.getAll);
+router.get('/', authMiddlewareLogged, departmentsController.getAll);
 
 router.get('/:id',
   [
