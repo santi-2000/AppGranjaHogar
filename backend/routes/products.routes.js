@@ -76,4 +76,6 @@ router.get("/:id/quantity", [
     productsController.getProductQuantity
 )
 
+router.get("/available-products", productsController.getAvailableProducts)
+
 export default router

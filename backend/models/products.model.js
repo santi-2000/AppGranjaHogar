@@ -82,6 +82,13 @@ class ProductsModel {
         const sql = 'UPDATE products SET deleted_at = CURRENT_TIMESTAMP, is_active = FALSE WHERE id = ?';
         return await db.query(sql, [id]);
     }
+
+    async getAvailableProducts() {
+    const sql = 'SELECT id, name FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
 }
 
 export const productsModel = new ProductsModel();

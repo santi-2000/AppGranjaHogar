@@ -7,6 +7,7 @@
  * 
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
+ * @author Samuel Isaac Lopez Mar
  * 
  * @example
  * import { productsController } from '../controllers/products.controller.js';
@@ -27,6 +28,7 @@ class ProductsController {
         this.createProduct = catchAsync(this.createProduct.bind(this));
         this.deleteProduct = catchAsync(this.deleteProduct.bind(this));
         this.UpdateProduct = catchAsync(this.UpdateProduct.bind(this));
+        this.getAvailableProducts = catchAsync(this.getAvailableProducts.bind(this));
     }
 
     /**
@@ -67,6 +69,10 @@ class ProductsController {
         res.json(result);
     }
 
+    async getAvailableProducts (req, res) {
+        const result = await productsService.getAvailableProducts()
+        res.json(result);
+    }
 }
 
 export const productsController = new ProductsController();

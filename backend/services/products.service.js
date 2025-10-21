@@ -19,6 +19,7 @@ import { productsModel } from "../models/products.model.js";
 import { ProductCatalogVO } from "../valueObjects/products/productCatalog.vo.js";
 import { ProductQuantityVO } from "../valueObjects/products/productQuantity.vo.js";
 import { ProductInventoryVO } from "../valueObjects/products/productInventory.vo.js";
+import { ProductsAvailableVO } from "../valueObjects/products/productsAvailable.vo.js";
 import { ProductVO } from "../valueObjects/products/product.vo.js";
 import { AppError } from "../utils/error.util.js";
 
@@ -87,6 +88,13 @@ class ProductsService {
         });
 
         return new ProductVO(updatedProduct);
+    }
+
+    async getAvailableProducts() {
+        const rows = await productsModel.getAvailableProducts()
+        if (!rows || !Array.isArray(rows)) return [];
+
+        return rows.map(availableProucts => new ProductsAvailableVO(availableProucts));
     }
 }
 
