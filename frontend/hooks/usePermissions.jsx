@@ -3,11 +3,8 @@ import PermissionsServiceProxy from '../proxies/PermissionsServiceProxy';
 import { PermissionVO, UserPermissionVO } from '../valueobjects/permissions/PermissionVO';
 
 /**
- * Custom hook for managing permissions data and operations.
  * @module hooks/usePermissions
  * @description This hook provides a comprehensive way to manage permissions in the application.
- * It handles fetching all available permissions, retrieving user-specific permissions, and updating user permissions.
- * The hook maintains loading states and error handling for all operations.
  * 
  * @returns {Object} An object containing:
  * - `fetchAllPermissions`: A function that fetches all available permissions from the backend.
@@ -16,19 +13,7 @@ import { PermissionVO, UserPermissionVO } from '../valueobjects/permissions/Perm
  * - `loading`: A boolean indicating if any permission operation is currently in progress.
  * - `error`: Any error message if an error occurred during the last operation.
  * 
- * @author Yahir Alfredo Tapia Sifuentes
- * 
- * @example
- * const { fetchAllPermissions, fetchUserPermissions, updatePermissions, loading, error } = usePermissions();
- * 
- * // Fetch all permissions
- * const allPermissions = await fetchAllPermissions();
- * 
- * // Fetch user permissions
- * const userPermissions = await fetchUserPermissions(userId);
- * 
- * // Update user permissions
- * await updatePermissions(userId, [1, 2, 3]);
+ * @author Amada Leticia García Cázares
  */
 const usePermissions = () => {
     const [loading, setLoading] = useState(false);
