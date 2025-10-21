@@ -13,6 +13,12 @@ class ProductOutModel {
 
   async create(data) {
     const { user_id, product_id, reason_id, department_id, unit_id, quantity, notes } = data;
+    const [result] = await db.query(
+      `INSERT INTO product_outs (user_id, product_id, reason_id, department_id, unit_id, quantity, notes) VALUES (?,?,?,?,?,?,?)`,
+      [user_id, product_id, reason_id, department_id, unit_id, quantity, notes]
+    );
+
+    return result;
   }
 }
 
