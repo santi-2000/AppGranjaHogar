@@ -26,7 +26,7 @@ const ProductsServiceProxy = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(productVO),
         });
@@ -35,6 +35,11 @@ const ProductsServiceProxy = () => {
             if (response.status === 400) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Request invalido');
+            } else if (response.status === 401) {
+                throw new Error('No autorizado');
+            } else if (response.status === 403) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'No tienes permisos para crear productos');
             } else if (response.status === 500) {
                 throw new Error('Error interno del servidor');
             } else if (response.status === 503) {
@@ -54,7 +59,7 @@ const ProductsServiceProxy = () => {
         const response = await fetch(`${API_BASE_URL}/v1/products/delete/${productId}`, {
             method: 'DELETE',
             headers: {
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             }
         });
 
