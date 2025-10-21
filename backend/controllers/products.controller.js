@@ -1,3 +1,18 @@
+/**
+ * Products Controller
+ * @module ProductsController
+ * @description This module defines the ProductsController class which handles HTTP requests related to products.
+ *              It interacts with the ProductsService to perform operations such as retrieving product catalogs,
+ *              managing inventory, and handling product creation, deletion, and updates.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * import { productsController } from '../controllers/products.controller.js';
+ * 
+ * app.get('/products/catalog', productsController.getCatalog); 
+ */
+
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 import { productsService } from "../services/products.service.js";
 

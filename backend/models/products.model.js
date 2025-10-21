@@ -1,3 +1,18 @@
+/**
+ * @module ProductsModel
+ * @description This module defines the ProductsModel class which handles database operations
+ *              related to products, including retrieval, creation, updating, and deletion.
+ * @param {Object} db - The database connection object.
+ * @returns {ProductsModel} An instance of ProductsModel for managing product data.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * import { productsModel } from '../models/products.model.js';
+ * 
+ * const catalog = await productsModel.getCatalog();    
+ */
+
 import db from "./index.js"
 
 class ProductsModel {

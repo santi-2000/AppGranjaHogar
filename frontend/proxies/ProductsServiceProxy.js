@@ -1,3 +1,19 @@
+/**
+ * Proxy module for interacting with the Products Service API.
+ * @module ProductsServiceProxy
+ * @description This module provides functions to create and delete products
+ *              by communicating with the backend API. It handles authentication
+ *              and error management for API requests.
+ * @param {Object} productVO - The Product Value Object containing product data.
+ * @returns {Object} An object containing methods to create and delete products.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * const productsService = ProductsServiceProxy();
+ * const newProduct = await productsService.createProduct(productVO);   
+ */
+
 import { ProductVO } from '../valueobjects/products/ProductVO';
 import { API_BASE_URL } from '@env';
 import * as SecureStore from 'expo-secure-store';

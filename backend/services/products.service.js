@@ -1,3 +1,19 @@
+/**
+ * Service for managing products.
+ * @module ProductsService
+ * @description This module provides services for handling product-related operations
+ *              such as retrieving product catalog, managing inventory, and CRUD operations.
+ * @param {Object} dbProduct - The raw product data from the database.
+ * @returns {ProductVO} An instance of ProductVO containing structured product data.
+ *  
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * import { productsService } from './services/products.service.js';
+ * 
+ * const catalog = await productsService.getCatalog();
+ */
+
 import { productsModel } from "../models/products.model.js";
 import { ProductCatalogVO } from "../valueObjects/products/productCatalog.vo.js";
 import { ProductQuantityVO } from "../valueObjects/products/productQuantity.vo.js";
