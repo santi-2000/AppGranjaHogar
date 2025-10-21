@@ -1,5 +1,15 @@
 import request from 'supertest';
 import { jest } from '@jest/globals';
+    
+/**
+ * Users Test
+ * @module UsersControllerTest
+ * @description This module contains unit tests for the UsersController.
+ *              It uses `supertest` for making HTTP requests to the Express app
+ *              and `jest` for mocking services and assertions.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ */
 
 const loginServiceMock = jest.fn();
 const verifyServiceMock = jest.fn();
@@ -54,15 +64,15 @@ describe("User Controller Unit Tests", () => {
     });
 
     test('Given non-existent username, When login, Then return 500', async () => {
-        // GIVEN
-        loginServiceMock.mockRejectedValue(new Error('Datos Incorrectos'));
-  
-        // WHEN/THEN
-        await request(app)
-          .post('/v1/users/login')
-          .send({ username: 'nouser', password: 'password123' })
-          .expect(500);
-      });
+      // GIVEN
+      loginServiceMock.mockRejectedValue(new Error('Datos Incorrectos'));
+
+      // WHEN/THEN
+      await request(app)
+        .post('/v1/users/login')
+        .send({ username: 'nouser', password: 'password123' })
+        .expect(500);
+    });
 
     test('Given missing password, When login, Then return 400 for validation error', async () => {
       // WHEN/THEN
@@ -76,59 +86,59 @@ describe("User Controller Unit Tests", () => {
     });
 
     test('Given password too short, When login, Then return 400 for validation error', async () => {
-        // WHEN/THEN
-        await request(app)
-          .post('/v1/users/login')
-          .send({ username: 'testuser', password: '123' })
-          .expect(400);
-  
-        // THEN
-        expect(loginServiceMock).not.toHaveBeenCalled();
+      // WHEN/THEN
+      await request(app)
+        .post('/v1/users/login')
+        .send({ username: 'testuser', password: '123' })
+        .expect(400);
+
+      // THEN
+      expect(loginServiceMock).not.toHaveBeenCalled();
     });
   });
 
   //Prueba para el Endpoint de Logout
   describe('POST /v1/users/logout', () => {
     test('Given no active session, When logout, Then return 400', async () => {
-        await request(app)
-            .post('/v1/users/logout')
-            .expect(400)
-            .expect(res => {
-                expect(res.body.error).toBe("Sesion NO Iniciada");
-            });
+      await request(app)
+        .post('/v1/users/logout')
+        .expect(400)
+        .expect(res => {
+          expect(res.body.error).toBe("Sesion NO Iniciada");
+        });
     });
   });
 
   //Pruebas para el Endpoint de Verificación de Token
   describe('POST /v1/users/verify', () => {
     test('Given a valid token in header, When verify, Then return 200', async () => {
-        // GIVEN
-        verifyServiceMock.mockResolvedValue();
+      // GIVEN
+      verifyServiceMock.mockResolvedValue();
 
-        // WHEN/THEN
-        await request(app)
-            .post('/v1/users/verify')
-            .set('Authorization', 'Bearer valid.token')
-            .expect(200)
-            .expect(res => {
-                expect(res.body).toBe(true);
-            });
+      // WHEN/THEN
+      await request(app)
+        .post('/v1/users/verify')
+        .set('Authorization', 'Bearer valid.token')
+        .expect(200)
+        .expect(res => {
+          expect(res.body).toBe(true);
+        });
     });
 
     test('Given an invalid token, When verify, Then return 500', async () => {
-        // GIVEN
-        verifyServiceMock.mockRejectedValue(new Error('Token inválido'));
-  
-        // WHEN/THEN
-        await request(app)
-          .post('/v1/users/verify')
-          .set('Authorization', 'Bearer invalid.token')
-          .expect(500);
+      // GIVEN
+      verifyServiceMock.mockRejectedValue(new Error('Token inválido'));
+
+      // WHEN/THEN
+      await request(app)
+        .post('/v1/users/verify')
+        .set('Authorization', 'Bearer invalid.token')
+        .expect(500);
     });
 
     test('Given no token, When verify, Then return 401 Unauthorized', async () => {
-        // WHEN/THEN
-        await request(app).post('/v1/users/verify').expect(401);
+      // WHEN/THEN
+      await request(app).post('/v1/users/verify').expect(401);
     });
   });
 });

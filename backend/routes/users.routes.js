@@ -4,6 +4,22 @@ import { usersController } from "../controllers/users.controller.js";
 import { validate } from "../middlewares/validator.middleware.js";
 import { authAuthorizePermissions, authMiddlewareLogged } from "../middlewares/auth.middleware.js";
 
+/**
+ * @file users.routes.js
+ * @description This file defines the routes for user-related operations in the application.
+ * It includes routes for user login, token verification, user creation, password updates, and user deletion.
+ * Each route is protected by authentication and authorization middleware to ensure that only authorized users can access them.
+ * Input validation is performed using express-validator to ensure data integrity.
+ * @module routes/users
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import usersRoutes from './routes/users.routes.js';
+ * app.use('/api/users', usersRoutes);
+ */
+
+
 const router = Router();
 
 router.post("/login", [

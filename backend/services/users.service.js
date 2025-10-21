@@ -5,6 +5,22 @@ import { PasswordUpdateVO } from "../valueObjects/users/passwordUpdate.vo.js";
 import { AppError } from "../utils/error.util.js";
 import jwt from 'jsonwebtoken'
 
+/**
+ * Users Service
+ * @module UsersService
+ * @description This module provides services for user-related operations, including authentication,
+ *              token verification, user creation, password updates, and user deletion.
+ *              It interacts with the UsersModel to perform database operations and uses
+ *              bcrypt for password hashing and jsonwebtoken for token management.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import { usersService } from '../services/users.service.js';
+ * 
+ * const token = await usersService.login('john.doe', 'password123');
+ */
+
 export class UsersService {
   async login({ username, password }) {
     const [rowsUsername] = await usersModel.loginModel(username);
