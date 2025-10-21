@@ -1,9 +1,5 @@
-import { AppError } from "../utils/error.util.js";
-import jwt from "jsonwebtoken";
-
 /**
- * auth middleware
- * @module AuthMiddleware
+ * @module middlewares/auth
  * @description This module provides authentication and authorization middleware functions.
  *              It includes `authAuthorizePermissions` for role-based access control
  *              and `authMiddlewareLogged` for general authentication.
@@ -16,9 +12,12 @@ import jwt from "jsonwebtoken";
  * router.get('/admin', authAuthorizePermissions('admin'), adminController.getDashboard);
  * router.get('/profile', authMiddlewareLogged, userController.getProfile);
  */
+import { AppError } from "../utils/error.util.js";
+import jwt from "jsonwebtoken";
+
 
 /**
- * Middleware to authorize user permissions.
+ * @description Middleware to authorize user permissions.
  * Checks if the user has any of the allowed permissions or is an admin.
  *
  * @param {...string} allowedPermissions - A list of permissions that are allowed to access the route.

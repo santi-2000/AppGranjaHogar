@@ -1,6 +1,5 @@
 /**
- * Value Object representing a Product.
- * @module ProductVO
+ * @class ProductVO
  * @description This module defines the ProductVO class which encapsulates product data
  *              and provides a structured way to interact with product information. 
  * @param {Object} dbProduct - The raw product data from the database.

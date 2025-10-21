@@ -1,7 +1,9 @@
 /** 
- * @module HomeScreen
+ * @module screens/Home
  * @description This module defines the HomeScreen component which serves as the main dashboard
  *              for users, providing navigation to various sections such as inventory, reports, and catalog.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
  * 
  * @author Carlos Alejandro Ortiz Caro
  */

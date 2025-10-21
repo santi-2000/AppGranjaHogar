@@ -1,3 +1,9 @@
+/**
+ * @module middlewares/validate
+ * @description Middleware to validate request using express-validator. Throws AppError if validation fails.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
 import { validationResult } from 'express-validator'
 import { AppError } from '../utils/error.util.js';
 

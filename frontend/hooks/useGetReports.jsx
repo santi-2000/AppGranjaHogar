@@ -4,7 +4,25 @@ import { ReportVO } from '../valueobjects/reports/ReportVO.jsx';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 
-
+/**
+ * Custom hook for selecting dates and fetching reports in PDF or XLSX formats.
+ * @module hooks/useGetReports
+ * @description This hook manages the selection of report dates and types, handles errors, and fetches the appropriate report files using the `ReportsProxy`.
+ * It also allows users to share the downloaded reports via the device's sharing functionality.
+ * 
+ * @returns {Object} An object containing:
+ * - `selectDate`: A function to select dates for the report.
+ * - `fetchFile`: A function to fetch the selected report type (PDF or XLSX).
+ * - `datesSelected`: The currently selected dates for the report.
+ * - `typesSelected`: The types of reports selected by the user.
+ * - `setTypesSelected`: A function to manually update the types of reports.
+ * - `error`: The error message if any error occurs while selecting dates or fetching reports.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ * 
+ * @example
+ * const { selectDate, fetchFile, datesSelected, typesSelected, setTypesSelected, error } = useGetReports();
+ */
 const useGetReports = () => {
     const [datesSelected, setDatesSelected] = useState({});
     const [typesSelected, setTypesSelected] = useState([]);

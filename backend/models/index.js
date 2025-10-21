@@ -1,3 +1,17 @@
+/**
+ * @module models/index.js
+ * 
+ * @description
+ * This module initializes a MySQL connection pool using the `mysql2/promise` library.
+ * Connection details are loaded from environment variables using `dotenv`.
+ * 
+ * @example
+ * import db from './models/index.js';
+ * const [rows] = await db.query('SELECT * FROM products');
+ *
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
+
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 

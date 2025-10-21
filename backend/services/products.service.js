@@ -1,11 +1,12 @@
 /**
- * Service for managing products.
- * @module ProductsService
+ * @module services/products
+ * 
  * @description This module provides services for handling product-related operations
  *              such as retrieving product catalog, managing inventory, and CRUD operations.
  * @param {Object} dbProduct - The raw product data from the database.
  * @returns {ProductVO} An instance of ProductVO containing structured product data.
  *  
+ * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
  * 
  * @example
@@ -22,6 +23,9 @@ import { ProductVO } from "../valueObjects/products/product.vo.js";
 import { AppError } from "../utils/error.util.js";
 
 class ProductsService {
+    /**
+     * @description Return the full product catalog with VOs. @author Yahir Alfredo Tapia Sifuentes
+     */
     async getCatalog() {
         const [rows] = await productsModel.getCatalog()
         if (!rows || !Array.isArray(rows)) return [];
@@ -69,7 +73,7 @@ class ProductsService {
     async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active }, productId) {
         const existingProduct = await productsModel.getById(productId);
         if (!existingProduct) throw new AppError('Producto no encontrado');
-        
+
 
         const updatedProduct = await productsModel.update(productId, {
             category_id,

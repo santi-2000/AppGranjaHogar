@@ -1,6 +1,13 @@
+
+
+import { useState } from 'react';
+import ProductsServiceProxy from '../proxies/ProductsServiceProxy';
+import { ProductVO } from '../valueobjects/products/ProductVO';
+import { useRouter } from 'expo-router';
+
 /**
  * Custom hook to create a new product.
- * @module useCreateProduct
+ * @module hooks/useCreateProduct
  * @description This hook provides functionality to create a new product using the ProductsServiceProxy.
  *              It manages loading and error states during the creation process.
  * @returns {Object} An object containing the createProduct function, loading state, and error state.
@@ -13,13 +20,6 @@
  * @example
  * const { createProduct, loading, error } = useCreateProduct();    
  */
-
-
-import { useState } from 'react';
-import ProductsServiceProxy from '../proxies/ProductsServiceProxy';
-import { ProductVO } from '../valueobjects/products/ProductVO';
-import { useRouter } from 'expo-router';
-
 const useCreateProduct = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
