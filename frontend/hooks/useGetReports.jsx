@@ -13,7 +13,6 @@ const useGetReports = () => {
 
     function selectDate(date) {
         let temporalDate = { ...datesSelected };
-        console.log(date)
 
         if (Object.keys(temporalDate).length <= 0) {
             temporalDate[date.dateString] = { selected: true, color: "#00568F", timestamp: date.timestamp };
@@ -119,36 +118,6 @@ const useGetReports = () => {
             console.log('Excel report shared successfully:', fileUri);
         }
     }
-
-    function validateSelections() {
-        let initialDate;
-        let endDate;
-
-        if (Object.keys(datesSelected).length != 2) return setError('Seleccione un rango de fechas válido');
-
-        if (datesSelected[Object.keys(datesSelected)[0]].timestamp < datesSelected[Object.keys(datesSelected)[1]].timestamp) {
-            initialDate = Object.keys(datesSelected)[0];
-            endDate = Object.keys(datesSelected)[1];
-        } else {
-            initialDate = Object.keys(datesSelected)[1];
-            endDate = Object.keys(datesSelected)[0];
-        }
-
-        if (typesSelected.length === 0) return setError('Seleccione al menos un tipo de reporte');
-
-        if (Object.keys(datesSelected).length !== 2) {
-            setError('Seleccione un rango de fechas válido');
-            return false;
-        }
-
-        if (typesSelected.length === 0) {
-            setError('Seleccione al menos un tipo de reporte');
-            return false;
-        }
-
-        return { initialDate, endDate };
-    }
-
     return { selectDate, fetchFile, datesSelected, typesSelected, setTypesSelected, error }
 }
 

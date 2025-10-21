@@ -1,12 +1,15 @@
 import { API_BASE_URL } from '@env';
 import { CatalogVO } from '../valueobjects/products/CatalogVO';
+import * as SecureStore from 'expo-secure-store';
 
 const CatalogProxy = () => {
     async function getCatalog() {
+        const token = await SecureStore.getItemAsync('token');
         const response = await fetch(API_BASE_URL + '/v1/products/catalog', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": "Barier " + token
             },
         });
 

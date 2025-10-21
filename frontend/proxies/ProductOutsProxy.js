@@ -1,32 +1,51 @@
-import {API_BASE_URL} from '@env';
+import { API_BASE_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 export const ProductOutsProxy = {
   async getAll() {
-    const res = await fetch(`${API_BASE_URL}/v1/product-outs`);
+    const token = await SecureStore.getItemAsync('token');
+
+    const res = await fetch(`${API_BASE_URL}/v1/product-outs`, {
+      headers: {
+        "Authorization": "Barier " + token
+
+      }
+    });
     if (!res.ok) throw new Error("Error al obtener las salidas");
     return res.json();
   },
 
   async getById(id) {
-    const res = await fetch(`${API_BASE_URL}/v1/product-outs${id}`);
+    const token = await SecureStore.getItemAsync('token');
+
+    const res = await fetch(`${API_BASE_URL}/v1/product-outs${id}`, {
+      headers: {
+        "Authorization": "Barier " + token
+
+      }
+    });
     if (!res.ok) throw new Error("Salida no encontrada");
     return res.json();
   },
 
-    async create(data) {
+  async create(data) {
+    const token = await SecureStore.getItemAsync('token');
+
     const res = await fetch(`${API_BASE_URL}/v1/product-outs`, {
-        method: "POST",
-        headers: {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        "Authorization": "Barier " + token
+
+      },
+      body: JSON.stringify(data),
     });
 
     if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.message || "Error al registrar la salida");
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.message || "Error al registrar la salida");
     }
 
     return res.json();
-}
+  }
 };

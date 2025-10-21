@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import NotificationsProxy from '../proxies/NotificationsProxy';
+import NotificationsProxy from '../proxies/NotificationsServiceProxy';
 
 const useNotifications = () => {
     const [notifications, setNotifications] = useState([]);

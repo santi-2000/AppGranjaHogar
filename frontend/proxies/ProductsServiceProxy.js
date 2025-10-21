@@ -1,13 +1,16 @@
 import { ProductVO } from '../valueobjects/products/ProductVO';
 import { API_BASE_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 const ProductsServiceProxy = () => {
-
     const createProduct = async (productVO) => {
+        const token = await SecureStore.getItemAsync('token');
+
         const response = await fetch(`${API_BASE_URL}/v1/products/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": "Barier " + token
             },
             body: JSON.stringify(productVO),
         });
@@ -30,8 +33,13 @@ const ProductsServiceProxy = () => {
     }
 
     const deleteProduct = async (productId) => {
+        const token = await SecureStore.getItemAsync('token');
+
         const response = await fetch(`${API_BASE_URL}/v1/products/delete/${productId}`, {
             method: 'DELETE',
+            headers: {
+                "Authorization": "Barier " + token
+            }
         });
 
         if (!response.ok) {
@@ -50,11 +58,11 @@ const ProductsServiceProxy = () => {
         const data = await response.json();
         return data.success;
     }
-    
+
     return {
         createProduct,
         deleteProduct,
     }
-};  
+};
 
 export default ProductsServiceProxy;
