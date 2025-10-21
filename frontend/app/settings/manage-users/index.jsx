@@ -1,3 +1,11 @@
+/** 
+ * @module ManageUsersScreen
+ * @description This module defines the ManageUsersScreen component which allows administrators
+ *              to manage user accounts, including adding new users and editing existing ones.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ */
+
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import UserPlus from '../../../components/Icons/UserPlus';

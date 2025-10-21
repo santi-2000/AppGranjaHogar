@@ -1,3 +1,11 @@
+/** 
+ * @module HomeScreen
+ * @description This module defines the HomeScreen component which serves as the main dashboard
+ *              for users, providing navigation to various sections such as inventory, reports, and catalog.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ */
+
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
