@@ -28,7 +28,7 @@ const CatalogProxy = () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
         });
 

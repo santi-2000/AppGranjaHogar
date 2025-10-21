@@ -8,7 +8,7 @@ export const UnitsProxy = {
     const res = await fetch(`${API_BASE_URL}/v1/units`, {
       headers: {
         "Cache-Control": "no-cache",
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
       }
     });
 
@@ -21,7 +21,7 @@ export const UnitsProxy = {
 
     const res = await fetch(`${API_BASE_URL}/v1/units/${id}`, {
       headers: {
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
       }
     });
     if (!res.ok) throw new Error("Unidad no encontrada");
@@ -35,7 +35,7 @@ export const UnitsProxy = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
       },
       body: JSON.stringify(data),
     });

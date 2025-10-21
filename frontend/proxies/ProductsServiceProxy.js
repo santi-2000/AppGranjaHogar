@@ -26,7 +26,7 @@ const ProductsServiceProxy = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(productVO),
         });
@@ -54,7 +54,7 @@ const ProductsServiceProxy = () => {
         const response = await fetch(`${API_BASE_URL}/v1/products/delete/${productId}`, {
             method: 'DELETE',
             headers: {
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             }
         });
 

@@ -10,7 +10,7 @@ const NotificationsProxy = () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
 
             },
         });
@@ -35,7 +35,7 @@ const NotificationsProxy = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(notification),
         });
@@ -54,7 +54,7 @@ const NotificationsProxy = () => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
 
             },
         });
