@@ -7,7 +7,7 @@ export const DepartmentsProxy = {
     const res = await fetch(`${API_BASE_URL}/v1/departments`, {
       headers: {
         "Cache-Control": "no-cache",
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       }
     });
@@ -21,7 +21,7 @@ export const DepartmentsProxy = {
     const res = await fetch(
       `${API_BASE_URL}/v1/departments/${id}`, {
       headers: {
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       }
     }
@@ -35,7 +35,7 @@ export const DepartmentsProxy = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       },
       body: JSON.stringify(data),

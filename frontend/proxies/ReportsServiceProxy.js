@@ -42,7 +42,7 @@ const ReportsProxy = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(reportVo),
         });
@@ -87,7 +87,7 @@ const ReportsProxy = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(reportVo),
         });
