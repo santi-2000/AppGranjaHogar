@@ -12,7 +12,7 @@ export const getInventory = async () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
 
             },
         });
@@ -20,8 +20,8 @@ export const getInventory = async () => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        
         const data = await response.json();
-        console.log("InventoryServiceProxy - API response:", data);
         return data;
     } catch (error) {
         console.error('Error fetching inventory:', error);
@@ -37,7 +37,7 @@ export const getProductQuantity = async (productId) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
 
             },
         });

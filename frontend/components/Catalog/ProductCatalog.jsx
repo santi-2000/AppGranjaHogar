@@ -1,7 +1,6 @@
 import { Link, useRouter } from "expo-router";
 import { View, Text, Pressable, Alert } from "react-native";
-import ArrowRight from "../Icons/ArrowRight";
-import AddIcon from "../Icons/AddIcon";
+import { findEmoji } from '../../utils/findEmojiUtil';
 
 import ChevronUpIcon from "../Icons/ChevronUpIcon";
 import ChevronDownIcon from "../Icons/ChevronDownIcon";
@@ -46,7 +45,7 @@ export default function ProductCatalog({ data }) {
             <View className={`${isOpen ? "bg-white" : "bg-gray-100"} border border-main py-4 px-3  mb-3 rounded-2xl `}>
                 <View className="w-full flex-row justify-between">
                     <View className="flex-row items-center items-center">
-                        <Text className="font-medium ml-3">{data.name}</Text>
+                        <Text className="font-medium ml-3">{findEmoji(data.name)} {data.name}</Text>
                     </View>
                     <View>
                         <View className={`${isOpen ? "" : "hidden"}`}>
