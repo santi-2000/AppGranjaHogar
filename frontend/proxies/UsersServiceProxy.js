@@ -1,6 +1,22 @@
 import { API_BASE_URL } from '@env';
 import * as SecureStore from 'expo-secure-store';
 
+/**
+ * Users Service Proxy
+ * @module UsersServiceProxy
+ * @description This module provides a proxy for interacting with the user-related endpoints of the API.
+ *              It handles HTTP requests for user login, token verification, user deletion, and password updates.
+ *              It also manages error handling for different HTTP response statuses.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import UsersServiceProxy from '../proxies/UsersServiceProxy.js';
+ * 
+ * const { postLogin, postVerify, deleteUser, putUpdatePassword } = UsersServiceProxy();
+ * const token = await postLogin({ username: 'john.doe', password: 'password123' });
+ */
+
 const UsersServiceProxy = () => {
     async function postLogin(LoginVO) {
         console.log(API_BASE_URL)

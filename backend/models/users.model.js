@@ -1,5 +1,20 @@
 import db from "../models/index.js"
 
+/**
+ * Users Model
+ * @module UsersModel
+ * @description This module provides methods for interacting with the 'users' table in the database.
+ *              It includes functions for user authentication, creation, permission management,
+ *              password updates, and user deletion.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import { usersModel } from '../models/users.model.js';
+ * 
+ * const user = await usersModel.loginModel('john.doe');
+ */
+
 class UsersModel {
   async loginModel(username) {
     const sql = `SELECT * FROM users WHERE username = ?`

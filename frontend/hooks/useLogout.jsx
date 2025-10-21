@@ -2,6 +2,24 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
+/**
+ * Custome hook to handle user logout.
+ * @module useLogout
+ * @description This hook provides functionality for user logout.
+ *              It manages loading and error states during the logout process.
+ * @returns {Object} An object containing logout function, error state.
+ * @returns {Function} logout - Function to handle user logout.
+ * @returns {string|null} error - Contains error message if logout fails, otherwise null.
+ * 
+ * @example
+ * const { logout, error } = useLogout();
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example 
+ * 
+ * 
+ */
+
 const usePostLogout = () => {
     const [error, setError] = useState('');
     const [LogoutData, setLogoutData] = useState({});

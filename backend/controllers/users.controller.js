@@ -3,6 +3,21 @@ import jwt from 'jsonwebtoken'
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 import { AppError } from "../utils/error.util.js";
 
+/**
+ * Users Controller
+ * @module UsersController
+ * @description This module defines the UserController class which handles HTTP requests related to user authentication and management.
+ *              It interacts with the UsersService to perform operations such as user login, token verification,
+ *              user creation, password updates, and user deletion.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import { usersController } from '../controllers/users.controller.js';
+ * 
+ * app.post('/users/login', usersController.postLogin);
+ */
+
 class UserController {
   constructor() {
     this.postLogin = catchAsync(this.postLogin.bind(this));
