@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CatalogProxy from '../proxies/CatalogServiceProxy.js';
 
 /**
@@ -23,6 +23,17 @@ const useGetCatalog = () => {
     const [catalog, setCatalog] = useState('');
     const [error, setError] = useState('');
     const { getCatalog } = CatalogProxy();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await fetchCatalog();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     async function fetchCatalog() {
         try {

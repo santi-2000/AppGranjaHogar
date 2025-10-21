@@ -20,11 +20,7 @@ import { useEffect } from 'react';
  */
 
 export default function CatalogScreen() {
-  const { fetchCatalog, catalog, error } = useGetCatalog();
-
-  useEffect(() => {
-    fetchCatalog();
-  }, []);
+  const { catalog, error } = useGetCatalog();
 
   return (
     <SafeAreaView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>

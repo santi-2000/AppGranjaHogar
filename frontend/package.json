@@ -20,6 +20,8 @@
     "expo-sharing": "~14.0.7",
     "expo-status-bar": "~3.0.8",
     "nativewind": "4.1.21",
+    "node-emoji": "^2.2.0",
+    "pluralize-esm": "^9.0.5",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.4",

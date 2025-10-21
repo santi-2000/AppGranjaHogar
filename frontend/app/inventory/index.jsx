@@ -4,33 +4,10 @@ import { Link } from "expo-router";
 import TitleBar from '../../components/TitleBar';
 import SearchProduct from '../../components/Catalog/SearchProduct';
 import { useInventory } from '../../hooks/useGetInventory';
+import { findEmoji } from '../../utils/findEmojiUtil';
 
 export default function InventaryScreen() {
-  const { inventory, loading, error, refetch } = useInventory();
-  
-  console.log("InventaryScreen - inventory:", inventory);
-  console.log("InventaryScreen - loading:", loading);
-  console.log("InventaryScreen - error:", error);
-
-  const getProductEmoji = (name) => {
-    const emojiMap = {
-      'Manzana': '🍎',
-      'Leche': '🥛',
-      'Yogurt': '🥛',
-      'Lentejas': '🫘',
-      'default': '📦'
-    };
-    return emojiMap[name] || emojiMap['default'];
-  };
-
-  const formatQuantity = (quantity, unit) => {
-    const unitMap = {
-      1: 'piezas',
-      2: 'piezas', 
-      3: 'litros'
-    };
-    return `${quantity} ${unitMap[unit] || 'unidades'}`;
-  };
+  const { inventory, loading, error, refetch, getProductEmoji, formatQuantity } = useInventory();
 
   if (loading) {
     return (
@@ -79,7 +56,7 @@ export default function InventaryScreen() {
             <View className="bg-white border border-gray-300 rounded-lg mb-3">
               <View className="flex-row justify-between p-4">
                 <Text className={styles.text}>
-                  {getProductEmoji(item.name)} {item.name}
+                  {findEmoji(item.name)} {item.name}
                 </Text>
                 <Text className={styles.text}>
                   {formatQuantity(item.quantity, item.unit)}

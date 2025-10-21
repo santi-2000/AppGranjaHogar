@@ -25,7 +25,7 @@ export class ProductOutReportVO {
         this.unit = dbProduct.unit;
         this.quantity = dbProduct.quantity;
         this.notes = dbProduct.notes;
-        this.created_at = dbProduct.created_at;
+        this.createdAt = dbProduct.created_at;
         
         Object.freeze(this);
     }

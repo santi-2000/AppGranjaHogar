@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
  *              It also manages error handling for different HTTP response statuses.
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
+ * @author Yahir Alfredo Tapia Sifuentes
  * 
  * @example
  * import UsersServiceProxy from '../proxies/UsersServiceProxy.js';
@@ -71,10 +72,73 @@ const UsersServiceProxy = () => {
 
         return data;
     }
+
+    /**
+     * @author Yahir Alfredo Tapia Sifuentes
+     */
+    async function getUsers() {
+        const token = await SecureStore.getItemAsync('token');
+
+        const response = await fetch(`${API_BASE_URL}/v1/users`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 400) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Request invalido');
+            } else if (response.status === 401) {
+                throw new Error('No autorizado');
+            } else if (response.status === 500) {
+                throw new Error('Error interno del servidor');
+            } else {
+                throw new Error('Error desconocido');
+            }
+        }
+
+        const data = await response.json();
+        return data.users;
+    }
+
+    async function getUserById(userId) {
+        const token = await SecureStore.getItemAsync('token');
+        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            }
+        });
+        if (!response.ok) {
+            if (response.status === 400) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Request invalido');
+            } else if (response.status === 401) {
+                throw new Error('No autorizado');
+            } else if (response.status === 404) {
+                throw new Error('Usuario no encontrado');
+            } else if (response.status === 500) {
+                throw new Error('Error interno del servidor');
+            } else {
+                throw new Error('Error desconocido');
+            }
+        }
+        const data = await response.json();
+        return data.user;
+    }
+
     async function deleteUser(userId) {
+        const token = await SecureStore.getItemAsync('token');
         const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
             method: 'DELETE',
-            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            },
         });
 
         if (!response.ok) {
@@ -96,6 +160,36 @@ const UsersServiceProxy = () => {
         return data.ok;
     }
 
+    async function putUser(userId, EditUserVO) {
+        const token = await SecureStore.getItemAsync('token');
+
+        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            },
+            credentials: 'include',
+            body: JSON.stringify(EditUserVO)
+        });
+
+        if (!response.ok) {
+            if (response.status === 400) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Datos inválidos');
+            } else if (response.status === 401) {
+                throw new Error('No autorizado');
+            } else if (response.status === 500) {
+                throw new Error('Error interno del servidor');
+            } else {
+                throw new Error('Error desconocido');
+            }
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
     async function putUpdatePassword(PasswordUpdateVO) {
         const token = await SecureStore.getItemAsync('token');
 
@@ -103,7 +197,7 @@ const UsersServiceProxy = () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             credentials: 'include',
             body: JSON.stringify(PasswordUpdateVO)
@@ -126,7 +220,7 @@ const UsersServiceProxy = () => {
         return data;
     }
 
-    return { postLogin, postVerify, deleteUser, putUpdatePassword };
+    return { postLogin, postVerify, getUsers, getUserById, deleteUser, putUpdatePassword, putUser };
 };
 
 export default UsersServiceProxy;

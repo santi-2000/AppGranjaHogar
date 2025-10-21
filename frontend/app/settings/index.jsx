@@ -7,7 +7,7 @@ import LinkHome from '../../components/Home/LinkHome';
 import UsersIcon from '../../components/Icons/UsersIcon';
 import KeyIcon from '../../components/Icons/KeyIcon';
 import LogoutIcon from '../../components/Icons/LogoutIcon';
-import usePostLogout from '../../hooks/useLogout';
+import useSettings from '../../hooks/useSettings';
 
 /**
  * @description This file defines the SettingsScreen component, which displays various settings options for the user.
@@ -21,7 +21,8 @@ import usePostLogout from '../../hooks/useLogout';
  */
 
 export default function SettingsScreen() { 
-  const { logout } = usePostLogout();
+  const { logout } = useSettings();
+
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Ajustes"} />
