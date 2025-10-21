@@ -5,6 +5,15 @@ import InputText from "../components/Form/InputText";
 import { Link } from "expo-router";
 import { useEffect } from "react";
 
+/**
+ * @module screens/login
+ * 
+ * @description The Login screen allows users to input their username and password to authenticate.
+ * It includes form validation and handles the login process through the `useLogin` hook.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
+
 export default function App() {
   const { login, setLoginData, loginData, error, handleChange, verify } = useLogin();
 

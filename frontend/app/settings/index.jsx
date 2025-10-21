@@ -10,15 +10,13 @@ import LogoutIcon from '../../components/Icons/LogoutIcon';
 import usePostLogout from '../../hooks/useLogout';
 
 /**
- * @file index.jsx
  * @description This file defines the SettingsScreen component, which displays various settings options for the user.
  *              It includes links to manage users, change password, and log out.
- * @module screens/SettingsScreen
+ * @module screens/settings
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * 
  * @example
- * // This component is typically used within a navigation stack.
  * <SettingsScreen />
  */
 

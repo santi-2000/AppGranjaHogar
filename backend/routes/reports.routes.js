@@ -1,3 +1,20 @@
+/**
+ * @module routers/reports
+ * 
+ * @description This file defines the routes for report-related operations in the application.
+ * It includes routes for generating PDF and XLSX reports.
+ * Each route is protected by authentication and authorization middleware to ensure that only authorized users can access them.
+ * Input validation is performed using express-validator to ensure data integrity.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ * 
+ * @example
+ * import reportsRoutes from './routes/reports.routes.js';
+ * app.use('/v1/reports', reportsRoutes);
+ */
+
+
+
 import { Router } from "express"
 import { check, param } from "express-validator" 
 import { reportsController } from "../controllers/reports.controller.js"

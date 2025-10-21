@@ -5,8 +5,8 @@ import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 
 /**
- * Custome hook to 
- * @module useLogin
+ * Custom hook to manage user login and session verification.
+ * @module hooks/useLogin
  * @description This hook provides functionality for user login and session verification.
  *              It manages loading and error states during the authentication process.
  * @returns {Object} An object containing login function, login data, error state, and handleChange function.
