@@ -1,11 +1,15 @@
 import { API_BASE_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 const ReportsProxy = () => {
     async function getPdfReport(reportVo) {
+        const token = await SecureStore.getItemAsync('token');
+
         const response = await fetch(API_BASE_URL + '/v1/reports/pdf', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": "Barier " + token
             },
             body: JSON.stringify(reportVo),
         });
@@ -28,10 +32,13 @@ const ReportsProxy = () => {
     }
 
     async function getXLSXReport(reportVo) {
+        const token = await SecureStore.getItemAsync('token');
+
         const response = await fetch(API_BASE_URL + '/v1/reports/xlsx', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "Authorization": "Barier " + token
             },
             body: JSON.stringify(reportVo),
         });

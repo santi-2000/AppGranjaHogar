@@ -1,35 +1,51 @@
-import {API_BASE_URL} from '@env';
+import { API_BASE_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 export const DepartmentsProxy = {
   async getAll() {
+    const token = await SecureStore.getItemAsync('token');
     const res = await fetch(`${API_BASE_URL}/v1/departments`, {
-  headers: { "Cache-Control": "no-cache" }
+      headers: {
+        "Cache-Control": "no-cache",
+        "Authorization": "Barier " + token
+
+      }
     });
-    
+
     if (!res.ok) throw new Error("Error al obtener los departamentos");
     return res.json();
   },
 
   async getById(id) {
-    const res = await fetch(`${API_BASE_URL}/v1/departments/${id}`);
+    const token = await SecureStore.getItemAsync('token');
+    const res = await fetch(
+      `${API_BASE_URL}/v1/departments/${id}`, {
+      headers: {
+        "Authorization": "Barier " + token
+
+      }
+    }
+    );
     if (!res.ok) throw new Error("Departamento no encontrado");
     return res.json();
   },
 
-    async create(data) {
+  async create(data) {
     const res = await fetch(`${API_BASE_URL}/v1/departments`, {
-        method: "POST",
-        headers: {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        "Authorization": "Barier " + token
+
+      },
+      body: JSON.stringify(data),
     });
 
     if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.message || "Error al registrar departamento");
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.message || "Error al registrar departamento");
     }
 
     return res.json();
-}
+  }
 };

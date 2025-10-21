@@ -19,6 +19,7 @@ const usePostLogin = () => {
         setError(null);
         try {
             const loginVO = new LoginVO(loginData);
+            console.log(loginVO)
             const response = await postLogin(loginVO);
             console.log(response)
             await SecureStore.setItemAsync('token', response.token);

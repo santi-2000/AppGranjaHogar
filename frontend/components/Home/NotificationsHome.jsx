@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native';
 import { Link } from "expo-router";
 import { Svg, Path } from 'react-native-svg'
 import React, { useEffect, useState } from 'react';
-import useNotifications from '../hooks/useNotifications.jsx';
+import useNotifications from '../../hooks/useNotifications.jsx';
 
 export default function NotificationsHome({ icon, isOpen, toggleSection }) {
   const { fetchNotifications, notifications, error } = useNotifications();
