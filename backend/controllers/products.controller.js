@@ -42,6 +42,7 @@ class ProductsController {
         const result = await productsService.getProductQuantity(id);
         res.json(result);
     }
+
     async getInventory(req, res) {
         const result = await productsService.getInventory();
         res.json(result);
