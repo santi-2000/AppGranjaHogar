@@ -12,6 +12,19 @@ import ButtonRounded from "../../../../components/Form/ButtonRounded";
 import useEditProduct from '../../../../hooks/useEditProduct';
 import useGetCatalog from '../../../../hooks/useGetCatalog';
 
+
+/** 
+ * @module EditProductScreen
+ * @decription This component allows users to edit an existing product's details.
+ * It fetches the product data based on the provided ID and populates
+ * the form fields for editing. Users can modify the product's name,
+ * perishability, category, unit, and stock levels. Upon submission,
+ * the updated product information is sent to the server.
+ * @returns 
+ * JSX.Element - The Edit Product Screen component.
+ * 
+ * @author Santiago Estrada
+ */
 export default function EditProductScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();

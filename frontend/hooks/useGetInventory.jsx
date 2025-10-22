@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { getInventory, getProductQuantity } from '../proxies/InventoryServiceProxy';
 import { ProductInventoryVO, ProductQuantityVO } from '../valueobjects/products/ProductVO';
 
+/**
+ * @class useInventory
+ * @description Custom React hook to manage product inventory data.
+ * @module hooks/useInventory
+ * @returns {Object} An object containing inventory data, loading state, error state, and utility functions.
+ * @author Roberto Santiago Estrada Orozco
+ * @example
+ * import { useInventory } from '../hooks/useInventory';
+ * const { inventory, loading, error, fetchInventory } = useInventory();
+ */
+
 export const useInventory = () => {
     const [inventory, setInventory] = useState([]);
     const [loading, setLoading] = useState(false);

@@ -8,6 +8,7 @@
  * 
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import { productsModel } from '../models/products.model.js';
@@ -32,18 +33,24 @@ class ProductsModel {
         return await db.query(sql, [true]);
     }
 
+    /**
+     * @description Retrieves the actual stock and unit id of a specific active product by its id.
+     * @param {*} id 
+     * @returns {Promise<Object>} - An object containing the product's name, actual stock, and unit id.
+     * @author Roberto Santiago Estrada Orozco 
+     */
     async getProductQuantity(id) {
         const [rows] = await db.query(`SELECT name, actual_stock, unit_id FROM products WHERE id = ? AND is_active = ?`, [id, true]);
         return rows[0];
     }
 
+    /**
+     * @description Retrieves the inventory of active products with their id, name, actual stock, and unit id.
+     * @returns {Promise<Array>} - An array of products with their id, name, actual stock, and unit id.
+     * @author Roberto Santiago Estrada Orozco
+     */
     async getInventory() {
-        const sql = `
-        SELECT id, name, actual_stock, unit_id 
-        FROM products 
-        WHERE is_active = ?
-        ORDER BY name ASC
-        `
+        const sql = `SELECT id, name, actual_stock, unit_id FROM products WHERE is_active = ? ORDER BY name ASC `;
         const [rows] = await db.query(sql, [true]);
         return rows;
     }

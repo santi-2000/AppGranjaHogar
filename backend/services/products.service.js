@@ -8,6 +8,7 @@
  *  
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import { productsService } from './services/products.service.js';
@@ -34,6 +35,9 @@ class ProductsService {
         return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
     }
 
+    /**
+     * @author Roberto Santiago Estrada Orozco
+     */
     async getProductQuantity(id) {
         const product = await productsModel.getProductQuantity(id);
         if (!product) throw new AppError('Product not found');
@@ -41,6 +45,10 @@ class ProductsService {
         return new ProductQuantityVO(product);
     }
 
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco 
+ */
     async getInventory() {
         const products = await productsModel.getInventory();
         return products.map(product => new ProductInventoryVO(product));

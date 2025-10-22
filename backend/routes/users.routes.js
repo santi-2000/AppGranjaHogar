@@ -15,6 +15,7 @@ import { AppError } from "../utils/error.util.js";
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import usersRoutes from './routes/users.routes.js';
@@ -90,7 +91,9 @@ router.put("/:id", [
 ],
   usersController.putUser
 );
-
+/**
+ * @author Roberto Santiago Estrada Orozco
+ */
 router.put("/update-password", [
   authMiddlewareLogged,
   body("currentPassword").isString().notEmpty().withMessage("La contraseña actual es requerida"),

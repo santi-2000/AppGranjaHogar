@@ -1,3 +1,13 @@
+/**
+ * @class PasswordUpdate
+ * @description Value Object for updating user passwords.
+ * @module valueobjects/users/UpdatePasswordVO
+ * @author Roberto Santiago Estrada Orozco
+ * @example
+ * import { PasswordUpdate } from '../valueobjects/users/UpdatePasswordVO';
+ * const passwordUpdate = new PasswordUpdate({
+ */
+
 export class PasswordUpdate {
     constructor({ currentPassword, newPassword, confirmPassword }) {
       this.validateInputs(currentPassword, newPassword, confirmPassword);

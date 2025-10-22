@@ -11,6 +11,17 @@ import ButtonRounded from "../../../components/Form/ButtonRounded";
 import useCreateProduct from '../../../hooks/useCreateProduct';
 import { useRouter } from 'expo-router';
 
+
+/**
+ * @module NewProductScreen
+ * @decription This component allows users to create a new product by filling out a form.
+ * It includes fields for the product's name, perishability, category, unit, and stock levels.
+ * Upon submission, the new product information is sent to the server.
+ * @returns 
+ * JSX.Element - The New Product Screen component.
+ * @author Santiago Estrada
+ */
+
 export default function NewProductScreen() {
   const { createProduct, loading, error } = useCreateProduct();
 
