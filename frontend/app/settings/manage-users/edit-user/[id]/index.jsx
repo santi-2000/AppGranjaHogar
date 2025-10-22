@@ -1,53 +1,79 @@
-import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { Alert, Pressable, ScrollView, Text, TextInput, View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import TitleBar from '../../../../../components/TitleBar';
 import ButtonRounded from '../../../../../components/Form/ButtonRounded';
 import useDeleteUser from '../../../../../hooks/useDeleteUser';
+import usePermissions from '../../../../../hooks/usePermissions';
 
-const roles = [
-  { label: 'Administrador', value: 'admin' },
-  { label: 'Cocina', value: 'kitchen' },
-  { label: 'Comedor', value: 'dining' },
-];
-
-const defaultPermissionsByRole = {
-  admin: { productIn: true, productOut: true, reports: true, editCatalog: true, manageUsers: true },
-  kitchen: { productIn: true, productOut: true, reports: false, editCatalog: false, manageUsers: false },
-  dining: { productIn: false, productOut: true, reports: false, editCatalog: false, manageUsers: false },
+const PERMISSION_IDS = {
+  ADMIN: 1,             
+  PRODUCT_ENTRIES: 2,   
+  PRODUCT_OUTS: 3,      
+  REPORTS: 4,           
+  EDIT_CATALOG: 5,      
+  MANAGE_USERS: 6,      
 };
 
 export default function EditUserScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { deleteUser, loading, error } = useDeleteUser();
+  const { deleteUser, loading: deleteLoading } = useDeleteUser();
+  const { 
+    fetchUserPermissions, 
+    updatePermissions, 
+    loading: permissionsLoading, 
+    error: permissionsError 
+  } = usePermissions();
 
-  const mockById = {
-    '0': { name: 'Yahir Alfredo Tapia Sifuentes', email: 'yahir.tapia@granjahogar.com', role: 'admin' },
-    '1': { name: 'Ana Lopez', email: 'ana.lopez@granjahogar.com', role: 'kitchen' },
-    '2': { name: 'Jared Marquez', email: 'jared.marquez@granjahogar.com', role: 'dining' },
+  const [name, setName] = useState('');
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    loadUserPermissions();
+  }, [id]);
+
+  const loadUserPermissions = async () => {
+    try {
+      setInitialLoading(true);
+      const userPerms = await fetchUserPermissions(id);
+
+      const permIds = userPerms.getPermissionIds();
+      setSelectedPermissions(permIds);
+      
+    } catch (err) {
+      console.error('Error cargando permisos:', err);
+      Alert.alert('Error', 'No se pudieron cargar los permisos del usuario');
+    } finally {
+      setInitialLoading(false);
+    }
   };
-  const initial = mockById[id] ?? { name: '', email: '', role: 'admin' };
 
-  const [name, setName] = useState(initial.name);
-  const [role, setRole] = useState(initial.role);
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
-  const [permissions, setPermissions] = useState(defaultPermissionsByRole[initial.role]);
-
-  const roleLabel = useMemo(() => roles.find(r => r.value === role)?.label ?? '', [role]);
-
-  const handleSelectRole = (nextValue) => {
-    setRole(nextValue);
-    setPermissions(defaultPermissionsByRole[nextValue]);
-    setShowRoleDropdown(false);
+  const togglePermission = (permissionId) => {
+    setSelectedPermissions(prev => {
+      if (prev.includes(permissionId)) {
+        return prev.filter(id => id !== permissionId);
+      } else {
+        return [...prev, permissionId];
+      }
+    });
   };
 
-  const togglePermission = (key) => setPermissions(prev => ({ ...prev, [key]: !prev[key] }));
+  const hasPermission = (permissionId) => {
+    return selectedPermissions.includes(permissionId);
+  };
 
-  const handleSave = () => {
-    console.log('Editar usuario', { id, name, role, permissions });
-    router.back();
+  const handleSave = async () => {
+    try {
+      await updatePermissions(id, selectedPermissions);
+      Alert.alert('Éxito', 'Permisos actualizados correctamente');
+      router.back();
+    } catch (err) {
+      console.error('Error guardando permisos:', err);
+      Alert.alert('Error', 'No se pudieron actualizar los permisos');
+    }
   };
 
   const handleDeleteConfirm = () => {
@@ -57,7 +83,6 @@ export default function EditUserScreen() {
       [
         {
           text: "Cancelar",
-          onPress: () => console.log("Eliminación cancelada"),
           style: "cancel" 
         },
         {
@@ -73,6 +98,18 @@ export default function EditUserScreen() {
     );
   };
 
+  if (initialLoading) {
+    return (
+      <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
+        <TitleBar title={"Editar permisos"} />
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#034977" />
+          <Text className="text-gray-600 mt-4">Cargando permisos...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Editar permisos"} />
@@ -83,51 +120,51 @@ export default function EditUserScreen() {
             <Text className="text-gray-900">Eliminar Usuario</Text>
           </Pressable>
 
-          <Text className="text-lg font-semibold mb-2">Nombre</Text>
-          <TextInput
-            placeholder="Nombre"
-            value={name}
-            onChangeText={setName}
-            className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
-          />
+          <Text className="text-lg font-semibold mb-2">Usuario ID: {id}</Text>
 
-          <Text className="text-lg font-semibold mt-6 mb-2">Rol</Text>
-          <Pressable
-            className="border border-gray-300 rounded-xl px-4 py-3 bg-white flex-row justify-between items-center"
-            onPress={() => setShowRoleDropdown(prev => !prev)}
-          >
-            <Text className="text-gray-900">{roleLabel}</Text>
-            <Text className="text-gray-500">{showRoleDropdown ? '▲' : '▼'}</Text>
-          </Pressable>
-          {showRoleDropdown && (
-            <View className="mt-2 border border-gray-300 rounded-xl overflow-hidden bg-white">
-              {roles.map((r, index) => (
-                <Pressable
-                  key={r.value}
-                  onPress={() => handleSelectRole(r.value)}
-                  className="px-4 py-3 flex-row justify-between items-center"
-                  style={index + 1 < roles.length ? { borderBottomWidth: 1, borderBottomColor: '#e5e7eb' } : null}
-                >
-                  <Text className="text-gray-900">{r.label}</Text>
-                  {role === r.value ? <Text className="text-[#00568F]">✓</Text> : null}
-                </Pressable>
-              ))}
+          {permissionsError && (
+            <View className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+              <Text className="text-red-600">{permissionsError}</Text>
             </View>
           )}
 
           <Text className="text-lg font-semibold mt-6 mb-3">Permisos</Text>
 
           <View className="gap-y-3">
-            <PermissionRow label="Entradas de productos" value={permissions.productIn} onValueChange={() => togglePermission('productIn')} />
-            <PermissionRow label="Salidas de productos" value={permissions.productOut} onValueChange={() => togglePermission('productOut')} />
-            <PermissionRow label="Generar reportes" value={permissions.reports} onValueChange={() => togglePermission('reports')} />
-            <PermissionRow label="Editar catálogo" value={permissions.editCatalog} onValueChange={() => togglePermission('editCatalog')} />
-            <PermissionRow label="Gestionar usuarios" value={permissions.manageUsers} onValueChange={() => togglePermission('manageUsers')} />
+            <PermissionRow 
+              label="Entrada de productos" 
+              value={hasPermission(PERMISSION_IDS.PRODUCT_ENTRIES)} 
+              onValueChange={() => togglePermission(PERMISSION_IDS.PRODUCT_ENTRIES)} 
+            />
+            <PermissionRow 
+              label="Salidas de productos" 
+              value={hasPermission(PERMISSION_IDS.PRODUCT_OUTS)} 
+              onValueChange={() => togglePermission(PERMISSION_IDS.PRODUCT_OUTS)} 
+            />
+            <PermissionRow 
+              label="Generar reportes" 
+              value={hasPermission(PERMISSION_IDS.REPORTS)} 
+              onValueChange={() => togglePermission(PERMISSION_IDS.REPORTS)} 
+            />
+            <PermissionRow 
+              label="Editar catálogo" 
+              value={hasPermission(PERMISSION_IDS.EDIT_CATALOG)} 
+              onValueChange={() => togglePermission(PERMISSION_IDS.EDIT_CATALOG)} 
+            />
+            <PermissionRow 
+              label="Gestionar usuarios" 
+              value={hasPermission(PERMISSION_IDS.MANAGE_USERS)} 
+              onValueChange={() => togglePermission(PERMISSION_IDS.MANAGE_USERS)} 
+            />
           </View>
         </View>
 
         <View className="mt-6">
-          <ButtonRounded text="Guardar cambios" action={handleSave} />
+          <ButtonRounded 
+            text={permissionsLoading ? "Guardando..." : "Guardar cambios"} 
+            action={handleSave}
+            disabled={permissionsLoading}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
