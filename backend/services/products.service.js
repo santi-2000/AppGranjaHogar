@@ -9,6 +9,7 @@
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  * 
  * @example
  * import { productsService } from './services/products.service.js';
@@ -79,6 +80,9 @@ class ProductsService {
         return { success: true, message: "Product deleted successfully" };
     }
 
+    /**
+     * @author Renata Loaiza
+     */
     async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active }, productId) {
         const existingProduct = await productsModel.getById(productId);
         if (!existingProduct) throw new AppError('Producto no encontrado');

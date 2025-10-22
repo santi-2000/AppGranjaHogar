@@ -10,6 +10,7 @@
  * @author Carlos Alejandro Ortiz Caro
  * @author Roberto Santiago Estrada Orozco
  * @author Samuel Isaac Lopez Mar
+ * @author Renata Loaiza
  * 
  * @example
  * import { productsModel } from '../models/products.model.js';
@@ -66,6 +67,9 @@ class ProductsModel {
         return rows[0];
     }
 
+    /**
+     * @author Renata Loaiza
+     */
     async update(id, updateData) {
         const fields = [];
         const values = [];

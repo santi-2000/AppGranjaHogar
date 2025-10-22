@@ -14,6 +14,7 @@ import { AppError } from "../utils/error.util.js";
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Roberto Santiago Estrada Orozco 
  * @author Renata Soto Bravo
+ * @author Renata Loaiza
  * 
  * @example
  * import { usersController } from '../controllers/users.controller.js';
@@ -63,6 +64,9 @@ class UserController {
     return res.status(200).json({ ok: true, user });
   }
 
+  /**
+   * @author Renata Loaiza
+   */
   async createUser(req, res) {
     const user = await usersService.createUser(req.body);
     return res.status(201).json({ ok: true, message: "Usuario creado", user });
