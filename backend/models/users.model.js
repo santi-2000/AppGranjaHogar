@@ -6,6 +6,7 @@
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Renata Soto Bravo
  * 
  * @example
  * import { usersModel } from '../models/users.model.js';
@@ -123,6 +124,9 @@ class UsersModel {
     }
   }
 
+  /**
+   * @author Renata Soto Bravo
+   */
   async delete(id) {
     const sql = `UPDATE users SET is_active = FALSE WHERE id = ? AND is_active = TRUE`;
     const [result] = await db.query(sql, [id]);

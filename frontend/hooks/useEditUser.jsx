@@ -4,6 +4,29 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import UsersProxy from '../proxies/UsersServiceProxy';
 import EditUserVO from '../valueobjects/users/EditUserVO';
 
+/**
+ * Custom hook for managing user editing and deletion operations.
+ * @module hooks/useEditUser
+ * @description This hook provides comprehensive state management for user editing operations including
+ *              fetching user data, updating user information, managing permissions, and deleting users.
+ *              It handles loading states, error states, and provides functions for all user management
+ *              operations in the edit user interface.
+ * @returns {Object} An object containing user management functions and state.
+ * @returns {Function} handleDeleteConfirm - Function to show delete confirmation dialog.
+ * @returns {Function} handleSave - Function to save user changes.
+ * @returns {Function} togglePermission - Function to toggle user permissions.
+ * @returns {Object} user - Current user data object.
+ * @returns {Function} setName - Function to update user name.
+ * @returns {Array} permissions - Available permissions array.
+ * @returns {boolean} loading - Loading state during operations.
+ * @returns {string|null} error - Error message if operation failed.
+ * 
+ * @author Renata Soto Bravo
+ * 
+ * @example
+ * const { handleDeleteConfirm, handleSave, user, loading } = useEditUser();
+ */
+
 const useEditUser = () => {
     const router = useRouter();
     const { id } = useLocalSearchParams();
@@ -60,6 +83,10 @@ const useEditUser = () => {
         console.log(response);
         router.back();
     };
+
+    /**
+     * @author Renata Soto Bravo
+     */
 
     const handleDeleteConfirm = () => {
         Alert.alert(
