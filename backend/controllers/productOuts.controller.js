@@ -90,30 +90,35 @@ export class ProductOutController {
   }
 
   /**
-   * Creates a new product out record.
+   * Creates a new product out record and updates the corresponding product's stock.
+   *
+   * If one or both queries fail, an `AppError` is thrown and the transaction is not finalized.
    *
    * @async
    * @memberof ProductOutController
-   * @param {import("express").Request} req - The HTTP request object containing product data in 'req.body'.
+   * @param {import("express").Request} req - The HTTP request object containing product out data in `req.body`.
    * @param {import("express").Response} res - The HTTP response object.
-   * @returns {Promise<void>} Returns an object with the ID of the newly created record and a confirmation message.
+   * @returns {Promise<void>} Sends a JSON response confirming the creation and stock update.
+   *
    * @example
    * // Request
    * POST /api/v1/product-outs
    * {
-   * "user_id": 3,
-   * "product_id": 12,
-   * "reason_id": 2,
-   * "department_id": 2,
-   * "unit_id": 2,
-   * "quantity": 6,
-   * "notes": "Se acabó el arroz"
+   *   "user_id": 3,
+   *   "product_id": 12,
+   *   "reason_id": 2,
+   *   "department_id": 2,
+   *   "unit_id": 2,
+   *   "quantity": 6,
+   *   "notes": "Se acabó el arroz"
    * }
-   * * // Response (201)
+   *
+   * // Response (201)
    * {
-   * "success": true,
-   * "insertId": 25,
-   * "message": "Salida registrada correctamente"
+   *   "success": true,
+   *   "updatedStock": true,
+   *   "insertId": 25,
+   *   "message": "Salida registrada correctamente"
    * }
    */
   async create(req, res) {

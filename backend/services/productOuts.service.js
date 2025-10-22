@@ -1,52 +1,68 @@
 /**
  * @module services/productOuts
+ * 
  * @description
- * This module defines the 'ProductOutService' class, which encapsulates the business logic
- * for product out operations. It acts as an intermediary, utilizing the 'productOutModel'
- * for database access and transforming the data using 'ProductOutVO'.
- * It includes methods for retrieving, fetching by ID, and creating product out records,
- * handling error states such as 'no records found' or 'insertion failure'.
- * @author Samuel Isaac Lopez Mar
-*/
+ * This module defines the `ProductOutService` class, which encapsulates the business logic 
+ * for product out operations. It serves as the intermediary layer between controllers and models, 
+ * ensuring clean separation of concerns. 
+ * 
+ * The service interacts with the `productOutModel` for database operations and leverages 
+ * `ProductOutVO` (Value Object) for consistent data transformation. It provides methods to:
+ * - Retrieve all product out records.
+ * - Retrieve a single record by its ID.
+ * - Create new product out entries and update product stock accordingly.
+ * 
+ * @author
+ * Samuel Isaac Lopez Mar
+ */
 
 import { productOutModel } from "../models/productOuts.model.js";
 import { AppError } from "../utils/error.util.js";
 import { ProductOutVO } from "../valueObjects/products/productOuts.vo.js";
 
 /**
- * Service class responsible for business logic related to product outs.
+ * Service class responsible for implementing business logic for product outflows.
+ * 
  * @class
+ * @classdesc Handles operations such as retrieving, fetching, and creating product out records.
  */
 class ProductOutService {
   /**
-   * Retrieves all product out records, maps them to Value Objects, and handles the 'not found' case.
+   * Retrieves all product out records from the database and converts them into `ProductOutVO` instances.
+   *
    * @async
    * @memberof ProductOutService
-   * @returns {Promise<Object>} An object containing the success status and an array of ProductOutVOs.
-   * @throws {AppError} If no records are found in the database.
+   * @returns {Promise<{ success: boolean, data: ProductOutVO[] }>}
+   * Returns a success flag and an array of `ProductOutVO` objects representing product out records.
+   *
    * @example
    * const result = await productOutService.getAll();
-   * // { success: true, data: [ProductOutVO, ProductOutVO, ...] }
+   * // Output: { success: true, data: [ProductOutVO, ProductOutVO, ...] }
    */
   async getAll() {
     const records = await productOutModel.getAll();
 
-    if (!records || records.length === 0) throw new AppError("No hay registros");
+    if (!records || records.length === 0)
+      throw new AppError("No hay registros");
+
     const data = records.map(record => new ProductOutVO(record));
 
     return { success: true, data };
   }
 
   /**
-   * Retrieves a single product out record by ID and maps it to a Value Object.
+   * Retrieves a specific product out record by its unique identifier.
+   * The retrieved data is transformed into a `ProductOutVO` instance.
+   *
    * @async
    * @memberof ProductOutService
-   * @param {number} id - The ID of the product out record to retrieve.
-   * @returns {Promise<Object>} An object containing the success status and a single ProductOutVO.
-   * @throws {AppError} If the record is not found with the given ID.
+   * @param {number} id - The unique identifier of the product out record.
+   * @returns {Promise<{ success: boolean, data: ProductOutVO }>}
+   * Returns a success flag and a `ProductOutVO` object representing the product out record.
+   *
    * @example
    * const result = await productOutService.getById(5);
-   * // { success: true, data: ProductOutVO }
+   * // Output: { success: true, data: ProductOutVO }
    */
   async getById(id) {
     const record = await productOutModel.getById(id);
@@ -59,23 +75,62 @@ class ProductOutService {
   }
 
   /**
-   * Creates a new product out record in the database.
+   * Creates a new product out record and updates the product's current stock.
+   * 
+   * This method performs two main operations:
+   * 1. Inserts a new record into the `product_outs` table.
+   * 2. Decreases the corresponding product's `actual_stock` value in the `products` table.
+   * 
    * @async
    * @memberof ProductOutService
-   * @param {Object} data - The data required for the new product out record.
-   * @returns {Promise<Object>} An object containing the success status, the insert ID, and a confirmation message.
-   * @throws {AppError} If the database insertion fails (no insertId returned).
+   * @param {Object} data - The data object containing the new product out information.
+   * @param {number} data.user_id - The ID of the user registering the outflow.
+   * @param {number} data.product_id - The ID of the product being deducted.
+   * @param {number} data.reason_id - The ID representing the reason for the outflow.
+   * @param {number} data.department_id - The ID of the department receiving the product.
+   * @param {number} data.unit_id - The ID of the unit associated with the product.
+   * @param {number} data.quantity - The quantity of product being deducted.
+   * @param {string} [data.notes] - Optional notes or comments for the outflow record.
+   * 
+   * @returns {Promise<{ success: boolean, updatedStock: boolean, insertId: number, message: string }>}
+   * Returns a confirmation object containing the operation result, including the insert ID.
+   * 
    * @example
-   * const result = await productOutService.create({ user_id: 1, product_id: 15, reason_id: 3, department_id: 2, unit_id: 4, quantity: 10, notes: "Donativo a otra granja hogar."});
-   * // { success: true, insertId: 25, message: "Salida registrada correctamente" }
+   * const result = await productOutService.create({
+   *   user_id: 1,
+   *   product_id: 15,
+   *   reason_id: 3,
+   *   department_id: 2,
+   *   unit_id: 4,
+   *   quantity: 10,
+   *   notes: "Donativo a otra granja hogar."
+   * });
+   * 
+   * // Output:
+   * // {
+   * //   success: true,
+   * //   updatedStock: true,
+   * //   insertId: 25,
+   * //   message: "Salida registrada correctamente"
+   * // }
    */
   async create(data) {
     const result = await productOutModel.create(data);
+    
+    if (!result || !result.insertId)
+      throw new AppError("Error al ingresar la salida");
 
-    if (!result || !result.insertId) throw new AppError("Error al ingresar la salida");
+    const updatedStock = await productOutModel.updateProductStock(
+      data.product_id,
+      data.quantity
+    );
+
+    if (updatedStock.affectedRows === 0)
+      throw new AppError("No se pudo actualizar el stock", 404);
 
     return {
       success: true,
+      updatedStock: true,
       insertId: result.insertId,
       message: "Salida registrada correctamente"
     };
