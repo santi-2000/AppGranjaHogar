@@ -108,6 +108,13 @@ class ProductsService {
 
         return rows.map(availableProducts => new ProductsAvailableVO(availableProducts));
     }
+    
+    async getAvailableProductsForEntries() {
+        const rows = await productsModel.getAvailableProductsForEntries()
+        if (!rows || !Array.isArray(rows)) return [];
+
+        return rows.map(availableProducts => new ProductsAvailableVO(availableProducts));
+    }
 }
 
 export const productsService = new ProductsService();

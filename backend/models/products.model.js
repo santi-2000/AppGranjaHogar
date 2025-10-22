@@ -103,10 +103,16 @@ class ProductsModel {
     }
 
     async getAvailableProducts() {
-    const sql = 'SELECT id, name, perishable, unit_id FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
-    const [rows] = await db.query(sql);
-    return rows;
-}
+        const sql = 'SELECT id, name, perishable, unit_id FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+        const [rows] = await db.query(sql);
+        return rows;
+    }
+
+    async getAvailableProductsForEntries() {
+        const sql = 'SELECT id, name, perishable, unit_id FROM products WHERE is_active = TRUE ORDER BY name;';
+        const [rows] = await db.query(sql);
+        return rows;
+    }
 
 }
 
