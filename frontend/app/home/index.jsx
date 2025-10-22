@@ -33,7 +33,6 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <View className="w-full flex-1 p-6">
-
         <View className="my-7 flex-row justify-between">
           <View>
             <Text className="text-5xl font-semibold">Hola, Yahir</Text>
@@ -57,8 +56,6 @@ export default function HomeScreen() {
           <View className="w-1/2 pl-2">
             <CreateHome icon={<FolderMinusIcon />} directory={"/products/product-out"} text={"Nueva Salida"} />
           </View>
-
-
         </View>
 
         <View className="mb-4">

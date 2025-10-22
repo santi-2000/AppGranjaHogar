@@ -9,9 +9,9 @@ export default function DepartmentSectionOut({ departmentId, setDepartmentId }) 
 
     return (
         <View>
-            <View className="bg-white p-4 rounded-2xl border border-main">
-                <Text className="text-gray-700 mb-2">Departamento al que se dirige</Text>
-                <View className="bg-white rounded-xl border border-gray-300 h-12 justify-center">
+            <View className="bg-white p-4 rounded-2xl">
+                <Text className="text-lg font-medium text-gray-800 mb-3">Departamento al que se dirige</Text>
+                <View className="bg-gray-50 rounded-xl h-12 justify-center">
                     {loading ? (
                         <ActivityIndicator size="small" color="#999"/>
                     ) : error ? (

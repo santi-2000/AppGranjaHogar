@@ -58,13 +58,13 @@ router.post(
   [
     authAuthorizePermissions("manage-users"),
     body("name").trim().isLength({ min: 2 }).withMessage("name mínimo 2 caracteres").trim().escape().toLowerCase(),
-    body("last_name").trim().isLength({ min: 2 }).withMessage("last_name mínimo 2 caracteres").trim().escape().toLowerCase(),
+    body("lastName").trim().isLength({ min: 2 }).withMessage("lastName mínimo 2 caracteres").trim().escape().toLowerCase(),
     body("username").trim().isLength({ min: 3 }).withMessage("username mínimo 3 caracteres").trim().escape().toLowerCase(),
     body("password").isString().isLength({ min: 8 }).withMessage("password mínimo 8 caracteres"),
-    body("roles").isArray().withMessage("roles debe ser un array").custom((value) => {
-      const validRoles = ["products-entries", "products-outs", "generate-reports", "edit-catalog", "manage-users"];
-      if (!value.every(role => validRoles.includes(role)))
-        throw new AppError(`Los roles deben ser uno de los siguientes: ${validRoles.join(", ")}`, 400);
+    body("permissions").isArray().withMessage("permissions debe ser un array").custom((value) => {
+      const validPermissions = ["products-entries", "products-outs", "generate-reports", "edit-catalog", "manage-users"];
+      if (!value.every(permission => validPermissions.includes(permission)))
+        throw new AppError(`Los permisos deben ser uno de los siguientes: ${validPermissions.join(", ")}`, 400);
       return true;
     }),
     validate

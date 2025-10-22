@@ -5,7 +5,7 @@ import ArrowRight from '../Icons/ArrowRight';
 
 export default function LinkHome({ icon, directory = "/", text, onPress, isButton = false }) {
     return (
-        <View className="p-4 rounded-xl bg-white border flex border-main w-full">
+        <View className="p-4 rounded-xl bg-white flex w-full">
             {!isButton ? <Link href={directory}>
                 <View className="w-full flex-row justify-between items-center">
                     <View className="flex-row items-center">

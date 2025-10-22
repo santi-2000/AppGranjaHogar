@@ -27,6 +27,7 @@ class ProductsModel {
         JOIN categories AS categories ON products.category_id = categories.id
         JOIN units AS units ON products.unit_id = units.id
         WHERE is_active = ?
+        ORDER BY products.name ASC
         `;
         return await db.query(sql, [true]);
     }
@@ -37,7 +38,13 @@ class ProductsModel {
     }
 
     async getInventory() {
-        const [rows] = await db.query('SELECT id, name, actual_stock, unit_id FROM products ORDER BY name');
+        const sql = `
+        SELECT id, name, actual_stock, unit_id 
+        FROM products 
+        WHERE is_active = ?
+        ORDER BY name ASC
+        `
+        const [rows] = await db.query(sql, [true]);
         return rows;
     }
 
@@ -84,7 +91,7 @@ class ProductsModel {
     }
 
     async getAvailableProducts() {
-    const sql = 'SELECT id, name FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+    const sql = 'SELECT id, name, perishable FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
     const [rows] = await db.query(sql);
     return rows;
 }

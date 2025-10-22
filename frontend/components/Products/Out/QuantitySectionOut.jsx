@@ -9,20 +9,20 @@ export default function QuantitySectionOut({ quantity, setQuantity, unitId, setU
 
     return (
         <View>
-            <View className="p-4 space-y-6 bg-white rounded-2xl border border-main">
+            <View className="p-4 space-y-6 bg-white rounded-2xl">
 
                 <View className="">
-                    <Text className="text-gray-700 mb-2">Cantidad</Text>
+                    <Text className="text-lg font-medium text-gray-800 mb-3">Cantidad</Text>
                     <View className="mb-4 h-12">
                         <TextInput
                             placeholder="Valor"
                             keyboardType="numeric"
-                            className="w-full border border-main rounded-xl h-12 p-3 mr-4"
+                            className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
                             value={String(quantity)}
                             onChangeText={setQuantity}
                         />
                     </View>
-                    <View className="w-full text-gray-700 rounded-xl border border-main h-12 justify-center ">
+                    <View className="w-full text-gray-700 rounded-xl bg-gray-50 h-12 justify-center ">
                         {loading ? (
                             <ActivityIndicator size="small" color="#999"/>
                         ) : error ? (

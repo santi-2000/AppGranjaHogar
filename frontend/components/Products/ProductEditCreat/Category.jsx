@@ -3,9 +3,9 @@ import { Picker } from "@react-native-picker/picker";
 
 export default function Categorysection({ value, onChange }) {
     return (
-        <View className="bg-white p-4 rounded-2xl border border-main mt-4">
-            <Text className="text-gray-700 mb-2">Categoría a la que pertenece</Text>
-            <View className="bg-white rounded-xl border border-gray-300">
+        <View className="bg-white p-4 rounded-2xl mt-4">
+            <Text className="text-lg font-medium text-gray-800 mb-2">Categoría a la que pertenece</Text>
+            <View className="bg-gray-50 rounded-xl px-2 text-gray-800">
                 <Picker
                     selectedValue={value}
                     onValueChange={onChange}

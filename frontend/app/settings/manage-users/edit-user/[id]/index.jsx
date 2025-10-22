@@ -21,8 +21,8 @@ export default function EditUserScreen() {
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Editar permisos"} />
       <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 24 }}>
-        <View className="bg-white rounded-2xl p-4" style={cardShadow}>
-          <Pressable onPress={handleDeleteConfirm} className="self-start mb-4 border border-gray-300 rounded-lg px-3 py-2 flex-row items-center">
+        <View className="bg-white rounded-2xl p-4">
+          <Pressable onPress={handleDeleteConfirm} className="self-start mb-4 border-[0.6px] border-gray-300 rounded-lg px-3 py-2 flex-row items-center">
             <Text className="text-red-600 mr-2">
               <TrashIcon width={16} height={16} />
             </Text>
@@ -34,14 +34,14 @@ export default function EditUserScreen() {
             placeholder="Nombre"
             value={user?.name}
             onChangeText={setName}
-            className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
+            className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
           />
           <Text className="text-lg mt-4 font-semibold mb-2">Apellidos</Text>
           <TextInput
             placeholder="Apellidos"
             value={user?.lastName}
             onChangeText={setName}
-            className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
+            className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
           />
 
           <Text className="text-lg font-semibold mt-6 mb-3">Permisos</Text>

@@ -6,7 +6,7 @@ export default function QuantityAndUnits({ quantityValue, setQuantityValue, sele
     <View className="bg-white rounded-xl p-4 mb-6">
       <Text className="text-lg font-medium text-gray-800 mb-4">
         Cantidad                      Unidad
-      </Text> 
+      </Text>
 
       <View className="flex-row space-x-4 items-center">
         <TextInput

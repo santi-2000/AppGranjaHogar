@@ -12,7 +12,7 @@ export default function NotificationsHome({ icon, isOpen, toggleSection }) {
   }, []);
 
   return (
-    <View className="bg-white p-4 rounded-xl border border-main">
+    <View className="bg-white p-4 rounded-xl">
       <View className="flex-row gap-3">
         <View>{icon}</View>
         <Text className="mb-4 text-second">Notificaciones recientes</Text>
@@ -33,7 +33,7 @@ export default function NotificationsHome({ icon, isOpen, toggleSection }) {
       </View>
 
       <Pressable
-        className="bg-[#00568F] justify-center my-2 w-full py-4 px-4 rounded-xl items-center"
+        className="bg-[#00568F] justify-center my-2 w-full py-2 px-4 rounded-xl items-center"
         onPress={toggleSection}
       >
         <Text className="text-white">{isOpen ? "Ver menos" : "Ver más"}</Text>
