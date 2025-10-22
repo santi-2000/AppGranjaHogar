@@ -29,11 +29,9 @@ export const getInventory = async () => {
             },
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+        
         return data;
     } catch (error) {
         console.error('Error fetching inventory:', error);
@@ -54,11 +52,9 @@ export const getProductQuantity = async (productId) => {
             },
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+
         return data;
     } catch (error) {
         console.error('Error fetching product quantity:', error);

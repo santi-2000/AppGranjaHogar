@@ -11,7 +11,7 @@ export const ProductsEntriesProxy = {
    * @param {Object} data - Datos de la nueva entrada
    * @returns {Promise<Object>} Entrada creada + stock actualizado
    */
-  async createEntry(data) {
+  async createEntry(dataVO) {
     const token = await SecureStore.getItemAsync('token');
 
     const res = await fetch(`${API_BASE_URL}/v1/product-entries/new`, {
@@ -20,15 +20,14 @@ export const ProductsEntriesProxy = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + token
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(dataVO)
     });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || "Error al registrar entrada");
-    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error al registrar entrada");
+    
 
-    return res.json();
+    return data;
   },
 
   /**
@@ -44,9 +43,9 @@ export const ProductsEntriesProxy = {
         "Authorization": "Bearer " + token
       }
     });
-
-    if (!res.ok) throw new Error("Error al obtener las entradas");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error desconocido");
+    return data;
   },
 
   /**
@@ -64,7 +63,8 @@ export const ProductsEntriesProxy = {
       }
     });
 
+    const data = await res.json();
     if (!res.ok) throw new Error("Entrada no encontrada");
-    return res.json();
+    return data;
   }
 };

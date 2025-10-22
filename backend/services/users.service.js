@@ -53,9 +53,12 @@ export class UsersService {
    * @author Jared Alejandro Marquez Muñoz Grado
    */
   async verify({ token }) {
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    if (!user) throw new AppError("Token inválido", 401);
-    return user
+    try {
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      return user
+    } catch (error) {
+      return false
+    }
   }
 
   async getUsers() {

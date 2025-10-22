@@ -4,6 +4,8 @@ import useLogin from "../hooks/useLogin";
 import InputText from "../components/Form/InputText";
 import { Link } from "expo-router";
 import { useEffect } from "react";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 /**
  * @module screens/login
@@ -14,8 +16,16 @@ import { useEffect } from "react";
  * @author Yahir Alfredo Tapia Sifuentes
  */
 
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('El nombre de usuario es obligatorio'),
+  password: Yup.string()
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .required('La contraseña es obligatoria'),
+});
+
 export default function App() {
-  const { login, setLoginData, loginData, errors, handleChange, verify } = useLogin();
+  const { login, setLoginData, loginData, handleSubmit, errors, verify } = useLogin();
 
   return (
     <KeyboardAvoidingView
@@ -39,30 +49,54 @@ export default function App() {
                 <Text className="font-bold text-gray-400 text-lg">Introduce tus credenciales</Text>
               </View>
 
-              <View className="border border-[0.5px] border-gray-300 rounded-xl mt-5 p-4 w-[96%] self-center">
-                <View className="my-2">
-                  <Text className="text-lg font-medium text-gray-800 my-2">Usuario</Text>
-                  <InputText
-                    placeholder="Usuario"
-                    value={loginData.username || ''}
-                    onChange={(v) => handleChange('username', v)}
-                  />
-                </View>
-                <View className="my-2">
-                  <Text className="text-lg font-medium text-gray-800 my-2">Contraseña</Text>
-                  <InputText
-                    placeholder="***"
-                    secureTextEntry={true}
-                    value={loginData.password || ''}
-                    onChange={(v) => handleChange('password', v)}
-                  />
-                </View>
+              <Formik
+                initialValues={{ username: '', password: '' }}
+                validationSchema={validationSchema}
+                onSubmit={(values) => login(values)}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  values,
+                  errors,
+                  touched }) => (
+                  <View className="border border-[0.5px] border-gray-300 rounded-xl mt-5 p-4 w-[96%] self-center">
+                    <View className="my-2">
+                      <Text className="text-lg font-medium text-gray-800 my-2">Usuario</Text>
+                      <InputText
+                        placeholder="Usuario"
+                        value={values.username || ''}
+                        onChange={handleChange('username')}
+                        error={errors.username}
+                        touched={touched.username}
+                      />
+                    </View>
+                    <View className="my-2">
+                      <Text className="text-lg font-medium text-gray-800 my-2">Contraseña</Text>
+                      <InputText
+                        placeholder="***"
+                        secureTextEntry={true}
+                        value={values.password || ''}
+                        onChange={handleChange('password')}
+                        error={errors.password}
+                        touched={touched.password}
+                      />
+                    </View>
 
-                <Pressable onPress={login} style={styles.submitButton} className="mb-2 mt-6 w-full py-2 py-3 px-4 rounded-lg items-center">
-                  <Text className="text-white text-center">Iniciar sesión</Text>
-                </Pressable>
+                    <Pressable onPress={handleSubmit} style={styles.submitButton} className="mb-2 mt-6 w-full py-2 py-3 px-4 rounded-lg items-center">
+                      <Text className="text-white text-center">Iniciar sesión</Text>
+                    </Pressable>
 
-              </View>
+                  </View>
+                )}
+              </Formik>
+              {errors.general &&
+                <Text className="text-red-500 text-center mb-2">
+                  {errors.general}
+                </Text>
+              }
+
             </View>
           </View>
         </ScrollView>

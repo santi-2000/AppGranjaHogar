@@ -21,18 +21,8 @@ const NotificationsProxy = () => {
             },
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                throw new Error('Datos de entrada inválidos');
-            } else if (response.status === 500) {
-                throw new Error('Error del servidor');
-            } else if (response.status === 503) {
-                throw new Error('Servicio no disponible');
-            } else {
-                throw new Error('Error desconocido');
-            }
-        }
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
         return data.map(item => new NotificationsVO(item));
     }
 
@@ -46,10 +36,9 @@ const NotificationsProxy = () => {
             body: JSON.stringify(notification),
         });
 
-        if (!response.ok) {
-            throw new Error('Error al crear la notificación');
-        }
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+        return data;
     }
 
     async function deleteNotification(id) {
@@ -64,10 +53,9 @@ const NotificationsProxy = () => {
 
             },
         });
-        if (!response.ok) {
-            throw new Error('Error al eliminar la notificación');
-        }
-        return await response.json();
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+        return data;
     }
 
     return { getNotifications, createNotification, deleteNotification };
