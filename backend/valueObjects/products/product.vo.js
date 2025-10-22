@@ -1,3 +1,14 @@
+/**
+ * Value Object representing a Product.
+ * @module ProductVO
+ * @description This module defines the ProductVO class which encapsulates product data
+ *              and provides a structured way to interact with product information. 
+ * @param {Object} dbProduct - The raw product data from the database.
+ * @returns {ProductVO} An instance of ProductVO containing structured product data.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ */
+
 export class ProductVO {
     constructor(dbProduct) {
         this.name = dbProduct.name;

@@ -1,6 +1,15 @@
 import 'dotenv/config';
 import { jest } from '@jest/globals';
 
+/**
+ * Users Service Test
+ * @module UsersServiceTest
+ * @description This module contains unit tests for the UsersService.
+ *              It uses `jest` for mocking services and assertions.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ */
+
 const loginModelMock = jest.fn();
 const bcryptCompareMock = jest.fn();
 const jwtSignMock = jest.fn();

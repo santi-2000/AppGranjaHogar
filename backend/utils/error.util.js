@@ -1,3 +1,10 @@
+/**
+ * @module utils/error
+ * @description Custom error class for application errors.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
+
 export class AppError extends Error {
   constructor(message, statusCode) {
     super(message);

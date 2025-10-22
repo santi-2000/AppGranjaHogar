@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import TitleBar from '../../../../components/TitleBar';
 import ButtonRounded from '../../../../components/Form/ButtonRounded';
+import useCreateUser from '../../../../hooks/useCreateUser';
 
 const roles = [
   { label: 'Administrador', value: 'admin' },
@@ -37,9 +38,11 @@ const defaultPermissionsByRole = {
 
 export default function NewUserScreen() {
   const router = useRouter();
+  const { createUser, loading, error } = useCreateUser();
 
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState(roles[0].value);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
@@ -62,17 +65,39 @@ export default function NewUserScreen() {
   const validate = () => {
     const nextErrors = {};
     if (!name.trim()) nextErrors.name = 'Requerido';
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) nextErrors.email = 'Correo inválido';
+    if (!lastName.trim()) nextErrors.lastName = 'Requerido';
+    if (!username.trim()) nextErrors.username = 'Requerido';
     if (password.length < 8) nextErrors.password = 'Mínimo 8 caracteres';
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const mapPermissionsToRoles = (permissions) => {
+    const roles = [];
+    if (permissions.productIn) roles.push('products-entries');
+    if (permissions.productOut) roles.push('products-outs');
+    if (permissions.reports) roles.push('generate-reports');
+    if (permissions.editCatalog) roles.push('edit-catalog');
+    if (permissions.manageUsers) roles.push('manage-users');
+    return roles;
+  };
+
+  const handleSubmit = async () => {
     if (!validate()) return;
-    const payload = { name: name.trim(), email: email.trim(), password, role, permissions };
-    console.log('Nuevo usuario:', payload);
-    router.back();
+    
+    try {
+      const userData = {
+        name: name.trim(),
+        last_name: lastName.trim(),
+        username: username.trim(),
+        password: password,
+        roles: mapPermissionsToRoles(permissions)
+      };
+      
+      await createUser(userData);
+    } catch (err) {
+      console.error('Error al crear usuario:', err);
+    }
   };
 
   return (
@@ -83,7 +108,7 @@ export default function NewUserScreen() {
         <View className="bg-white rounded-2xl p-4" style={cardShadow}>
           <Text className="text-lg font-semibold mb-2">Nombre</Text>
           <TextInput
-            placeholder="Value"
+            placeholder="Nombre"
             value={name}
             onChangeText={setName}
             className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
@@ -91,16 +116,25 @@ export default function NewUserScreen() {
           />
           {errors.name ? <Text className="text-red-600 mt-1">{errors.name}</Text> : null}
 
-          <Text className="text-lg font-semibold mt-6 mb-2">Correo electrónico</Text>
+          <Text className="text-lg font-semibold mt-6 mb-2">Apellido</Text>
           <TextInput
-            placeholder="Value"
-            value={email}
-            onChangeText={setEmail}
+            placeholder="Apellido"
+            value={lastName}
+            onChangeText={setLastName}
+            className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
+            autoCapitalize="words"
+          />
+          {errors.lastName ? <Text className="text-red-600 mt-1">{errors.lastName}</Text> : null}
+
+          <Text className="text-lg font-semibold mt-6 mb-2">Usuario</Text>
+          <TextInput
+            placeholder="Nombre de usuario"
+            value={username}
+            onChangeText={setUsername}
             className="border border-gray-300 rounded-xl px-4 py-3 bg-white"
             autoCapitalize="none"
-            keyboardType="email-address"
           />
-          {errors.email ? <Text className="text-red-600 mt-1">{errors.email}</Text> : null}
+          {errors.username ? <Text className="text-red-600 mt-1">{errors.username}</Text> : null}
 
           <Text className="text-lg font-semibold mt-6 mb-2">Contraseña</Text>
           <TextInput
@@ -168,8 +202,18 @@ export default function NewUserScreen() {
         </View>
 
         <View className="mt-6">
-          <ButtonRounded text="Guardar" action={handleSubmit} />
+          <ButtonRounded 
+            text={loading ? "Creando..." : "Guardar"} 
+            disabled={loading}
+            action={handleSubmit} 
+          />
         </View>
+
+        {error && (
+          <View className="mt-4">
+            <Text className="text-red-600 text-center">{error}</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

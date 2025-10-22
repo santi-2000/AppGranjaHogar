@@ -7,15 +7,34 @@ export const useInventory = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const getProductEmoji = (name) => {
+        const emojiMap = {
+            'Manzana': '🍎',
+            'Leche': '🥛',
+            'Yogurt': '🥛',
+            'Lentejas': '🫘',
+            'default': '📦'
+        };
+        return emojiMap[name] || emojiMap['default'];
+    };
+
+    const formatQuantity = (quantity, unit) => {
+        const unitMap = {
+            1: 'piezas',
+            2: 'piezas',
+            3: 'litros'
+        };
+        return `${quantity} ${unitMap[unit] || 'unidades'}`;
+    };
+
     const fetchInventory = async () => {
         setLoading(true);
         setError(null);
-        
+
         try {
             const data = await getInventory();
-            console.log("useInventory - raw data from API:", data);
             const inventoryItems = data.map(item => new ProductInventoryVO(item));
-            console.log("useInventory - processed inventory items:", inventoryItems);
+
             setInventory(inventoryItems);
         } catch (err) {
             setError(err.message);
@@ -45,6 +64,8 @@ export const useInventory = () => {
         error,
         fetchInventory,
         fetchProductQuantity,
-        refetch: fetchInventory
+        refetch: fetchInventory,
+        getProductEmoji,
+        formatQuantity
     };
 };

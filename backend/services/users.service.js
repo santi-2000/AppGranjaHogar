@@ -1,11 +1,30 @@
+/**
+ * @module services/users
+ * @description This module provides services for user-related operations, including authentication,
+ *              token verification, user creation, password updates, and user deletion.
+ *              It interacts with the UsersModel to perform database operations and uses
+ *              bcrypt for password hashing and jsonwebtoken for token management.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import { usersService } from '../services/users.service.js';
+ * const token = await usersService.login('john.doe', 'password123');
+ */
+
 import bcrypt from "bcryptjs";
 import { usersModel } from "../models/users.model.js";
 import { PasswordVO } from "../valueObjects/users/password.vo.js";
 import { PasswordUpdateVO } from "../valueObjects/users/passwordUpdate.vo.js";
 import { AppError } from "../utils/error.util.js";
 import jwt from 'jsonwebtoken'
+import { UserVO } from "../valueObjects/users/user.vo.js";
+
 
 export class UsersService {
+  /**
+   * @author Jared Alejandro Marquez Muñoz Grado
+   */
   async login({ username, password }) {
     const [rowsUsername] = await usersModel.loginModel(username);
     if (rowsUsername.length === 0) throw new AppError("Datos Incorrectos");
@@ -27,10 +46,30 @@ export class UsersService {
     return token;
   }
 
+  /**
+   * @author Jared Alejandro Marquez Muñoz Grado
+   */
   async verify({ token }) {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     if (!user) throw new AppError("Token inválido", 401);
     return user
+  }
+
+  async getUsers() {
+    const users = await usersModel.getAllUsers();
+    return users.map(user => new UserVO(user));
+  }
+
+  /**
+   * @author Yahir Alfredo Tapia Sifuentes
+   */
+  async getUserById({ id }) {
+    const user = await usersModel.getUserById(id);
+    const permissions = await usersModel.userPermissions(id);
+    if (!user) throw new AppError("Usuario no encontrado", 404);
+    return new UserVO({
+      ...user, permissions: permissions[0].map(p => p.permission)
+    });
   }
 
   async createUser({ name, last_name, username, password, roles }) {
@@ -60,7 +99,7 @@ export class UsersService {
 
     const user = await usersModel.getUserById(userId);
     if (!user) throw new AppError("Usuario no encontrado", 404);
-    
+
 
     const isCurrentPasswordValid = await bcrypt.compare(passwordUpdateVO.getCurrentPassword(), user.password_hash);
     if (!isCurrentPasswordValid) throw new AppError("La contraseña actual es incorrecta", 400);
@@ -80,6 +119,24 @@ export class UsersService {
 
     return { success: true, message: "Contraseña actualizada exitosamente" };
   };
+
+  /**
+   * @author Yahir Alfredo Tapia Sifuentes
+   */
+  async editUser({ id, name, lastName, permissions }) {
+    console.log("Editing user:", id, name, lastName, permissions);
+    const user = await usersModel.getUserById(id);
+    if (!user) throw new AppError("Usuario no encontrado", 404);
+
+    const updatedUser = await usersModel.updateUser({ id, name, last_name: lastName });
+
+    await usersModel.updateUserPermissions(id, permissions);
+
+    return new UserVO({
+      ...updatedUser,
+      permissions
+    });
+  }
 
   async deleteUser({ id }) {
     const [result] = await usersModel.delete(id);

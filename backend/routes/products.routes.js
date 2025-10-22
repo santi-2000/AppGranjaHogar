@@ -1,3 +1,19 @@
+/**
+ * @module routes/products  
+ * 
+ * @description This file defines the routes for product-related operations in the application.
+ * It includes routes for creating, deleting, updating, and retrieving products from the catalog and inventory.
+ * Each route is protected by authentication and authorization middleware to ensure that only authorized users can access them.
+ * Input validation is performed using express-validator to ensure data integrity.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * import productsRoutes from './routes/products.routes.js';
+ * app.use('/api/products', productsRoutes);    
+ */
+
 import { Router } from "express"
 import { body, param } from "express-validator"
 import { productsController } from "../controllers/products.controller.js"
@@ -6,6 +22,9 @@ import { authAuthorizePermissions, authMiddlewareLogged } from "../middlewares/a
 
 const router = Router()
 
+/**
+ * @description Route to get the full product catalog. @author Yahir Alfredo Tapia Sifuentes
+ */
 router.get("/catalog", authMiddlewareLogged, productsController.getCatalog)
 
 router.post("/create", [
@@ -56,5 +75,7 @@ router.get("/:id/quantity", [
 ],
     productsController.getProductQuantity
 )
+
+router.get("/available-products", productsController.getAvailableProducts)
 
 export default router

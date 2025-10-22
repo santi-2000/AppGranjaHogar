@@ -1,5 +1,30 @@
+/**
+ * @module middlewares/auth
+ * @description This module provides authentication and authorization middleware functions.
+ *              It includes `authAuthorizePermissions` for role-based access control
+ *              and `authMiddlewareLogged` for general authentication.
+ * 
+ * @author Jared Alejandro Marquez Muñoz Grado
+ * 
+ * @example
+ * import { authAuthorizePermissions, authMiddlewareLogged } from '../middlewares/auth.middleware.js';
+ * 
+ * router.get('/admin', authAuthorizePermissions('admin'), adminController.getDashboard);
+ * router.get('/profile', authMiddlewareLogged, userController.getProfile);
+ */
 import { AppError } from "../utils/error.util.js";
 import jwt from "jsonwebtoken";
+
+
+/**
+ * @description Middleware to authorize user permissions.
+ * Checks if the user has any of the allowed permissions or is an admin.
+ *
+ * @param {...string} allowedPermissions - A list of permissions that are allowed to access the route.
+ * @returns {Function} Express middleware.
+ * @throws {AppError} 401 if no token is provided.
+ * @throws {AppError} 403 if the token is invalid or the user does not have sufficient permissions.
+ */
 
 export const authAuthorizePermissions = (...allowedPermissions) => {
   return (req, res, next) => {

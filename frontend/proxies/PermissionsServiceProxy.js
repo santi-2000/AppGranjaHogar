@@ -37,7 +37,7 @@ const PermissionsServiceProxy = () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
         });
 
@@ -77,7 +77,7 @@ const PermissionsServiceProxy = () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
         });
 
@@ -118,7 +118,7 @@ const PermissionsServiceProxy = () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": "Barier " + token
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify({
                 'permission-ids': permissionIds

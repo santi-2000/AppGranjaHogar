@@ -1,6 +1,25 @@
+/**
+ * @module models/products
+ * 
+ * @description This module defines the ProductsModel class which handles database operations
+ *              related to products, including retrieval, creation, updating, and deletion.
+ * @param {Object} db - The database connection object.
+ * @returns {ProductsModel} An instance of ProductsModel for managing product data.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ * @author Carlos Alejandro Ortiz Caro
+ * 
+ * @example
+ * import { productsModel } from '../models/products.model.js';
+ * const catalog = await productsModel.getCatalog();    
+ */
+
 import db from "./index.js"
 
 class ProductsModel {
+    /**
+     * @description Retrieves the product catalog with category and unit information for active products. @author Yahir Alfredo Tapia Sifuentes
+     */
     async getCatalog() {
         const sql = `
         SELECT products.id, products.name, categories.name AS category, units.name AS unit, products.perishable, products.min_stock, products.max_stock, products.actual_stock
@@ -62,7 +81,14 @@ class ProductsModel {
     async deleteProduct(id) {
         const sql = 'UPDATE products SET deleted_at = CURRENT_TIMESTAMP, is_active = FALSE WHERE id = ?';
         return await db.query(sql, [id]);
-    }  
+    }
+
+    async getAvailableProducts() {
+    const sql = 'SELECT id, name FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
 }
 
 export const productsModel = new ProductsModel();

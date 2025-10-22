@@ -7,7 +7,7 @@ export const ProductOutsProxy = {
 
     const res = await fetch(`${API_BASE_URL}/v1/product-outs`, {
       headers: {
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       }
     });
@@ -20,7 +20,7 @@ export const ProductOutsProxy = {
 
     const res = await fetch(`${API_BASE_URL}/v1/product-outs${id}`, {
       headers: {
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       }
     });
@@ -35,7 +35,7 @@ export const ProductOutsProxy = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Barier " + token
+        "Authorization": "Bearer " + token
 
       },
       body: JSON.stringify(data),

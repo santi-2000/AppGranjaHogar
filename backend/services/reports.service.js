@@ -1,4 +1,17 @@
-import PDFDocument from "pdfkit"
+/**
+ * @module services/reports
+ * 
+ * @description This module defines the ReportsService class which handles the business logic for generating reports.
+ *              It interacts with the ReportsModel to fetch data and generate PDF and XLSX reports.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ * 
+ * @example
+ * import { reportsService } from '../services/reports.service.js';
+ * const pdfDoc = await reportsService.postReportPDFService({doc, userId, initialDate, endDate, type});
+ */
+
+
 import ExcelJS from "exceljs"
 import { reportsModel } from "../models/reports.model.js";
 import { ProductReportVO } from "../valueObjects/reports/productReport.vo.js";
@@ -6,11 +19,22 @@ import { ProductEntrieReportVO } from "../valueObjects/reports/productEntrieRepo
 import { ProductOutReportVO } from "../valueObjects/reports/productOutReport.vo.js";
 
 class ReportsService {
-    async postReportPDFService(res, userId, initialDate, endDate, type) {
-        const doc = new PDFDocument({ size: 'LETTER', margin: 50 });
-        doc.pipe(res);
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename=${initialDate}to${endDate}.pdf`);
+    /**
+   * Populates a PDFDocument with report data based on the selected types.
+   * 
+   * @async
+   * @param {PDFKit.PDFDocument} doc - An instance of a PDFKit document to write into.
+   * @param {number} userId - ID of the user generating the report.
+   * @param {string} initialDate - Start date of the report (in ISO 8601 format).
+   * @param {string} endDate - End date of the report (in ISO 8601 format).
+   * @param {number[]} type - Array of report sections to include:
+   *   - 1: Inventory
+   *   - 2: Product Entries
+   *   - 3: Product Outs
+   * 
+   * @returns {Promise<void>}
+   */
+    async postReportPDFService({ doc, userId, initialDate, endDate, type }) {
 
         doc.image('assets/logos/main-logo.png', 50, 30, { width: 95 })
 
@@ -136,16 +160,21 @@ class ReportsService {
         return doc.end();
     }
 
-    async postReportXLSXService(res, userId, initialDate, endDate, type) {
-        res.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        res.setHeader(
-            'Content-Disposition',
-            'attachment; filename=' + `${initialDate}to${endDate}.xlsx`
-        );
-
+    /**
+   * Generates an Excel report (XLSX) with specified sections.
+   *
+   * @async
+   * @param {number} userId - ID of the user requesting the report.
+   * @param {string} initialDate - Start date of the report (in ISO 8601 format).
+   * @param {string} endDate - End date of the report (in ISO 8601 format).
+   * @param {number[]} type - Array of report sections to include:
+   *   - 1: Inventory
+   *   - 2: Product Entries
+   *   - 3: Product Outs
+   * 
+   * @returns {Promise<ExcelJS.Workbook>} - The generated Excel workbook instance.
+   */
+    async postReportXLSXService({ userId, initialDate, endDate, type }) {
         const workbook = new ExcelJS.Workbook();
 
         if (type.includes(1)) {
@@ -280,7 +309,6 @@ class ReportsService {
             };
         }
 
-        await workbook.xlsx.write(res);
 
         const [report] = await reportsModel.postReport(userId, initialDate, endDate);
 
@@ -289,7 +317,7 @@ class ReportsService {
         if (type.includes(2)) await reportsModel.postReportInclude(report.insertId, 2);
         if (type.includes(3)) await reportsModel.postReportInclude(report.insertId, 3);
 
-        return res.end();
+        return workbook
     }
 }
 

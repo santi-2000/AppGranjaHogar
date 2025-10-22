@@ -8,190 +8,19 @@ import ProductCatalog from '../../components/Catalog/ProductCatalog';
 import useGetCatalog from '../../hooks/useGetCatalog.jsx';
 import { useEffect } from 'react';
 
-const DATA = [
-  {
-    id: 0,
-    name: '🍎 Manzana',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 1,
-    name: '🍌 Plátano',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 2,
-    name: '🥕 Zanahoria',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 3,
-    name: '🥩 Carne de res',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 4,
-    name: '🥚 Huevo',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Docenas',
-  },
-  {
-    id: 5,
-    name: '🥛 Leche',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Litros',
-  },
-  {
-    id: 6,
-    name: '🍞 Pan',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 7,
-    name: '🧀 Queso',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 8,
-    name: '🥦 Brócoli',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 9,
-    name: '🍅 Tomate',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 10,
-    name: '🥔 Papa',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 11,
-    name: '🥬 Lechuga',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 12,
-    name: '🍊 Naranja',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 13,
-    name: '🍇 Uvas',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 14,
-    name: '🍍 Piña',
-    type: 'Perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 15,
-    name: '🍫 Chocolate',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Piezas',
-  },
-  {
-    id: 16,
-    name: '🥤 Refresco',
-    type: 'No perecedero',
-    category: 'Bebida',
-    unit: 'Litros',
-  },
-  {
-    id: 17,
-    name: '🍪 Galletas',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Paquetes',
-  },
-  {
-    id: 18,
-    name: '🥫 Atún en lata',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Latas',
-  },
-  {
-    id: 19,
-    name: '🍚 Arroz',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 20,
-    name: '🍝 Pasta',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Paquetes',
-  },
-  {
-    id: 21,
-    name: '🧂 Sal',
-    type: 'No perecedero',
-    category: 'Condimento',
-    unit: 'Kilogramos',
-  },
-  {
-    id: 22,
-    name: '🛢️ Aceite vegetal',
-    type: 'No perecedero',
-    category: 'Alimento',
-    unit: 'Litros',
-  },
-  {
-    id: 23,
-    name: '☕ Café',
-    type: 'No perecedero',
-    category: 'Bebida',
-    unit: 'Gramos',
-  },
-  {
-    id: 24,
-    name: '🍵 Té',
-    type: 'No perecedero',
-    category: 'Bebida',
-    unit: 'Cajas',
-  },
-];
+/**
+ * @module screens/catalog
+ * 
+ * @description
+ * This screen is used to show a catalog of products. It uses the `useGetCatalog` hook to 
+ * fetch the list of products and handles rendering the catalog, as well as providing 
+ * functionality for product search and adding new products.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
 
 export default function CatalogScreen() {
-  const { fetchCatalog, catalog, error } = useGetCatalog();
-
-  useEffect(() => {
-    fetchCatalog();
-  }, []);
+  const { catalog, error } = useGetCatalog();
 
   return (
     <SafeAreaView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>
@@ -211,7 +40,7 @@ export default function CatalogScreen() {
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 280, // 👈 espacio extra para que el scroll no corte el último elemento
+            paddingBottom: 280,
             paddingTop: 10,
           }}
         />
