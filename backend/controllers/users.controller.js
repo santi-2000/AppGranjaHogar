@@ -12,6 +12,7 @@ import { AppError } from "../utils/error.util.js";
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Roberto Santiago Estrada Orozco 
  * 
  * @example
  * import { usersController } from '../controllers/users.controller.js';
@@ -75,6 +76,9 @@ class UserController {
     return res.status(200).json({ ok: true, message: "Usuario actualizado", user });
   }
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   async updatePassword(req, res) {
     const userId = req.user.id;
     const { currentPassword, newPassword, confirmPassword } = req.body;

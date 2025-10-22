@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import UsersServiceProxy from '../proxies/UsersServiceProxy.js';
@@ -189,7 +190,10 @@ const UsersServiceProxy = () => {
         const data = await response.json();
         return data;
     }
-
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco
+ */
     async function putUpdatePassword(PasswordUpdateVO) {
         const token = await SecureStore.getItemAsync('token');
 

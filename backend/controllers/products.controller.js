@@ -8,6 +8,7 @@
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
  * @author Samuel Isaac Lopez Mar
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import { productsController } from '../controllers/products.controller.js';
@@ -39,12 +40,18 @@ class ProductsController {
         res.json(result);
     }
 
+    /**
+     * @author Roberto Santiago Estrada Orozco
+     */
     async getProductQuantity(req, res) {
         const { id } = req.params;
         const result = await productsService.getProductQuantity(id);
         res.json(result);
     }
-
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco
+ */
     async getInventory(req, res) {
         const result = await productsService.getInventory();
         res.json(result);

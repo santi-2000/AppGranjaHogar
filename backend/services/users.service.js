@@ -6,6 +6,7 @@
  *              bcrypt for password hashing and jsonwebtoken for token management.
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
+ * @author Roberto Santiago Estrada Orozco
  * 
  * @example
  * import { usersService } from '../services/users.service.js';
@@ -89,6 +90,9 @@ export class UsersService {
     return created;
   };
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   async updatePassword({ userId, currentPassword, newPassword, confirmPassword }) {
     const passwordUpdateVO = new PasswordUpdateVO({
       currentPassword,
