@@ -1,47 +1,67 @@
-import { View, Text, TextInput, ActivityIndicator } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { useUnits } from "../../../hooks/useUnits";
+/**
+ * @module components/Products/Out/QuantitySectionOut
+ * @description
+ * This component manages the quantity input and displays
+ * the unit associated with the selected product.
+ *
+ * The unit is automatically assigned from the selected product
+ * in the `ProductSearch` component. It does not fetch data from
+ * the backend, keeping the interface lightweight and consistent.
+ *
+ * @example
+ * // Example usage
+ * <QuantitySectionOut
+ *   quantity={quantity}
+ *   setQuantity={setQuantity}
+ *   unitId={unitId}
+ *   unitName={unitName}
+ * />
+ *
+ * @see {@link components/Products/Out/ProductSearch} - Provides the selected unit.
+ *
+ * @author
+ * Samuel Isaac Lopez Mar
+ */
 
-export default function QuantitySectionOut({ quantity, setQuantity, unitId, setUnitId}) {
+import { View, Text, TextInput } from "react-native";
 
-    const { data, loading, error } = useUnits();
-    const unitsArray = Array.isArray(data) ? data : [];
+/**
+ * Displays a numeric input for quantity and shows
+ * the automatically selected unit name.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {string|number} props.quantity - The numeric quantity value.
+ * @param {Function} props.setQuantity - Function to update the quantity.
+ * @param {number|null} props.unitId - Numeric ID of the unit (used for backend).
+ * @param {string} props.unitName - Readable name of the unit (for display).
+ *
+ * @returns {JSX.Element} A React Native component for managing quantity and unit display.
+ */
+export default function QuantitySectionOut({ quantity, setQuantity, unitId, unitName }) {
+  return (
+    <View>
+      <View className="p-4 space-y-6 bg-white rounded-2xl border border-main">
+        <Text className="text-gray-700 mb-2">Cantidad</Text>
 
-    return (
-        <View>
-            <View className="p-4 space-y-6 bg-white rounded-2xl">
-
-                <View className="">
-                    <Text className="text-lg font-medium text-gray-800 mb-3">Cantidad</Text>
-                    <View className="mb-4 h-12">
-                        <TextInput
-                            placeholder="Valor"
-                            keyboardType="numeric"
-                            className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
-                            value={String(quantity)}
-                            onChangeText={setQuantity}
-                        />
-                    </View>
-                    <View className="w-full text-gray-700 rounded-xl bg-gray-50 h-12 justify-center ">
-                        {loading ? (
-                            <ActivityIndicator size="small" color="#999"/>
-                        ) : error ? (
-                            <Text className="text-red-700 mb-2" >{error}</Text>
-                        ) : (
-                        <Picker 
-                        selectedValue={unitId} 
-                        onValueChange={(itemValue) => setUnitId(itemValue)}
-                        >
-                            <Picker.Item label="Seleccione..." value={null} />
-                            {unitsArray.map((unit) => (
-                                <Picker.Item key={unit.id} label={unit.name} value={unit.id} />
-                            ))}
-                        </Picker>
-                        )}
-                    </View>
-                </View>
-
-            </View>
-        </View>
-    )
+        <TextInput
+          placeholder="Valor"
+          keyboardType="numeric"
+          className="w-full border border-main rounded-xl h-12 p-3 mr-4 mb-2"
+          value={String(quantity)}
+          onChangeText={setQuantity}
+        />
+        {unitId ? (
+          <Text className="text-gray-600 text-base">
+            Unidad seleccionada automáticamente:{" "}
+            <Text className="font-semibold text-gray-800">{unitName}</Text>
+          </Text>
+        ) : (
+          <Text className="text-gray-400 italic">
+            Selecciona un producto para asignar la unidad
+          </Text>
+        )}
+      </View>
+    </View>
+  );
 }

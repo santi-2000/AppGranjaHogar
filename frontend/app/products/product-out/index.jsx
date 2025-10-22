@@ -35,10 +35,30 @@ export default function OutScreen() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
   const [unitId, setUnitId] = useState(null);
+  const [unitName, setUnitName] = useState("");
   const [departmentId, setDepartmentId] = useState(null);
   const [reasonId, setReasonId] = useState(null);
   const [notes, setNotes] = useState("");
 
+  /**
+   * Handles form submission and sends the payload to the backend.
+   *
+   * @async
+   * @function handleRegister
+   * @returns {Promise<void>}
+   *
+   * @example
+   * // Example payload sent to backend:
+   * {
+   *   "user_id": 3,
+   *   "product_id": 12,
+   *   "reason_id": 2,
+   *   "department_id": 1,
+   *   "unit_id": 3,
+   *   "quantity": 5,
+   *   "notes": "Salida de prueba"
+   * }
+   */
   const handleRegister = async () => {
     try {
       if (!selectedProduct || !quantity || !unitId || !departmentId || !reasonId) {
@@ -57,8 +77,8 @@ export default function OutScreen() {
       };
 
       console.log("Enviando payload:", payload);
+      console.log("Unidad mostrada:", unitName);
       const result = await createProductOut(payload);
-
       console.log("Respuesta del servidor:", result);
       Alert.alert("Éxito", "Salida registrada correctamente 🎉");
       router.replace("/products/product-out");
@@ -88,12 +108,13 @@ export default function OutScreen() {
           >
             <View>
               <TitleBar title={"Nueva Salida"} />
-
               <View className="px-6">
                 <View className="mb-4">
                   <ProductSearch
                     selectedProduct={selectedProduct}
                     setSelectedProduct={setSelectedProduct}
+                    setUnitId={setUnitId}
+                    setUnitName={setUnitName}
                   />
                 </View>
                 <View className="mb-4">
@@ -101,7 +122,7 @@ export default function OutScreen() {
                     quantity={quantity}
                     setQuantity={setQuantity}
                     unitId={unitId}
-                    setUnitId={setUnitId}
+                    unitName={unitName}
                   />
                 </View>
                 <View className="mb-4">
@@ -124,14 +145,13 @@ export default function OutScreen() {
                 </View>
               </View>
             </View>
-
-            <View className="px-4 pb-6">
-              <ButtonRounded
-                text={loading ? "Registrando..." : "Registrar"}
-                action={handleRegister}
-              />
-            </View>
-          </ScrollView>
+      <View className="px-4 pb-6">
+        <ButtonRounded
+          text={loading ? "Registrando..." : "Registrar"}
+          action={handleRegister}
+        />
+      </View>
+      </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>

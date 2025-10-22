@@ -25,8 +25,21 @@
 import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import { useProductsAvailable } from "../../../hooks/useProductsAvailable";
+import { getUnitNameById } from "../../../utils/unitMapper";
 
-export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
+/**
+ * Searchable dropdown component for selecting products.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {number|null} props.selectedProduct - The currently selected product ID.
+ * @param {Function} props.setSelectedProduct - Function to update the selected product ID.
+ * @param {Function} props.setUnitId - Function to set the unit ID (numeric value).
+ * @param {Function} props.setUnitName - Function to set the readable unit name (for display).
+ *
+ * @returns {JSX.Element} A React Native component for selecting a product.
+ */
+export default function ProductSearch({ selectedProduct, setSelectedProduct, setUnitId, setUnitName }) {
   const { data, loading, error } = useProductsAvailable();
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -35,9 +48,22 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
     product.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  /**
+   * Handles the selection of a product from the dropdown.
+   * Automatically updates both the product and its corresponding unit.
+   *
+   * @function handleSelect
+   * @param {Object} item - The selected product object.
+   * @param {number} item.id - Product ID.
+   * @param {string} item.name - Product name.
+   * @param {number} item.unit_id - Unit ID associated with the product.
+   * @returns {void}
+   */
   const handleSelect = (item) => {
     setSelectedProduct(item.id);
     setSearch(item.name);
+    setUnitId(item.unit_id);
+    setUnitName(getUnitNameById(item.unit_id));
     setShowOptions(false);
   };
 
