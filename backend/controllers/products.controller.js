@@ -84,6 +84,11 @@ class ProductsController {
         const result = await productsService.getAvailableProducts()
         res.json(result);
     }
+    
+    async getAvailableProductsForEntries (req, res) {
+        const result = await productsService.getAvailableProductsForEntries()
+        res.json(result);
+    }
 }
 
 export const productsController = new ProductsController();

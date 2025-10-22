@@ -89,4 +89,6 @@ router.get("/:id/quantity", [
 
 router.get("/available-products", authAuthorizePermissions("products-entries", "products-outs"), productsController.getAvailableProducts)
 
+router.get("/available-products-for-entries", authAuthorizePermissions("products-entries", "products-outs"), productsController.getAvailableProductsForEntries)
+
 export default router

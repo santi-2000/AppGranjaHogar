@@ -3,8 +3,6 @@
  *
  * @description
  * A lightweight searchable dropdown for selecting a product.
- * Uses a regular map rendering instead of FlatList to avoid
- * VirtualizedList warnings inside nested scroll views.
  *
  * @component
  * @param {Object} props
