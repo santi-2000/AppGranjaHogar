@@ -43,7 +43,7 @@ export class UsersService {
       username: rowsUsername[0].username,
       name: rowsUsername[0].name,
       permissions: permissions,
-      last_name: rowsUsername[0].last_name
+      lastName: rowsUsername[0].last_name
     }, process.env.JWT_SECRET, { expiresIn: "365d" });
 
     return token;

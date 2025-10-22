@@ -8,6 +8,7 @@ import UsersIcon from '../../components/Icons/UsersIcon';
 import KeyIcon from '../../components/Icons/KeyIcon';
 import LogoutIcon from '../../components/Icons/LogoutIcon';
 import useSettings from '../../hooks/useSettings';
+import { hasPermission } from '../../stores/useUserStore.js';
 
 /**
  * @description This file defines the SettingsScreen component, which displays various settings options for the user.
@@ -29,9 +30,10 @@ export default function SettingsScreen() {
 
       <View className="p-4">
 
+        {hasPermission(["manage-users", "admin"]) && 
         <View className="mb-4">
           <LinkHome icon={<UsersIcon />} directory={"/settings/manage-users"} text={"Gestión de usuarios"} />
-        </View>
+        </View>}
 
         <View className="mb-4">
           <LinkHome icon={<KeyIcon />} directory={"/settings/change-password"} text={"Cambiar contraseña"} />

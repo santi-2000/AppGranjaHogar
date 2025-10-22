@@ -23,55 +23,62 @@ import GridIcon from '../../components/Icons/GridIcon';
 import NotificationsHome from '../../components/Home/NotificationsHome';
 import InfoIcon from '../../components/Icons/InfoIcon';
 import Avatar from '../../components/Profile/Avatar';
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
+import { hasPermission, useUserStore } from '../../stores/useUserStore.js';
+import { capitalizeFirstLetterEachWord } from '../../utils/textUtil.js';
 
 export default function HomeScreen() {
   const [isOpen, setIsOpen] = useState(false);
-      const toggleSection = () => {
-      setIsOpen(!isOpen);
-      };
+  const toggleSection = () => {
+    setIsOpen(!isOpen);
+  };
+  const user = useUserStore((state) => state.user);
+
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <View className="w-full flex-1 p-6">
         <View className="my-7 flex-row justify-between">
           <View>
-            <Text className="text-5xl font-semibold">Hola, Yahir</Text>
+            <Text className="text-5xl font-semibold">Hola, {capitalizeFirstLetterEachWord((user?.name)?.split(" ")[0])}</Text>
             <Text className="text-lg font-semibold text-second">Bienvenido al almacén de Granja hogar</Text>
           </View>
           <View>
-            <Avatar/>
+            <Avatar title={`${user?.name} ${user?.lastName}`} />
           </View>
         </View>
 
         <View className="mb-4">
-          <NotificationsHome icon={<InfoIcon/>} isOpen={isOpen} toggleSection={toggleSection}/>
+          <NotificationsHome icon={<InfoIcon />} isOpen={isOpen} toggleSection={toggleSection} />
         </View>
-       <View className={`${isOpen ? 'hidden' : ''}`}>
+        <View className={`${isOpen ? 'hidden' : ''}`}>
+          <View className="flex-row flex-wrap mb-4">
 
-        <View className="flex-row flex-wrap mb-4">
-          <View className="w-1/2 pr-2">
-            <CreateHome icon={<FolderPlusIcon />} directory={"/products/product-in"} text={"Nueva Entrada"} />
+            {hasPermission(["products-entries", "admin"]) &&
+            <View className={`${hasPermission(["products-entries", "admin"]) ? 'w-1/2 pr-2' : 'w-full'}`}>
+              <CreateHome icon={<FolderPlusIcon />} directory={"/products/product-in"} text={"Nueva Entrada"} />
+            </View>}
+
+            {hasPermission(["products-outs", "admin"]) &&
+            <View className={`${hasPermission(["products-outs", "admin"]) ? 'w-1/2 pl-2' : 'w-full'} `}>
+              <CreateHome icon={<FolderMinusIcon />} directory={"/products/product-out"} text={"Nueva Salida"} />
+            </View>}
+            
           </View>
 
-          <View className="w-1/2 pl-2">
-            <CreateHome icon={<FolderMinusIcon />} directory={"/products/product-out"} text={"Nueva Salida"} />
+          <View className="mb-4">
+            <LinkHome icon={<BoxIcon />} directory={"/inventory"} text={"Inventario"} />
           </View>
-        </View>
 
-        <View className="mb-4">
-          <LinkHome icon={<BoxIcon/>} directory={"/inventory"} text={"Inventario"} />
-        </View>
+          {hasPermission(["generate-reports", "admin"]) && <View className="mb-4">
+            <LinkHome icon={<ClipboardIcon />} directory={"/reports"} text={"Reportes"} />
+          </View>}
 
-        <View className="mb-4">
-          <LinkHome icon={<ClipboardIcon/>} directory={"/reports"} text={"Reportes"} />
-        </View>
+          {hasPermission(["edit-catalog", "admin"]) && <View className="mb-4">
+            <LinkHome icon={<GridIcon />} directory={"/catalog"} text={"Catalogo"} />
+          </View>}
 
-        <View className="mb-4">
-          <LinkHome icon={<GridIcon/>} directory={"/catalog"} text={"Catalogo"} />
         </View>
-
       </View>
-       </View>
 
     </SafeAreaView>
   );

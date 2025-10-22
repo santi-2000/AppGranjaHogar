@@ -9,6 +9,7 @@ import TrashIcon from "../Icons/TrashIcon";
 import { useState } from "react";
 
 import useDeleteProduct from "../../hooks/useDeleteProduct";
+import { capitalizeFirstLetterEachWord } from "../../utils/textUtil";
 
 
 export default function ProductCatalog({ data }) {
@@ -45,7 +46,7 @@ export default function ProductCatalog({ data }) {
             <View className={`${isOpen ? "bg-white" : "bg-gray-200"} py-4 px-3 mb-3 rounded-2xl`}>
                 <View className="w-full flex-row justify-between">
                     <View className="flex-row items-center items-center">
-                        <Text className="font-medium ml-3">{findEmoji(data.name)} {data.name}</Text>
+                        <Text className="font-medium ml-3">{findEmoji(data.name)} {capitalizeFirstLetterEachWord(data.name)}</Text>
                     </View>
                     <View>
                         <View className={`${isOpen ? "" : "hidden"}`}>

@@ -34,8 +34,6 @@ export default function ManageUsersScreen() {
       <TitleBar title={"Usuarios"} />
 
       <View className="w-full flex-1 px-6">
-
-
         <View className="mb-4">
           <LinkHome icon={<UserPlus />} directory={"/settings/manage-users/new-user"} text={"Registrar nuevo usuario"} />
         </View>

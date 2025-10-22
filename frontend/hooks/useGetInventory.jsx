@@ -18,17 +18,6 @@ export const useInventory = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getProductEmoji = (name) => {
-        const emojiMap = {
-            'Manzana': '🍎',
-            'Leche': '🥛',
-            'Yogurt': '🥛',
-            'Lentejas': '🫘',
-            'default': '📦'
-        };
-        return emojiMap[name] || emojiMap['default'];
-    };
-
     const formatQuantity = (quantity, unit) => {
         const unitMap = {
             1: 'piezas',
@@ -76,7 +65,6 @@ export const useInventory = () => {
         fetchInventory,
         fetchProductQuantity,
         refetch: fetchInventory,
-        getProductEmoji,
         formatQuantity
     };
 };
