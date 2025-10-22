@@ -1,3 +1,9 @@
+/**
+ * @description Módulo responsable de interactuar con la API para gestionar notificaciones.
+ *              Incluye operaciones para obtener, crear y eliminar notificaciones.
+ * @module proxies/NotificationsServiceProxy.js
+ * @author Silvana Davila Garcia
+ */
 import { API_BASE_URL } from '@env';
 import { NotificationsVO } from '../valueobjects/NotificationsVO';
 import * as SecureStore from 'expo-secure-store';
