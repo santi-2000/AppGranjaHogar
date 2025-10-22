@@ -10,9 +10,9 @@ export const ProductsProxy = {
         "Cache-Control": "no-cache",
       },
     });
-
-    if (!res.ok) throw new Error("Error al obtener los productos disponibles");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error desconocido");
+    return data;
   },
   
   async getAvailableProductsForEntries() {
@@ -24,7 +24,9 @@ export const ProductsProxy = {
       },
     });
 
-    if (!res.ok) throw new Error("Error al obtener los productos disponibles");
-    return res.json();
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || "Error desconocido");
+    return data;
   }
 };

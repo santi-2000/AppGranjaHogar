@@ -12,8 +12,9 @@ export const ReasonProxy = {
       }
     });
 
-    if (!res.ok) throw new Error("Error al obtener la Razón");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
+    return data;
   },
 
   async getById(id) {
@@ -24,11 +25,12 @@ export const ReasonProxy = {
         "Authorization": "Bearer " + token
       }
     });
-    if (!res.ok) throw new Error("Razón no encontrada");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
+    return data;
   },
 
-  async create(data) {
+  async create(dataVO) {
     const token = await SecureStore.getItemAsync('token');
 
     const res = await fetch(`${API_BASE_URL}/v1/reasons`, {
@@ -37,14 +39,13 @@ export const ReasonProxy = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + token
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataVO),
     });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || "Error al registrar razón");
-    }
+    const data = await res.json();
 
-    return res.json();
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
+
+    return data
   }
 };

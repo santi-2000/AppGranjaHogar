@@ -12,8 +12,11 @@ export const UnitsProxy = {
       }
     });
 
-    if (!res.ok) throw new Error("Error al obtener la unidad");
-    return res.json();
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
+    
+    return data
   },
 
   async getById(id) {
@@ -24,8 +27,12 @@ export const UnitsProxy = {
         "Authorization": "Bearer " + token
       }
     });
-    if (!res.ok) throw new Error("Unidad no encontrada");
-    return res.json();
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
+    
+    return data
   },
 
   async create(data) {
@@ -40,11 +47,9 @@ export const UnitsProxy = {
       body: JSON.stringify(data),
     });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || "Error al registrar unidad");
-    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
 
-    return res.json();
+    return data;
   }
 };
