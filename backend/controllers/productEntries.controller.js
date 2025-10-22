@@ -11,15 +11,21 @@ export class ProductEntriesController {
   /**
    * @description Crea una nueva entrada en product_entries
    * y actualiza automáticamente el actual_stock del producto asociado.
+   * @author Dania Sagarnaga Macías
    */
-  async createEntry(req, res) {
-    const result = await productEntriesService.create(req.body);
+  async createEntry(req, res) {  
+    const data = {
+    ...req.body,
+    user_id: req.body.user_id };
+
+    const result = await productEntriesService.create(data);
 
     res.status(201).json({
-      message: result.message, // viene del service
+      message: result.message,
       data: {
-        entry: result.entry,
-        updated_stock: result.updated_stock
+      entry: result.entry,
+      updated_stock: result.updated_stock
+        
       }
     });
   }
