@@ -1,13 +1,33 @@
 import { Text, View, FlatList, TextInput, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
+import { useState, useMemo } from 'react';
 import TitleBar from '../../components/TitleBar';
-import SearchProduct from '../../components/Catalog/SearchProduct';
+import ProductSearch from '../../components/Products/Out/ProductSearch';
 import { useInventory } from '../../hooks/useGetInventory';
 import { findEmoji } from '../../utils/findEmojiUtil';
 
 export default function InventaryScreen() {
   const { inventory, loading, error, refetch, getProductEmoji, formatQuantity } = useInventory();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredInventory = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return inventory;
+    }
+    return inventory.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [inventory, searchTerm]);
+
+  const handleProductSelect = (productId) => {
+    setSelectedProduct(productId);
+    const product = inventory.find(item => item.id === productId);
+    if (product) {
+      setSearchTerm(product.name);
+    }
+  };
 
   if (loading) {
     return (
@@ -45,11 +65,16 @@ export default function InventaryScreen() {
       <View className="p-4" style={{ flex: 1 }}>
 
         <View className="mb-4">
-          <SearchProduct />
+          <ProductSearch 
+            selectedProduct={selectedProduct}
+            setSelectedProduct={handleProductSelect}
+            setUnitId={() => {}} 
+            setUnitName={() => {}} 
+          />
         </View>
 
         <FlatList
-          data={inventory}
+          data={filteredInventory}
           renderItem={({ item }) => (
             <View className="bg-white rounded-2xl mb-3">
               <View className="flex-row justify-between p-4">
@@ -65,7 +90,9 @@ export default function InventaryScreen() {
           keyExtractor={item => item.id.toString()}
           ListEmptyComponent={
             <View className="flex-1 justify-center items-center p-8">
-              <Text className="text-gray-500 text-center">No hay productos en el inventario</Text>
+              <Text className="text-gray-500 text-center">
+                {searchTerm.trim() ? 'No se encontraron productos que coincidan con la búsqueda' : 'No hay productos en el inventario'}
+              </Text>
             </View>
           }
         />
