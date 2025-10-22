@@ -1,32 +1,30 @@
 import { ProductEntryVO } from "../valueObjects/products/productEntries.vo.js";
 import { productEntriesModel } from "../models/productEntries.model.js";
-import { productsModel } from "../models/products.model.js";
+import { productsModel } from "../models/products.model.js"; 
 
 class ProductEntriesService {
   /**
    * Crea una nueva entrada y actualiza el stock del producto.
+   * @param {Object} data - Datos de la nueva entrada
+   * @returns {Object} Resultado con mensaje, entrada creada y stock actualizado
+   * @author Dania Sagarnaga Macías
    */
   async create(data) {
     const entryVO = new ProductEntryVO(data);
 
-    //guardar entrada en product_entries
     const id = await productEntriesModel.create(entryVO);
-    const product = await productsModel.getById(entryVO.product_id);
-
-    if (!product) throw new Error("Producto no encontrado");
-    if (!product.is_active) throw new Error("El producto no está activo");
-
     const entry = { id, ...entryVO };
 
-    //calcular nuevo stock
+    const product = await productsModel.getById(entry.product_id);
+    if (!product) throw new Error("Producto no encontrado");
+    if (!product.is_active) throw new Error("El producto no está activo");
+  
     const newStock = parseFloat(product.actual_stock || 0) + parseFloat(entry.quantity);
 
-    //actualizar stock en products
     await productsModel.update(entry.product_id, { actual_stock: newStock });
 
-    //return resutl to controller
     return {
-      message: "Entrada creada y stock actualizado correctamente",
+      message: `Entrada creada por el usuario ${entry.user_id} y stock actualizado correctamente`,
       entry,
       updated_stock: newStock
     };
