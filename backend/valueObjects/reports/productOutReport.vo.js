@@ -31,10 +31,10 @@ export class ProductOutReportVO {
     }
 
     getFormattedCreatedAt() {
-        return format(this.created_at, "MM-dd-yy HH:mm");
+        return format(this.createdAt, "MM-dd-yy HH:mm");
     }
 
     getFormattedExpDate() {
-        return format(this.exp_date, "MM-dd-yy HH:mm");
+        return format(this.createdAt, "MM-dd-yy HH:mm");
     }
 }

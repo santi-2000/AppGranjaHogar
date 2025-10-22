@@ -157,7 +157,7 @@ class ReportsService {
         if (type.includes(2)) await reportsModel.postReportInclude(report.insertId, 2);
         if (type.includes(3)) await reportsModel.postReportInclude(report.insertId, 3);
 
-        return doc.end();
+        return doc;
     }
 
     /**

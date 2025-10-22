@@ -52,7 +52,8 @@ class ReportsController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=${initialDate}to${endDate}.pdf`);
 
-    await reportsService.postReportPDFService({doc, userId: 1, initialDate, endDate, type});
+    const docModified = await reportsService.postReportPDFService({doc, userId: 1, initialDate, endDate, type});
+    docModified.end();
   }
 }
 
