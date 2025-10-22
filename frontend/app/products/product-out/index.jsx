@@ -1,3 +1,21 @@
+/**
+ * @module screens/products/OutScreen
+ *
+ * @description
+ * Screen used to register product outflows. Allows users to select a product, define quantity,
+ * specify department and reason, add optional notes, and submit the data to the backend.
+ *
+ * @component
+ * @returns {JSX.Element} The product out registration screen.
+ *
+ * @example
+ * import OutScreen from "./index";
+ * <OutScreen />;
+ *
+ * @author
+ * Samuel Isaac Lopez Mar
+ */
+
 import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
@@ -10,7 +28,6 @@ import OutReason from "../../../components/Products/Out/OutReason";
 import OutNotes from "../../../components/Products/Out/OutNotes";
 import ProductSearch from "../../../components/Products/Out/ProductSearch";
 import { useProductOuts } from "../../../hooks/useProductOuts";
-
 
 export default function OutScreen() {
   const { createProductOut, loading } = useProductOuts();
@@ -64,7 +81,11 @@ export default function OutScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+          >
             <View>
               <TitleBar title={"Nueva Salida"} />
 
@@ -90,16 +111,16 @@ export default function OutScreen() {
                   />
                 </View>
                 <View className="mb-4">
-                  <OutReason
-                    reasonId={reasonId}
-                    setReasonId={setReasonId}
-                  />
+                  <OutReason 
+                  reasonId={reasonId}
+                   setReasonId={setReasonId}
+                    />
                 </View>
                 <View className="mb-4">
                   <OutNotes
-                    notes={notes}
+                   notes={notes}
                     setNotes={setNotes}
-                  />
+                     />
                 </View>
               </View>
             </View>
