@@ -9,6 +9,7 @@
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
  * @author Roberto Santiago Estrada Orozco
+ * @author Samuel Isaac Lopez Mar
  * 
  * @example
  * import { productsModel } from '../models/products.model.js';
@@ -98,7 +99,7 @@ class ProductsModel {
     }
 
     async getAvailableProducts() {
-    const sql = 'SELECT id, name, perishable FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+    const sql = 'SELECT id, name, perishable, unit_id FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
     const [rows] = await db.query(sql);
     return rows;
 }

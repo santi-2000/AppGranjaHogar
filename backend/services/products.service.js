@@ -102,7 +102,7 @@ class ProductsService {
         const rows = await productsModel.getAvailableProducts()
         if (!rows || !Array.isArray(rows)) return [];
 
-        return rows.map(availableProucts => new ProductsAvailableVO(availableProucts));
+        return rows.map(availableProducts => new ProductsAvailableVO(availableProducts));
     }
 }
 
