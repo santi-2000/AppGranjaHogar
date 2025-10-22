@@ -91,11 +91,10 @@ class ProductsModel {
     }
 
     async getAvailableProducts() {
-    const sql = 'SELECT id, name, perishable FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
-    const [rows] = await db.query(sql);
-    return rows;
-}
-
+        const sql = 'SELECT id, name, perishable FROM products WHERE actual_stock > 0 AND is_active = TRUE ORDER BY name;';
+        const [rows] = await db.query(sql);
+        return rows;
+    }
 }
 
 export const productsModel = new ProductsModel();

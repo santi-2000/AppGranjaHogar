@@ -11,6 +11,7 @@ export const useProductsAvailable = () => {
       setLoading(true);
       setError(null);
       const result = await ProductsProxy.getAvailableProducts();
+      console.log(result)
       setData(result.data || result);
     } catch (err) {
       setError(err.message);
