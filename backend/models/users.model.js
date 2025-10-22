@@ -7,6 +7,7 @@
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Renata Soto Bravo
+ * @author Renata Loaiza
  * 
  * @example
  * import { usersModel } from '../models/users.model.js';
@@ -51,6 +52,9 @@ class UsersModel {
     return rows;
   }
 
+  /**
+   * @author Renata Loaiza
+   */
   async create({ name, lastName, username, passwordHash }) {
     const sql = `
       INSERT INTO users (name, username, last_name, password_hash)

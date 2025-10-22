@@ -17,6 +17,7 @@ import { AppError } from "../utils/error.util.js";
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Roberto Santiago Estrada Orozco
  * @author Renata Soto Bravo
+ * @author Renata Loaiza
  * 
  * @example
  * import usersRoutes from './routes/users.routes.js';
@@ -55,6 +56,9 @@ router.get("/:id", [
   validate
 ], usersController.getUserById);
 
+/**
+ * @author Renata Loaiza
+ */
 router.post(
   "/new",
   [

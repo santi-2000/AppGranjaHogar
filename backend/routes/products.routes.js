@@ -9,6 +9,7 @@
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  * 
  * @example
  * import productsRoutes from './routes/products.routes.js';
@@ -49,6 +50,9 @@ router.delete("/delete/:id", [
     productsController.deleteProduct
 )
 
+/**
+ * @author Renata Loaiza
+ */
 router.put(
     "/editar/:id",
     [

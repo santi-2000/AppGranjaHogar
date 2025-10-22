@@ -8,6 +8,7 @@
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Roberto Santiago Estrada Orozco
  * @author Renata Soto Bravo
+ * @author Renata Loaiza
  * 
  * @example
  * import { usersService } from '../services/users.service.js';
@@ -74,6 +75,9 @@ export class UsersService {
     });
   }
 
+  /**
+   * @author Renata Loaiza
+   */
   async createUser({ name, lastName, username, password, permissions }) {
     const passVO = new PasswordVO(password);
     const salt = await bcrypt.genSalt(10);

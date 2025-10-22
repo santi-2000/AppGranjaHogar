@@ -9,6 +9,7 @@
  * @author Carlos Alejandro Ortiz Caro
  * @author Samuel Isaac Lopez Mar
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  * 
  * @example
  * import { productsController } from '../controllers/products.controller.js';
@@ -69,6 +70,9 @@ class ProductsController {
         res.json(result);
     }
 
+    /**
+     * @author Renata Loaiza
+     */
     async UpdateProduct (req, res) {
         const { id } = req.params;
         const updateData = req.body;
