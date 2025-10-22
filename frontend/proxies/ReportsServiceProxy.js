@@ -47,19 +47,9 @@ const ReportsProxy = () => {
             body: JSON.stringify(reportVo),
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                throw new Error('Datos de entrada inválidos');
-            } else if (response.status === 500) {
-                throw new Error('Error al convertir');
-            } else if (response.status === 503) {
-                throw new Error('Servicio no disponible');
-            } else {
-                throw new Error('Error desconocido');
-            }
-        }
-
         const data = await response.blob();
+
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
 
         return data
     }
@@ -92,19 +82,9 @@ const ReportsProxy = () => {
             body: JSON.stringify(reportVo),
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                throw new Error('Datos de entrada inválidos');
-            } else if (response.status === 500) {
-                throw new Error('Error al convertir');
-            } else if (response.status === 503) {
-                throw new Error('Servicio no disponible');
-            } else {
-                throw new Error('Error desconocido');
-            }
-        }
-
         const data = await response.blob();
+        
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
 
         return data
     }

@@ -1,5 +1,5 @@
 //esto no está LISTO pausa 
-import { View, Alert } from 'react-native';
+import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store'; // 👈 importamos SecureStore
@@ -22,14 +22,14 @@ export default function InScreen() {
   const [isDonation, setIsDonation] = useState(true);
   const [cost, setCost] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
-  const [userId, setUserId] = useState(null); 
+  const [userId, setUserId] = useState(null);
 
   const { createEntry, loading } = useProductEntries();
-  
+
   useEffect(() => {
     const getUserId = async () => {
       try {
-        const storedId = await SecureStore.getItemAsync('id'); 
+        const storedId = await SecureStore.getItemAsync('id');
         if (storedId) setUserId(Number(storedId));
       } catch (err) {
         console.error("Error al obtener user_id:", err);
@@ -83,37 +83,50 @@ export default function InScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }} edges={['bottom', 'left', 'right']}>
       <TitleBar title={"Nueva Entrada"} />
-      
-      <View className="flex-1 px-6">
-        <SearchProduct selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
-        <NewProductLink />
 
-        <QuantityAndUnits 
-          quantityValue={quantityValue}
-          setQuantityValue={setQuantityValue}
-          selectedUnit={selectedUnit}
-          setSelectedUnit={setSelectedUnit}
-        />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="flex-1 px-6">
+              <SearchProduct selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
+              <NewProductLink />
 
-        <Donation 
-          isDonation={isDonation}
-          setIsDonation={setIsDonation}
-          cost={cost}
-          setCost={setCost}
-        />
+              <QuantityAndUnits
+                quantityValue={quantityValue}
+                setQuantityValue={setQuantityValue}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+              />
 
-        <ExpirationDate 
-          expirationDate={expirationDate}
-          setExpirationDate={setExpirationDate}
-        />
+              <Donation
+                isDonation={isDonation}
+                setIsDonation={setIsDonation}
+                cost={cost}
+                setCost={setCost}
+              />
 
-        <View className="mb-6">
-          <ButtonRounded 
-            action={handleRegister}
-            text={loading ? "Registrando..." : "Registrar"}
-          />
-        </View>
-      </View>
+              <ExpirationDate
+                expirationDate={expirationDate}
+                setExpirationDate={setExpirationDate}
+              />
+
+              <View className="mb-6">
+                <ButtonRounded
+                  action={handleRegister}
+                  text={loading ? "Registrando..." : "Registrar"}
+                />
+              </View>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

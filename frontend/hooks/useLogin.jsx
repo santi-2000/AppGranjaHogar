@@ -26,7 +26,6 @@ import { jwtDecode } from 'jwt-decode';
 
 const usePostLogin = () => {
     const [errors, setErrors] = useState({});
-    const [loginData, setLoginData] = useState({});
     const [loading, setLoading] = useState(false);
     const { postLogin, postVerify } = LoginProxy();
     const user = useUserStore((state) => state.user);
@@ -38,12 +37,12 @@ const usePostLogin = () => {
         verify();
     }, [])
 
-    async function login() {
+    async function login(values) {
         setErrors({});
 
         setLoading(true);
         try {
-            const loginVO = new LoginVO(loginData);
+            const loginVO = new LoginVO(values);
             const response = await postLogin(loginVO);
 
             const decoded = jwtDecode(response.token);
@@ -69,14 +68,12 @@ const usePostLogin = () => {
             const token = await SecureStore.getItemAsync('token');
             const response = await postVerify(token);
 
-
             if (response) {
                 const decoded = jwtDecode(token);
                 setUser(decoded);
                 router.push('/home');
             } else {
                 await SecureStore.deleteItemAsync('token');
-                router.push('/login');
             }
         } catch (err) {
             console.log(err)
@@ -87,11 +84,7 @@ const usePostLogin = () => {
         return;
     }
 
-    const handleChange = (key, value) => {
-        setLoginData(prev => ({ ...prev, [key]: value }));
-    };
-
-    return { login, setLoginData, loginData, errors, handleChange, verify }
+    return { login, errors, verify }
 }
 
 export default usePostLogin;

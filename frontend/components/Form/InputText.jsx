@@ -5,6 +5,7 @@ export default function InputText({
     onChange, 
     placeholder, 
     error,
+    touched,
     className = "bg-gray-50 rounded-xl px-4 py-4 text-gray-800", 
     secureTextEntry = false
 }) {
@@ -20,7 +21,10 @@ export default function InputText({
                 autoCapitalize="none"
                 secureTextEntry={secureTextEntry}
             />
-            {error && <Text style={{ color: 'red' }}>{error}</Text>}
+            {error && touched && 
+            <Text className="text-sm mt-2 text-red-500">
+                {error}
+            </Text>}
         </View>
     );
 }

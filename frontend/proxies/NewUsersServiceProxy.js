@@ -35,24 +35,9 @@ const NewUsersServiceProxy = () => {
             body: JSON.stringify(userVO)
         });
 
-        if (!response.ok) {
-            if (response.status === 400) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Datos inválidos');
-            } else if (response.status === 401) {
-                throw new Error('No autorizado');
-            } else if (response.status === 409) {
-                throw new Error('El usuario ya existe');
-            } else if (response.status === 500) {
-                throw new Error('Error interno del servidor');
-            } else if (response.status === 503) {
-                throw new Error('Servicio no disponible');
-            } else {
-                throw new Error('Error desconocido');
-            }
-        }
-
         const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+
         return data.user;
     }
 

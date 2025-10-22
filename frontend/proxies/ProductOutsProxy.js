@@ -11,8 +11,9 @@ export const ProductOutsProxy = {
 
       }
     });
-    if (!res.ok) throw new Error("Error al obtener las salidas");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error desconocido");
+    return data;
   },
 
   async getById(id) {
@@ -21,14 +22,14 @@ export const ProductOutsProxy = {
     const res = await fetch(`${API_BASE_URL}/v1/product-outs${id}`, {
       headers: {
         "Authorization": "Bearer " + token
-
       }
     });
-    if (!res.ok) throw new Error("Salida no encontrada");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Salida no encontrada");
+    return data;
   },
 
-  async create(data) {
+  async create(dataVO) {
     const token = await SecureStore.getItemAsync('token');
 
     const res = await fetch(`${API_BASE_URL}/v1/product-outs`, {
@@ -38,14 +39,11 @@ export const ProductOutsProxy = {
         "Authorization": "Bearer " + token
 
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataVO),
     });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || "Error al registrar la salida");
-    }
-
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error al crear la salida");
+    return data;
   }
 };

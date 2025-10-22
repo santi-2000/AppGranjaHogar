@@ -11,9 +11,9 @@ export const DepartmentsProxy = {
 
       }
     });
-
-    if (!res.ok) throw new Error("Error al obtener los departamentos");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error al obtener los departamentos');
+    return data;
   },
 
   async getById(id) {
@@ -26,11 +26,13 @@ export const DepartmentsProxy = {
       }
     }
     );
-    if (!res.ok) throw new Error("Departamento no encontrado");
-    return res.json();
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Departamento no encontrado');
+    return data;
   },
 
-  async create(data) {
+  async create(dataVO) {
+    const token = await SecureStore.getItemAsync('token');
     const res = await fetch(`${API_BASE_URL}/v1/departments`, {
       method: "POST",
       headers: {
@@ -38,14 +40,12 @@ export const DepartmentsProxy = {
         "Authorization": "Bearer " + token
 
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataVO),
     });
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.message || "Error al registrar departamento");
-    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Error desconocido');
 
-    return res.json();
+    return data;
   }
 };
