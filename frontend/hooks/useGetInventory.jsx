@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getInventory, getProductQuantity } from '../proxies/InventoryServiceProxy';
 import { ProductInventoryVO, ProductQuantityVO } from '../valueobjects/products/ProductVO';
+import { removeAccents } from '../utils/textUtil';
 
 /**
  * @class useInventory
@@ -17,15 +18,16 @@ export const useInventory = () => {
     const [inventory, setInventory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const formatQuantity = (quantity, unit) => {
-        const unitMap = {
-            1: 'piezas',
-            2: 'piezas',
-            3: 'litros'
-        };
-        return `${quantity} ${unitMap[unit] || 'unidades'}`;
-    };
+    const filteredInventory = useMemo(() => {
+        if (!searchTerm.trim()) return inventory;
+
+        return inventory.filter(item =>
+            removeAccents(item.name.toLowerCase()).includes(searchTerm.toLowerCase())
+        );
+    }, [inventory, searchTerm]);
+
 
     const fetchInventory = async () => {
         setLoading(true);
@@ -34,6 +36,8 @@ export const useInventory = () => {
         try {
             const data = await getInventory();
             const inventoryItems = data.map(item => new ProductInventoryVO(item));
+
+            console.log('Fetched inventory items:', inventoryItems);
 
             setInventory(inventoryItems);
         } catch (err) {
@@ -62,9 +66,11 @@ export const useInventory = () => {
         inventory,
         loading,
         error,
+        searchTerm,
+        setSearchTerm,
+        filteredInventory,
         fetchInventory,
         fetchProductQuantity,
         refetch: fetchInventory,
-        formatQuantity
     };
 };

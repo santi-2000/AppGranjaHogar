@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LoginProxy from '../proxies/UsersServiceProxy.js';
 import { LoginVO } from '../valueobjects/users/LoginVO.jsx';
 import { useRouter } from 'expo-router';
@@ -25,7 +25,7 @@ import { jwtDecode } from 'jwt-decode';
  */
 
 const usePostLogin = () => {
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState({});
     const [loginData, setLoginData] = useState({});
     const [loading, setLoading] = useState(false);
     const { postLogin, postVerify } = LoginProxy();
@@ -34,11 +34,14 @@ const usePostLogin = () => {
 
     const router = useRouter();
 
+    useEffect(() => {
+        verify();
+    }, [])
+
     async function login() {
-        setError('');
+        setErrors({});
 
         setLoading(true);
-        setError(null);
         try {
             const loginVO = new LoginVO(loginData);
             const response = await postLogin(loginVO);
@@ -51,7 +54,7 @@ const usePostLogin = () => {
             router.push('/home');
         } catch (err) {
             console.log(err)
-            setError(err.message);
+            setErrors({ general: err.message });
         } finally {
             setLoading(false);
         }
@@ -59,15 +62,14 @@ const usePostLogin = () => {
     }
 
     async function verify() {
-        setError('');
+        setErrors({});
 
         setLoading(true);
-        setError(null);
         try {
             const token = await SecureStore.getItemAsync('token');
             const response = await postVerify(token);
 
-            
+
             if (response) {
                 const decoded = jwtDecode(token);
                 setUser(decoded);
@@ -78,7 +80,7 @@ const usePostLogin = () => {
             }
         } catch (err) {
             console.log(err)
-            setError(err.message);
+            setErrors({ general: err.message });
         } finally {
             setLoading(false);
         }
@@ -89,7 +91,7 @@ const usePostLogin = () => {
         setLoginData(prev => ({ ...prev, [key]: value }));
     };
 
-    return { login, setLoginData, loginData, error, handleChange, verify }
+    return { login, setLoginData, loginData, errors, handleChange, verify }
 }
 
 export default usePostLogin;

@@ -20,14 +20,14 @@ import { useEffect } from 'react';
  */
 
 export default function CatalogScreen() {
-  const { catalog, error } = useGetCatalog();
+  const { filteredProducts, search, handleSearch, error } = useGetCatalog();
 
   return (
     <SafeAreaView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>
       <TitleBar title={'Catálogo'} />
       <View className="p-4">
         <View className="mb-4">
-          <SearchProduct />
+          <SearchProduct onSearch={handleSearch} value={search} />
         </View>
 
         <View className="mb-4">
@@ -35,7 +35,7 @@ export default function CatalogScreen() {
         </View>
 
         <FlatList
-          data={catalog}
+          data={filteredProducts}
           renderItem={({ item }) => <ProductCatalog data={item} />}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}

@@ -60,9 +60,13 @@ export default function NewProductScreen() {
           <ScrollView className="px-6" contentContainerStyle={{ flexGrow: 1 }}>
 
             <ValueSection value={productData.name} onChange={(v) => handleChange('name', v)} />
+            
             <PerishableSection value={productData.perishable} onChange={(v) => handleChange('perishable', v)} />
+            
             <Categorysection value={productData.category_id} onChange={(v) => handleChange('category_id', v)} />
+            
             <UnirSection value={productData.unit_id} onChange={(v) => handleChange('unit_id', v)} />
+            
             <StockSection
               minStock={productData.min_stock}
               maxStock={productData.max_stock}

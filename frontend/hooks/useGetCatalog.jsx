@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import CatalogProxy from '../proxies/CatalogServiceProxy.js';
+import { removeAccents } from '../utils/textUtil.js';
 
 /**
  * Custom hook for fetching catalog data.
@@ -21,8 +22,21 @@ import CatalogProxy from '../proxies/CatalogServiceProxy.js';
 
 const useGetCatalog = () => {
     const [catalog, setCatalog] = useState('');
-    const [error, setError] = useState('');
     const { getCatalog } = CatalogProxy();
+    const [search, setSearch] = useState('');
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [error, setError] = useState('');
+
+    const handleSearch = (text) => {
+        setSearch(text);
+        const normalizedSearch = removeAccents(text.toLowerCase());
+
+        const filtered = catalog.filter(product =>
+            removeAccents(product.name.toLowerCase()).includes(normalizedSearch)
+        );
+
+        setFilteredProducts(filtered);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,6 +53,7 @@ const useGetCatalog = () => {
         try {
             setError('');
             const catalog = await getCatalog();
+            setFilteredProducts(catalog);
             setCatalog(catalog);
         } catch (error) {
             setError(error.message);
@@ -46,7 +61,7 @@ const useGetCatalog = () => {
         }
     }
 
-    return { fetchCatalog, catalog, setCatalog, error }
+    return { filteredProducts, search, handleSearch, error }
 }
 
 export default useGetCatalog;
