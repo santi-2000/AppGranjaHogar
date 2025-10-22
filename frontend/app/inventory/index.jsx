@@ -6,6 +6,7 @@ import TitleBar from '../../components/TitleBar';
 import ProductSearch from '../../components/Products/Out/ProductSearch';
 import { useInventory } from '../../hooks/useGetInventory';
 import { findEmoji } from '../../utils/findEmojiUtil';
+import { capitalizeFirstLetterEachWord } from '../../utils/textUtil';
 
 export default function InventaryScreen() {
   const { inventory, loading, error, refetch, getProductEmoji, formatQuantity } = useInventory();
@@ -79,7 +80,7 @@ export default function InventaryScreen() {
             <View className="bg-white rounded-2xl mb-3">
               <View className="flex-row justify-between p-4">
                 <Text className={styles.text}>
-                  {findEmoji(item.name)} {item.name}
+                  {findEmoji(item.name)} {capitalizeFirstLetterEachWord(item.name)}
                 </Text>
                 <Text className={styles.text}>
                   {formatQuantity(item.quantity, item.unit)}

@@ -3,6 +3,8 @@ import LoginProxy from '../proxies/UsersServiceProxy.js';
 import { LoginVO } from '../valueobjects/users/LoginVO.jsx';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import { useUserStore } from '../stores/useUserStore.js';
+import { jwtDecode } from 'jwt-decode';
 
 /**
  * Custom hook to manage user login and session verification.
@@ -17,13 +19,9 @@ import * as SecureStore from 'expo-secure-store';
  * @returns {Function} handleChange - Function to handle changes in login form inputs.
  * @returns {Function} verify - Function to verify user session.
  * 
+ * @author Jared Alejandro Marquez Muñoz Grado
  * @example
  * const { login, loginData, error, handleChange, verify } = useLogin();
- * @author Jared Alejandro Marquez Muñoz Grado
- * 
- * @example 
- * 
- * 
  */
 
 const usePostLogin = () => {
@@ -31,6 +29,8 @@ const usePostLogin = () => {
     const [loginData, setLoginData] = useState({});
     const [loading, setLoading] = useState(false);
     const { postLogin, postVerify } = LoginProxy();
+    const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUser);
 
     const router = useRouter();
 
@@ -41,12 +41,13 @@ const usePostLogin = () => {
         setError(null);
         try {
             const loginVO = new LoginVO(loginData);
-            console.log(loginVO)
             const response = await postLogin(loginVO);
-            console.log(response)
+
+            const decoded = jwtDecode(response.token);
+            setUser(decoded);
+
             await SecureStore.setItemAsync('token', response.token);
 
-            console.log("Sesión Iniciada")
             router.push('/home');
         } catch (err) {
             console.log(err)
@@ -65,8 +66,16 @@ const usePostLogin = () => {
         try {
             const token = await SecureStore.getItemAsync('token');
             const response = await postVerify(token);
-            if (response)  router.push('/home');
-            else router.push('/login');
+
+            
+            if (response) {
+                const decoded = jwtDecode(token);
+                setUser(decoded);
+                router.push('/home');
+            } else {
+                await SecureStore.deleteItemAsync('token');
+                router.push('/login');
+            }
         } catch (err) {
             console.log(err)
             setError(err.message);
@@ -77,10 +86,10 @@ const usePostLogin = () => {
     }
 
     const handleChange = (key, value) => {
-    setLoginData(prev => ({ ...prev, [key]: value }));
-  };
+        setLoginData(prev => ({ ...prev, [key]: value }));
+    };
 
-    return { login, setLoginData, loginData, error, handleChange, verify}
+    return { login, setLoginData, loginData, error, handleChange, verify }
 }
 
 export default usePostLogin;
