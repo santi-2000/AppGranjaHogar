@@ -7,6 +7,21 @@ import ButtonRounded from '../../../../components/Form/ButtonRounded';
 import useCreateUser from '../../../../hooks/useCreateUser';
 import PermissionRow from '../../../../components/Form/PermissionRow';
 
+/**
+ * Screen component for creating new users.
+ * @module screens/NewUserScreen
+ * @description This screen provides a form interface for administrators to create new users
+ *              with specific permissions. It includes fields for name, last name, username,
+ *              password, and permission selection.
+ * @returns {JSX.Element} The NewUserScreen component
+ * 
+ * @author Renata Soto Bravo
+ * 
+ * @example
+ * // This screen is accessed via navigation
+ * router.push('/settings/manage-users/new-user');
+ */
+
 const permissions = [
   { label: 'Entradas de productos', value: 'products-entries' },
   { label: 'Salidas de productos', value: 'products-outs' },

@@ -12,6 +12,9 @@ import { AppError } from "../utils/error.util.js";
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Roberto Santiago Estrada Orozco 
+ * @author Renata Soto Bravo
+ * @author Renata Loaiza
  * 
  * @example
  * import { usersController } from '../controllers/users.controller.js';
@@ -61,6 +64,9 @@ class UserController {
     return res.status(200).json({ ok: true, user });
   }
 
+  /**
+   * @author Renata Loaiza
+   */
   async createUser(req, res) {
     const user = await usersService.createUser(req.body);
     return res.status(201).json({ ok: true, message: "Usuario creado", user });
@@ -75,6 +81,9 @@ class UserController {
     return res.status(200).json({ ok: true, message: "Usuario actualizado", user });
   }
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   async updatePassword(req, res) {
     const userId = req.user.id;
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -84,6 +93,9 @@ class UserController {
     return res.status(200).json({ ok: true, message: result.message });
   }
 
+  /**
+   * @author Renata Soto Bravo
+   */
   async deleteUser(req, res) {
     const { id } = req.params;
     const result = await usersService.deleteUser({ id });

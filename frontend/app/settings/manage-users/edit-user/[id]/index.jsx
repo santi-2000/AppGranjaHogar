@@ -5,6 +5,21 @@ import ButtonRounded from '../../../../../components/Form/ButtonRounded';
 import useEditUser from '../../../../../hooks/useEditUser';
 import TrashIcon from "../../../../../components/Icons/TrashIcon";
 
+/**
+ * Screen component for editing user permissions and deleting users.
+ * @module screens/EditUserScreen
+ * @description This screen allows administrators to edit user permissions and delete users.
+ *              It displays user information, permission checkboxes, and provides a delete button
+ *              with confirmation dialog. Users can modify permissions and save changes.
+ * @returns {JSX.Element} The EditUserScreen component
+ * 
+ * @author Renata Soto Bravo
+ * 
+ * @example
+ * // This screen is accessed via navigation with user ID
+ * router.push(`/settings/manage-users/edit-user/${userId}`);
+ */
+
 export default function EditUserScreen() {
   const {
     handleDeleteConfirm,

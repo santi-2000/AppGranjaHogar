@@ -5,6 +5,7 @@
  * @param {Object} dbProduct - The raw product data from the database.
  * @returns {ProductVO} An instance of ProductVO containing structured product data.
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
  */
 
 export class ProductVO {
@@ -19,6 +20,10 @@ export class ProductVO {
     }
 }
 
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco
+ */
 export class ProductQuantityVO {
     constructor(dbProduct) {
         this.name = dbProduct.name;
@@ -27,6 +32,9 @@ export class ProductQuantityVO {
     }
 }
 
+/**
+ * @author Roberto Santiago Estrada Orozco
+ */
 export class ProductInventoryVO {
     constructor(dbProduct) {
         this.id = dbProduct.id;

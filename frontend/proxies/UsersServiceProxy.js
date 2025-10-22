@@ -10,6 +10,8 @@ import * as SecureStore from 'expo-secure-store';
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
+ * @author Roberto Santiago Estrada Orozco
+ * @author Renata Soto Bravo
  * 
  * @example
  * import UsersServiceProxy from '../proxies/UsersServiceProxy.js';
@@ -131,6 +133,9 @@ const UsersServiceProxy = () => {
         return data.user;
     }
 
+    /**
+     * @author Renata Soto Bravo
+     */
     async function deleteUser(userId) {
         const token = await SecureStore.getItemAsync('token');
         const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
@@ -189,7 +194,10 @@ const UsersServiceProxy = () => {
         const data = await response.json();
         return data;
     }
-
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco
+ */
     async function putUpdatePassword(PasswordUpdateVO) {
         const token = await SecureStore.getItemAsync('token');
 

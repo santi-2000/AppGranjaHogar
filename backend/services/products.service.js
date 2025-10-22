@@ -8,6 +8,8 @@
  *  
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  * 
  * @example
  * import { productsService } from './services/products.service.js';
@@ -34,6 +36,9 @@ class ProductsService {
         return rows.map(dbProduct => new ProductCatalogVO(dbProduct));
     }
 
+    /**
+     * @author Roberto Santiago Estrada Orozco
+     */
     async getProductQuantity(id) {
         const product = await productsModel.getProductQuantity(id);
         if (!product) throw new AppError('Product not found');
@@ -41,6 +46,10 @@ class ProductsService {
         return new ProductQuantityVO(product);
     }
 
+/**
+ * 
+ * @author Roberto Santiago Estrada Orozco 
+ */
     async getInventory() {
         const products = await productsModel.getInventory();
         return products.map(product => new ProductInventoryVO(product));
@@ -71,6 +80,9 @@ class ProductsService {
         return { success: true, message: "Product deleted successfully" };
     }
 
+    /**
+     * @author Renata Loaiza
+     */
     async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active }, productId) {
         const existingProduct = await productsModel.getById(productId);
         if (!existingProduct) throw new AppError('Producto no encontrado');
@@ -94,7 +106,14 @@ class ProductsService {
         const rows = await productsModel.getAvailableProducts()
         if (!rows || !Array.isArray(rows)) return [];
 
-        return rows.map(availableProucts => new ProductsAvailableVO(availableProucts));
+        return rows.map(availableProducts => new ProductsAvailableVO(availableProducts));
+    }
+    
+    async getAvailableProductsForEntries() {
+        const rows = await productsModel.getAvailableProductsForEntries()
+        if (!rows || !Array.isArray(rows)) return [];
+
+        return rows.map(availableProducts => new ProductsAvailableVO(availableProducts));
     }
 }
 

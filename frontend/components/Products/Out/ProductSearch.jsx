@@ -1,8 +1,43 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
-import { useProductsAvailable } from "../../../hooks/useProductsAvailable";
+/**
+ * @module components/Products/Out/ProductSearch
+ *
+ * @description
+ * A lightweight searchable dropdown for selecting a product.
+ *
+ * @component
+ * @param {Object} props
+ * @param {number|null} props.selectedProduct
+ * @param {Function} props.setSelectedProduct
+ * @returns {JSX.Element}
+ *
+ * @example
+ * <ProductSearch
+ *   selectedProduct={selectedProduct}
+ *   setSelectedProduct={setSelectedProduct}
+ * />
+ *
+ * @author
+ * Samuel Isaac Lopez Mar
+ */
 
-export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
+import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import { useProductsAvailable } from "../../../hooks/useProductsAvailable";
+import { getUnitNameById } from "../../../utils/unitMapper";
+
+/**
+ * Searchable dropdown component for selecting products.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {number|null} props.selectedProduct - The currently selected product ID.
+ * @param {Function} props.setSelectedProduct - Function to update the selected product ID.
+ * @param {Function} props.setUnitId - Function to set the unit ID (numeric value).
+ * @param {Function} props.setUnitName - Function to set the readable unit name (for display).
+ *
+ * @returns {JSX.Element} A React Native component for selecting a product.
+ */
+export default function ProductSearch({ selectedProduct, setSelectedProduct, setUnitId, setUnitName }) {
   const { data, loading, error } = useProductsAvailable();
   const [search, setSearch] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -11,16 +46,29 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
     product.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  /**
+   * Handles the selection of a product from the dropdown.
+   * Automatically updates both the product and its corresponding unit.
+   *
+   * @function handleSelect
+   * @param {Object} item - The selected product object.
+   * @param {number} item.id - Product ID.
+   * @param {string} item.name - Product name.
+   * @param {number} item.unit_id - Unit ID associated with the product.
+   * @returns {void}
+   */
   const handleSelect = (item) => {
     setSelectedProduct(item.id);
     setSearch(item.name);
+    setUnitId(item.unit_id);
+    setUnitName(getUnitNameById(item.unit_id));
     setShowOptions(false);
   };
 
   return (
     <View className="bg-white p-4 rounded-2xl">
       <Text className="text-lg font-medium text-gray-800 mb-3">Producto</Text>
-      <View className="rounded-xl bg-gray-50 ">
+      <View className="rounded-xl bg-gray-50">
         <TextInput
           placeholder="Buscar producto..."
           value={search}
@@ -36,21 +84,28 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
         {error && <Text className="text-red-500">{error}</Text>}
 
         {showOptions && search.length > 0 && (
-          <View className="border-t border-gray-300 max-h-40">
-            <FlatList
-              data={filteredOptions}
-              keyExtractor={(item) => item.id.toString()}
-              keyboardShouldPersistTaps="handled"
-              renderItem={({ item }) => (
+          <ScrollView
+            className="border-t border-gray-300 max-h-40"
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+          >
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((item) => (
                 <TouchableOpacity
+                  key={item.id}
                   className="p-3 border-b border-gray-100"
                   onPress={() => handleSelect(item)}
                 >
                   <Text className="text-gray-800">{item.name}</Text>
                 </TouchableOpacity>
-              )}
-            />
-          </View>
+              ))
+            ) : (
+              <View className="p-3">
+                <Text className="text-gray-500">No se encontraron productos</Text>
+              </View>
+            )}
+          </ScrollView>
         )}
       </View>
     </View>

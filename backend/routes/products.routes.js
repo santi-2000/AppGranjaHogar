@@ -8,6 +8,8 @@
  * 
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  * 
  * @example
  * import productsRoutes from './routes/products.routes.js';
@@ -48,6 +50,9 @@ router.delete("/delete/:id", [
     productsController.deleteProduct
 )
 
+/**
+ * @author Renata Loaiza
+ */
 router.put(
     "/editar/:id",
     [
@@ -66,8 +71,14 @@ router.put(
     productsController.UpdateProduct
 )
 
+/**
+ * @description Route to get the inventory of products. @author Roberto Santiago Estrada Orozco
+ */
 router.get("/inventory", authMiddlewareLogged, productsController.getInventory)
 
+/**
+ * @description Route to get the quantity of a specific product by its ID. @author Roberto Santiago Estrada Orozco 
+ */
 router.get("/:id/quantity", [
     authMiddlewareLogged,
     param('id').isInt().withMessage('ID tiene que ser un numero'),
@@ -77,5 +88,7 @@ router.get("/:id/quantity", [
 )
 
 router.get("/available-products", authAuthorizePermissions("products-entries", "products-outs"), productsController.getAvailableProducts)
+
+router.get("/available-products-for-entries", authAuthorizePermissions("products-entries", "products-outs"), productsController.getAvailableProductsForEntries)
 
 export default router
