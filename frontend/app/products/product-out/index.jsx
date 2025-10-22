@@ -1,4 +1,4 @@
-import { View, Alert } from "react-native";
+import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { router } from "expo-router";
@@ -59,51 +59,60 @@ export default function OutScreen() {
         justifyContent: "space-between",
       }}
     >
-      <View>
-        <TitleBar title={"Nueva Salida"} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View>
+              <TitleBar title={"Nueva Salida"} />
 
-        <View className="p-4">
-          <View className="mb-4">
-            <ProductSearch
-              selectedProduct={selectedProduct}
-              setSelectedProduct={setSelectedProduct}
-            />
-          </View>
-          <View className="mb-4">
-            <QuantitySectionOut
-              quantity={quantity}
-              setQuantity={setQuantity}
-              unitId={unitId}
-              setUnitId={setUnitId}
-            />
-          </View>
-          <View className="mb-4">
-            <DepartmentSectionOut
-              departmentId={departmentId}
-              setDepartmentId={setDepartmentId}
-            />
-          </View>
-          <View className="mb-4">
-            <OutReason
-              reasonId={reasonId}
-              setReasonId={setReasonId}
-            />  
-          </View>
-          <View className="mb-4">
-            <OutNotes
-              notes={notes}
-              setNotes={setNotes}
-            />
-          </View>
-        </View>
-      </View>
+              <View className="px-6">
+                <View className="mb-4">
+                  <ProductSearch
+                    selectedProduct={selectedProduct}
+                    setSelectedProduct={setSelectedProduct}
+                  />
+                </View>
+                <View className="mb-4">
+                  <QuantitySectionOut
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    unitId={unitId}
+                    setUnitId={setUnitId}
+                  />
+                </View>
+                <View className="mb-4">
+                  <DepartmentSectionOut
+                    departmentId={departmentId}
+                    setDepartmentId={setDepartmentId}
+                  />
+                </View>
+                <View className="mb-4">
+                  <OutReason
+                    reasonId={reasonId}
+                    setReasonId={setReasonId}
+                  />
+                </View>
+                <View className="mb-4">
+                  <OutNotes
+                    notes={notes}
+                    setNotes={setNotes}
+                  />
+                </View>
+              </View>
+            </View>
 
-      <View className="px-4 pb-6">
-        <ButtonRounded
-          text={loading ? "Registrando..." : "Registrar"}
-          action={handleRegister}
-        />
-      </View>
+            <View className="px-4 pb-6">
+              <ButtonRounded
+                text={loading ? "Registrando..." : "Registrar"}
+                action={handleRegister}
+              />
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

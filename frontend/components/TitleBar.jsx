@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 export default function TitleBar({ title }) {
     const router = useRouter()
     return (
-        <View className="p-7">
+        <View className="mt-7 p-7">
             <View className="flex-row justify-between items-center">
                 <Pressable onPress={() => router.back()}>
                     <ArrowRightBarIcon />

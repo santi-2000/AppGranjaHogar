@@ -3,8 +3,8 @@ import { View } from "react-native";
 import TitleBar from "../../components/TitleBar";
 import ButtonGreen from "../../components/Buttons/greenButton";
 import ButtonBlue from "../../components/Buttons/blueButton";
-import CalendarCard from "../../components/calendar/CalendarCard";
-import ReportOption from "../../components/ReportOption/ReportOption";
+import CalendarCard from "../../components/Reports/CalendarCard";
+import ReportOption from "../../components/Reports/ReportOption";
 import Subtitle from "../../components/Text/Text";
 import useGetReports from "../../hooks/useGetReports";
 

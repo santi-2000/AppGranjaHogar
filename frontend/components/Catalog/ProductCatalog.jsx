@@ -42,7 +42,7 @@ export default function ProductCatalog({ data }) {
 
     return (
         <Pressable onPress={() => setIsOpen(!isOpen)} className="justify-between items-center" >
-            <View className={`${isOpen ? "bg-white" : "bg-gray-100"} border border-main py-4 px-3  mb-3 rounded-2xl `}>
+            <View className={`${isOpen ? "bg-white" : "bg-gray-200"} py-4 px-3 mb-3 rounded-2xl`}>
                 <View className="w-full flex-row justify-between">
                     <View className="flex-row items-center items-center">
                         <Text className="font-medium ml-3">{findEmoji(data.name)} {data.name}</Text>

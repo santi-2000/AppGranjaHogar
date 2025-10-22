@@ -4,7 +4,7 @@ import { Svg, Path } from 'react-native-svg'
 
 export default function CreateHome({ icon, text, directory }) {
   return (
-    <View className="bg-white p-4 rounded-xl border border-main">
+    <View className="bg-white p-4 rounded-xl">
       <View className="flex-row gap-3">
         <View className="">
           {icon}

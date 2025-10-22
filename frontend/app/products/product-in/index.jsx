@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 
@@ -32,38 +32,47 @@ export default function InScreen() {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }} edges={['bottom', 'left', 'right']} >
-      <TitleBar title={"Nueva Entrada"} />
-      
-      <View className="flex-1 px-6">
-        <SearchProduct selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
-        <NewProductLink />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "android" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <TitleBar title={"Nueva Entrada"} />
 
-        <QuantityAndUnits 
-          quantityValue={quantityValue}
-          setQuantityValue={setQuantityValue}
-          selectedUnit={selectedUnit}
-          setSelectedUnit={setSelectedUnit}
-        />
+            <View className="flex-1 px-6">
+              <SearchProduct selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
+              <NewProductLink />
 
-        <Donation 
-          isDonation={isDonation}
-          setIsDonation={setIsDonation}
-          cost={cost}
-          setCost={setCost}
-        />
+              <QuantityAndUnits
+                quantityValue={quantityValue}
+                setQuantityValue={setQuantityValue}
+                selectedUnit={selectedUnit}
+                setSelectedUnit={setSelectedUnit}
+              />
 
-        <ExpirationDate 
-          expirationDate={expirationDate}
-          setExpirationDate={setExpirationDate}
-        />
+              <Donation
+                isDonation={isDonation}
+                setIsDonation={setIsDonation}
+                cost={cost}
+                setCost={setCost}
+              />
 
-        <View className="mb-6">
-          <ButtonRounded 
-            action={handleRegister}
-            text="Registrar"
-          />
-        </View>
-      </View>
+              <ExpirationDate
+                expirationDate={expirationDate}
+                setExpirationDate={setExpirationDate}
+              />
+
+              <View className="mb-6">
+                <ButtonRounded
+                  action={handleRegister}
+                  text="Registrar"
+                />
+              </View>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

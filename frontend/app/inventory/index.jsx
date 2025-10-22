@@ -28,7 +28,7 @@ export default function InventaryScreen() {
         <View className="flex-1 justify-center items-center p-4">
           <Text className="text-red-600 text-center mb-4">Error al cargar el inventario</Text>
           <Text className="text-gray-600 text-center mb-4">{error}</Text>
-          <Pressable 
+          <Pressable
             className="bg-[#034977] rounded-full p-4"
             onPress={refetch}
           >
@@ -44,16 +44,14 @@ export default function InventaryScreen() {
       <TitleBar title={"Inventario"} />
       <View className="p-4" style={{ flex: 1 }}>
 
-        {/* search bar */}
         <View className="mb-4">
           <SearchProduct />
         </View>
 
-        {/* product listing */}
         <FlatList
           data={inventory}
           renderItem={({ item }) => (
-            <View className="bg-white border border-gray-300 rounded-lg mb-3">
+            <View className="bg-white rounded-2xl mb-3">
               <View className="flex-row justify-between p-4">
                 <Text className={styles.text}>
                   {findEmoji(item.name)} {item.name}
@@ -72,18 +70,17 @@ export default function InventaryScreen() {
           }
         />
 
-        {/* print button */}
-            <View className="mt-4">
-              <Pressable 
-                className="bg-[#034977] rounded-full p-4 mb-2"
-                onPress={refetch}
-              >
-                <Text className="text-white text-center text-xl font-bold">Refrescar Inventario</Text>
-              </Pressable>
-              <Pressable className="bg-[#034977] rounded-full p-4">
-                <Text className="text-white text-center text-xl font-bold">Imprimir</Text>
-              </Pressable>
-            </View>
+        <View className="mt-4">
+          <Pressable
+            className="bg-[#034977] rounded-full p-4 mb-2"
+            onPress={refetch}
+          >
+            <Text className="text-white text-center text-xl font-bold">Refrescar Inventario</Text>
+          </Pressable>
+          <Pressable className="bg-[#034977] rounded-full p-4">
+            <Text className="text-white text-center text-xl font-bold">Imprimir</Text>
+          </Pressable>
+        </View>
 
       </View>
     </SafeAreaView>

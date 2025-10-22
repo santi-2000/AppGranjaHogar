@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TitleBar from '../../../components/TitleBar';
 import ValueSection from "../../../components/Products/ProductEditCreat/value";
@@ -41,36 +41,40 @@ export default function NewProductScreen() {
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
       <TitleBar title={"Crear producto"} />
-      <ScrollView contentContainerStyle={{ padding: 16 }}>
-        <View className="center">
-          <Text className="text-xl font-semibold">Nombre del producto</Text>
-        </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView className="px-6" contentContainerStyle={{ flexGrow: 1 }}>
 
-        <ValueSection value={productData.name} onChange={(v) => handleChange('name', v)} />
-        <PerishableSection value={productData.perishable} onChange={(v) => handleChange('perishable', v)} />
-        <Categorysection value={productData.category_id} onChange={(v) => handleChange('category_id', v)} />
-        <UnirSection value={productData.unit_id} onChange={(v) => handleChange('unit_id', v)} />
-        <StockSection 
-          minStock={productData.min_stock}
-          maxStock={productData.max_stock}
-          onChangeMin={(v) => handleChange('min_stock', v)}
-          onChangeMax={(v) => handleChange('max_stock', v)}
-        />
+            <ValueSection value={productData.name} onChange={(v) => handleChange('name', v)} />
+            <PerishableSection value={productData.perishable} onChange={(v) => handleChange('perishable', v)} />
+            <Categorysection value={productData.category_id} onChange={(v) => handleChange('category_id', v)} />
+            <UnirSection value={productData.unit_id} onChange={(v) => handleChange('unit_id', v)} />
+            <StockSection
+              minStock={productData.min_stock}
+              maxStock={productData.max_stock}
+              onChangeMin={(v) => handleChange('min_stock', v)}
+              onChangeMax={(v) => handleChange('max_stock', v)}
+            />
 
-        <View className="mt-8">
-          <ButtonRounded 
-            text={loading ? "Creando..." : "Crear"} 
-            disabled={loading}
-            action={handleCreate} 
-          />
-        </View>
+            <View className="mt-8">
+              <ButtonRounded
+                text={loading ? "Creando..." : "Crear"}
+                disabled={loading}
+                action={handleCreate}
+              />
+            </View>
 
 
 
-        {error &&
-        <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text> 
-        }
-      </ScrollView>
+            {error &&
+              <Text style={{ color: 'red', marginTop: 10 }}>{error}</Text>
+            }
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

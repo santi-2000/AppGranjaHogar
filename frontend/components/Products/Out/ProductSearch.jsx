@@ -18,9 +18,9 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
   };
 
   return (
-    <View className="bg-white p-4 rounded-2xl border border-main">
-      <Text className="text-gray-700 mb-2">Producto</Text>
-      <View className="bg-white rounded-xl border border-gray-300">
+    <View className="bg-white p-4 rounded-2xl">
+      <Text className="text-lg font-medium text-gray-800 mb-3">Producto</Text>
+      <View className="rounded-xl bg-gray-50 ">
         <TextInput
           placeholder="Buscar producto..."
           value={search}
@@ -29,7 +29,7 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct }) {
             setShowOptions(true);
           }}
           onFocus={() => setShowOptions(true)}
-          className="p-3 text-gray-700"
+          className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
         />
 
         {loading && <ActivityIndicator size="small" color="#999" />}

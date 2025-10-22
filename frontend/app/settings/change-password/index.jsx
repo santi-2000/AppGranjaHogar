@@ -1,4 +1,4 @@
-import { Text, View, Alert } from 'react-native';
+import { Text, View, Alert, Platform, Pressable, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from "expo-router";
 import { useState } from 'react';
@@ -23,16 +23,18 @@ export default function ChangePasswordScreen() {
     try {
       await updatePassword(passwordData);
       Alert.alert(
-        'Éxito', 
+        'Éxito',
         'Contraseña actualizada correctamente',
-        [{ text: 'OK', onPress: () => {
-          setPasswordData({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-          });
-          resetState();
-        }}]
+        [{
+          text: 'OK', onPress: () => {
+            setPasswordData({
+              currentPassword: '',
+              newPassword: '',
+              confirmPassword: ''
+            });
+            resetState();
+          }
+        }]
       );
     } catch (err) {
       Alert.alert('Error', err.message);
@@ -41,22 +43,31 @@ export default function ChangePasswordScreen() {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1, justifyContent: "space-between" }}>
-      <View>
-        <TitleBar title={"Contraseña"} />
-        <View className="p-4">
-          <InputsSectionPassword 
-            passwordData={passwordData}
-            onChange={handleChange}
-          /> 
-        </View>
-        {error && (
-          <View className="px-4 mb-4">
-            <Text className="text-red-600 text-center">{error}</Text>
-          </View>
-        )}
-      </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View>
+              <TitleBar title={"Contraseña"} />
+              <View className="p-4">
+                <InputsSectionPassword
+                  passwordData={passwordData}
+                  onChange={handleChange}
+                />
+              </View>
+              {error && (
+                <View className="px-4 mb-4">
+                  <Text className="text-red-600 text-center">{error}</Text>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
       <View className="px-4 pb-6">
-        <ButtonRounded 
+        <ButtonRounded
           text={loading ? "Actualizando..." : "Guardar"}
           disabled={loading}
           action={handleUpdatePassword}

@@ -19,7 +19,7 @@ const useEditUser = () => {
     });
 
     const [name, setName] = useState(user?.name);
-    const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+    
     const [permissions, setPermissions] = useState([
         { label: 'Administrador', value: 'admin' },
         { label: 'Entradas de productos', value: 'products-entries' },
@@ -44,7 +44,6 @@ const useEditUser = () => {
     }, []);
 
     const togglePermission = (key) => {
-        console.log('Toggle permission', key);
         const newPermissions = user?.permissions ? [...user.permissions] : [];
         if (newPermissions.includes(key)) {
             const index = newPermissions.indexOf(key);

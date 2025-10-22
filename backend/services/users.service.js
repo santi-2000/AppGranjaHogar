@@ -72,20 +72,19 @@ export class UsersService {
     });
   }
 
-  async createUser({ name, last_name, username, password, roles }) {
+  async createUser({ name, lastName, username, password, permissions }) {
     const passVO = new PasswordVO(password);
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(passVO.value, salt);
 
     const created = await usersModel.create({
       name,
-      last_name,
+      lastName,
       username,
-      roles,
       passwordHash
     });
 
-    await usersModel.addPermissionsToUser(created.insertId, roles);
+    await usersModel.addPermissionsToUser(created.insertId, permissions);
 
     return created;
   };

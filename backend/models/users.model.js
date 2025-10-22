@@ -50,26 +50,24 @@ class UsersModel {
     return rows;
   }
 
-  async create({ name, last_name, username, roles, passwordHash }) {
+  async create({ name, lastName, username, passwordHash }) {
     const sql = `
       INSERT INTO users (name, username, last_name, password_hash)
       VALUES (?, ?, ?, ?)
     `;
-    const params = [name, username, last_name, passwordHash];
+    const params = [name, username, lastName, passwordHash];
     const [result] = await db.query(sql, params);
     return result;
   }
 
-  async addPermissionsToUser(userId, roles) {
+  async addPermissionsToUser(userId, permissions) {
     const sql = `
       INSERT INTO user_permissions (user_id, permission_id)
       VALUES (?, (SELECT id FROM permissions WHERE permission = ?))
     `;
 
-    for (const role of roles) {
-      console.log("Adding role to user:", role);
-      console.log("SQL:", sql);
-      await db.query(sql, [userId, role]);
+    for (const permission of permissions) {
+      await db.query(sql, [userId, permission]);
     }
   }
 

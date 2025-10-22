@@ -5,33 +5,36 @@ export default function InputsSectionPassword({ passwordData, onChange }) {
     return (
         <View className="bg-white rounded-2xl p-4">
             <View className="my-2">
-                <Text className="my-2">Contraseña actual</Text>
+                <Text className="text-lg font-medium text-gray-800 mb-2">Contraseña actual</Text>
                 <TextInput 
                     className={styles.textInput} 
                     placeholder="•••••••••••"
                     value={passwordData.currentPassword}
                     onChangeText={(value) => onChange('currentPassword', value)}
                     secureTextEntry={true}
+                    autoCapitalize="none"
                 />
             </View>
             <View className="my-2">
-                <Text className="my-2">Nueva contraseña</Text>
+                <Text className="text-lg font-medium text-gray-800 mb-2">Nueva contraseña</Text>
                 <TextInput 
                     className={styles.textInput} 
                     placeholder="•••••••••••"
                     value={passwordData.newPassword}
                     onChangeText={(value) => onChange('newPassword', value)}
                     secureTextEntry={true}
+                    autoCapitalize="none"
                 />
             </View>
             <View className="my-2">
-                <Text className="my-2">Confirmar nueva contraseña</Text>
+                <Text className="text-lg font-medium text-gray-800 mb-2">Confirmar nueva contraseña</Text>
                 <TextInput 
                     className={styles.textInput} 
                     placeholder="•••••••••••"
                     value={passwordData.confirmPassword}
                     onChangeText={(value) => onChange('confirmPassword', value)}
                     secureTextEntry={true}
+                    autoCapitalize="none"
                 />
             </View>
         </View>
@@ -39,7 +42,7 @@ export default function InputsSectionPassword({ passwordData, onChange }) {
 }
 
 const styles = {
-    textInput: "border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5",
+    textInput: "bg-gray-50 rounded-xl px-4 py-4 text-gray-800",
     submitButton: {
         backgroundColor: "#00568F",
     }

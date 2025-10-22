@@ -9,6 +9,7 @@ export default function InputText({ value, onChange, placeholder, secureTextEntr
                 value={value}
                 onChangeText={onChange}
                 editable={true}
+                autoCapitalize="none"
                 secureTextEntry={secureTextEntry}
             />
         </View>
