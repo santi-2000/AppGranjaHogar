@@ -15,12 +15,8 @@ import { useEffect } from "react";
  */
 
 export default function App() {
-  const { login, setLoginData, loginData, error, handleChange, verify } = useLogin();
+  const { login, setLoginData, loginData, errors, handleChange, verify } = useLogin();
 
-  useEffect(() => {
-    verify();
-  }, [])
-  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -45,18 +41,16 @@ export default function App() {
 
               <View className="border border-[0.5px] border-gray-300 rounded-xl mt-5 p-4 w-[96%] self-center">
                 <View className="my-2">
-                  <Text className="my-2">Usuario</Text>
+                  <Text className="text-lg font-medium text-gray-800 my-2">Usuario</Text>
                   <InputText
-                    className={styles.textInput}
                     placeholder="Usuario"
                     value={loginData.username || ''}
                     onChange={(v) => handleChange('username', v)}
                   />
                 </View>
                 <View className="my-2">
-                  <Text className="my-2">Contraseña</Text>
+                  <Text className="text-lg font-medium text-gray-800 my-2">Contraseña</Text>
                   <InputText
-                    className={styles.textInput}
                     placeholder="***"
                     secureTextEntry={true}
                     value={loginData.password || ''}
@@ -64,11 +58,7 @@ export default function App() {
                   />
                 </View>
 
-                {/* <Link href="/home" style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
-            <Text className="text-white text-center">Iniciar sesión</Text>
-          </Link> */}
-
-                <Pressable onPress={login} style={styles.submitButton} className="my-2 w-full py-2 px-4 rounded-lg items-center">
+                <Pressable onPress={login} style={styles.submitButton} className="mb-2 mt-6 w-full py-2 py-3 px-4 rounded-lg items-center">
                   <Text className="text-white text-center">Iniciar sesión</Text>
                 </Pressable>
 
@@ -83,7 +73,6 @@ export default function App() {
 }
 
 const styles = {
-  textInput: "border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5",
   submitButton: {
     backgroundColor: "#00568F",
   }

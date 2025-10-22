@@ -67,7 +67,6 @@ export default function ProductSearch({ selectedProduct, setSelectedProduct, set
 
   return (
     <View className="bg-white p-4 rounded-2xl">
-      <Text className="text-lg font-medium text-gray-800 mb-3">Producto</Text>
       <View className="rounded-xl bg-gray-50">
         <TextInput
           placeholder="Buscar producto..."

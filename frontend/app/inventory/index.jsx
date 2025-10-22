@@ -1,27 +1,17 @@
 import { Text, View, FlatList, TextInput, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from "expo-router";
-import { useState, useMemo } from 'react';
 import TitleBar from '../../components/TitleBar';
 import ProductSearch from '../../components/Products/Out/ProductSearch';
 import { useInventory } from '../../hooks/useGetInventory';
 import { findEmoji } from '../../utils/findEmojiUtil';
 import { capitalizeFirstLetterEachWord } from '../../utils/textUtil';
+import SearchProduct from '../../components/Catalog/SearchProduct';
+import { getUnitNameById } from '../../utils/unitMapper';
 
 export default function InventaryScreen() {
-  const { inventory, loading, error, refetch, getProductEmoji, formatQuantity } = useInventory();
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredInventory = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return inventory;
-    }
-    return inventory.filter(item => 
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [inventory, searchTerm]);
-
+  const { setSearchTerm, searchTerm, filteredInventory, loading, error, refetch, formatQuantity } = useInventory();
+  
+/* 
   const handleProductSelect = (productId) => {
     setSelectedProduct(productId);
     const product = inventory.find(item => item.id === productId);
@@ -29,7 +19,7 @@ export default function InventaryScreen() {
       setSearchTerm(product.name);
     }
   };
-
+ */
   if (loading) {
     return (
       <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
@@ -66,13 +56,18 @@ export default function InventaryScreen() {
       <View className="p-4" style={{ flex: 1 }}>
 
         <View className="mb-4">
-          <ProductSearch 
+          <SearchProduct 
+            onSearch={setSearchTerm} 
+            value={searchTerm} 
+          />
+        </View>
+          {/* <ProductSearch 
             selectedProduct={selectedProduct}
             setSelectedProduct={handleProductSelect}
             setUnitId={() => {}} 
             setUnitName={() => {}} 
           />
-        </View>
+        </View> */}
 
         <FlatList
           data={filteredInventory}
@@ -83,7 +78,7 @@ export default function InventaryScreen() {
                   {findEmoji(item.name)} {capitalizeFirstLetterEachWord(item.name)}
                 </Text>
                 <Text className={styles.text}>
-                  {formatQuantity(item.quantity, item.unit)}
+                  {`${item.quantity} ${getUnitNameById(item.unit, true)}`}
                 </Text>
               </View>
             </View>
@@ -105,9 +100,9 @@ export default function InventaryScreen() {
           >
             <Text className="text-white text-center text-xl font-bold">Refrescar Inventario</Text>
           </Pressable>
-          <Pressable className="bg-[#034977] rounded-full p-4">
+          {/* <Pressable className="bg-[#034977] rounded-full p-4">
             <Text className="text-white text-center text-xl font-bold">Imprimir</Text>
-          </Pressable>
+          </Pressable> */}
         </View>
 
       </View>
