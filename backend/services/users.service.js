@@ -7,6 +7,7 @@
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Soto Bravo
  * 
  * @example
  * import { usersService } from '../services/users.service.js';
@@ -141,6 +142,9 @@ export class UsersService {
     });
   }
 
+  /**
+   * @author Renata Soto Bravo
+   */
   async deleteUser({ id }) {
     const [result] = await usersModel.delete(id);
 

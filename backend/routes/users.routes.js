@@ -16,6 +16,7 @@ import { AppError } from "../utils/error.util.js";
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Yahir Alfredo Tapia Sifuentes
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Soto Bravo
  * 
  * @example
  * import usersRoutes from './routes/users.routes.js';
@@ -104,6 +105,9 @@ router.put("/update-password", [
   usersController.updatePassword
 );
 
+/**
+ * @author Renata Soto Bravo
+ */
 router.delete(
   "/:id",
   [
