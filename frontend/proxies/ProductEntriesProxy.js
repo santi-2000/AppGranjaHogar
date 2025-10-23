@@ -12,6 +12,7 @@ export const ProductsEntriesProxy = {
    * @returns {Promise<Object>} Entrada creada + stock actualizado
    */
   async createEntry(dataVO) {
+    
     const token = await SecureStore.getItemAsync('token');
 
     const res = await fetch(`${API_BASE_URL}/v1/product-entries/new`, {

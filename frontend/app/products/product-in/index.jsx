@@ -2,7 +2,9 @@
 import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
-import * as SecureStore from 'expo-secure-store'; // 👈 importamos SecureStore
+import * as SecureStore from 'expo-secure-store';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import { useProductEntries } from '../../../hooks/useProductEntries';
 
@@ -14,71 +16,19 @@ import NewProductLink from '../../../components/Products/In/NewProductLink';
 import QuantityAndUnits from '../../../components/Products/In/QuantityAndUnits';
 import Donation from '../../../components/Products/In/Donation';
 import ExpirationDate from '../../../components/Products/In/ExpirationDate';
+import { useUserStore } from '../../../stores/useUserStore';
+
+const validationSchema = Yup.object().shape({
+  product_id: Yup.number().required('El producto es obligatorio'),
+  unit_id: Yup.number().required('La unidad es obligatoria'),
+  quantity: Yup.number().positive('La cantidad debe ser un número positivo').required('La cantidad es obligatoria'),
+  is_donation: Yup.boolean().required('El tipo de entrada es obligatorio'),
+  cost: Yup.number().notRequired(),
+  exp_date: Yup.date().nullable().notRequired()
+});
 
 export default function InScreen() {
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [quantityValue, setQuantityValue] = useState('');
-  const [selectedUnit, setSelectedUnit] = useState('');
-  const [isDonation, setIsDonation] = useState(true);
-  const [cost, setCost] = useState('');
-  const [expirationDate, setExpirationDate] = useState('');
-  const [userId, setUserId] = useState(null);
-
-  const { createEntry, loading } = useProductEntries();
-
-  useEffect(() => {
-    const getUserId = async () => {
-      try {
-        const storedId = await SecureStore.getItemAsync('id');
-        if (storedId) setUserId(Number(storedId));
-      } catch (err) {
-        console.error("Error al obtener user_id:", err);
-      }
-    };
-    getUserId();
-  }, []);
-
-  const handleRegister = async () => {
-    try {
-      if (!selectedProduct || !quantityValue || !selectedUnit) {
-        Alert.alert("Campos incompletos", "Por favor completa todos los campos requeridos.");
-        return;
-      }
-
-      if (!userId) {
-        Alert.alert("Error", "No se pudo obtener el usuario actual.");
-        return;
-      }
-
-      const newEntry = {
-        product_id: Number(selectedProduct),
-        user_id: userId,
-        unit_id: Number(selectedUnit),
-        is_donation: isDonation,
-        quantity: parseFloat(quantityValue),
-        cost: isDonation ? null : parseFloat(cost) || 0,
-        exp_date: expirationDate || null
-      };
-
-      const response = await createEntry(newEntry);
-
-      console.log("Entrada registrada correctamente:", response.data.entry);
-      console.log("Nuevo stock:", response.data.updated_stock);
-
-      Alert.alert("Éxito", "Entrada registrada correctamente.");
-
-      setSelectedProduct('');
-      setQuantityValue('');
-      setSelectedUnit('');
-      setIsDonation(true);
-      setCost('');
-      setExpirationDate('');
-
-    } catch (err) {
-      console.error("Error al registrar:", err.message);
-      Alert.alert("Error", err.message || "No se pudo registrar la entrada.");
-    }
-  };
+  const { isPerishable, setIsPerishable, unitId, setUnitId, createEntry, loading } = useProductEntries();
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }} edges={['bottom', 'left', 'right']}>
@@ -95,34 +45,69 @@ export default function InScreen() {
             showsVerticalScrollIndicator={false}
           >
             <View className="flex-1 px-6">
-              <SearchProduct selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} />
-              <NewProductLink />
+              <Formik
+                initialValues={{ 
+                  product_id: 0, 
+                  unit_id: 0,
+                  quantity: 0,
+                  is_donation: true,
+                  cost: 0,
+                  exp_date: "" 
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values) => createEntry(values)}
+              >
+                {({
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  setFieldValue,
+                  values,
+                  errors,
+                  touched }) => (
+                  <View>
+                    <SearchProduct
+                      setFieldValue={setFieldValue}
+                      setIsPerishable={setIsPerishable}
+                      setUnitId={setUnitId}
+                      error={errors.product_id}
+                      touched={touched.product_id}
+                    />
 
-              <QuantityAndUnits
-                quantityValue={quantityValue}
-                setQuantityValue={setQuantityValue}
-                selectedUnit={selectedUnit}
-                setSelectedUnit={setSelectedUnit}
-              />
+                    <NewProductLink />
 
-              <Donation
-                isDonation={isDonation}
-                setIsDonation={setIsDonation}
-                cost={cost}
-                setCost={setCost}
-              />
+                    <QuantityAndUnits
+                      values={values}
+                      handleChange={handleChange}
+                      unitId={unitId}
+                      errors={errors}
+                      touched={touched}
+                    />
 
-              <ExpirationDate
-                expirationDate={expirationDate}
-                setExpirationDate={setExpirationDate}
-              />
+                    <Donation
+                      values={values}
+                      handleChange={handleChange}
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                      touched={touched}
+                    />
 
-              <View className="mb-6">
-                <ButtonRounded
-                  action={handleRegister}
-                  text={loading ? "Registrando..." : "Registrar"}
-                />
-              </View>
+                    {isPerishable && (
+                    <ExpirationDate
+                      values={values}
+                      handleChange={handleChange}
+                    />
+                    )}
+
+                    <View className="mb-6">
+                      <ButtonRounded
+                        action={handleSubmit}
+                        text={loading ? "Registrando..." : "Registrar"}
+                      />
+                    </View>
+                  </View>
+                )}
+              </Formik>
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>

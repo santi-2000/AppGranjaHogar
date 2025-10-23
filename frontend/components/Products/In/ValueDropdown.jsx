@@ -7,7 +7,6 @@ export default function Dropdown({ selectedValue, setSelectedValue, options = []
 
   return (
     <View>
-      {/* botón */}
       <Pressable
         onPress={() => setOpen(true)}
         className="bg-gray-50 rounded-xl px-4 py-4"
@@ -21,14 +20,12 @@ export default function Dropdown({ selectedValue, setSelectedValue, options = []
         </View>
       </Pressable>
 
-      {/* opciones */}
       <Modal
         visible={open}
         transparent
         animationType="fade"
         onRequestClose={() => setOpen(false)}
       >
-        {/* cierra al tocar afuera y fondo oscuro */}
         <Pressable
           style={{
             flex: 1,
@@ -38,7 +35,6 @@ export default function Dropdown({ selectedValue, setSelectedValue, options = []
           }}
           onPress={() => setOpen(false)}
         >
-          {/* cuadro de opciones */}
           <Pressable
             style={{
               backgroundColor: "#fff",

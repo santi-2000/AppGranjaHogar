@@ -7,7 +7,6 @@ export class ProductEntryVO {
     this.quantity = parseFloat(entry.quantity);
     this.cost = this.is_donation ? null : parseFloat(entry.cost);
     this.exp_date = entry.exp_date ? new Date(entry.exp_date) : null;
-    this.created_at = new Date();
 
     Object.freeze(this);
   }

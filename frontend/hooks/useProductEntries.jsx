@@ -1,68 +1,49 @@
 import { useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { ProductsEntriesProxy } from "../proxies/ProductEntriesProxy";
+import { CreateProductEntrieVo } from "../valueobjects/product-entries/CreateProductEntrieVo";
+import { useRouter } from "expo-router";
 
 /**
  * Hook personalizado para manejar las entradas de productos.
  * @author Dania Sagarnaga Macías
  */
 export const useProductEntries = () => {
-  const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isPerishable, setIsPerishable] = useState(false);
+  const [unitId, setUnitId] = useState(null);
 
-  /**
-   * Obtiene todas las entradas registradas.
-   */
-  const fetchEntries = async () => {
-    try {
-      setLoading(true);
-      const data = await ProductsEntriesProxy.getAll();
-      setEntries(data);
-    } catch (err) {
-      console.error("Error al obtener las entradas:", err);
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const router = useRouter()
 
-  /**
-   * Crea una nueva entrada de producto y actualiza el stock.
-   * Incluye el user_id guardado en SecureStore.
-   */
   const createEntry = async (entryData) => {
     try {
       setLoading(true);
-      const userId = await SecureStore.getItemAsync("user_id"); // 👈 guardado al iniciar sesión
 
-      if (!userId) throw new Error("No se encontró el ID del usuario autenticado.");
+      const entrieVo = new CreateProductEntrieVo(entryData);
+      console.log(entrieVo);
 
-      const dataWithUser = { ...entryData, user_id: userId };
+      await ProductsEntriesProxy.createEntry(entrieVo);
 
-      const newEntry = await ProductsEntriesProxy.createEntry(dataWithUser);
+      router.replace("/home");
 
-      // Actualiza el estado local con la nueva entrada
-      setEntries((prev) => [...prev, newEntry]);
-      return newEntry;
     } catch (err) {
       console.error("Error al crear la entrada:", err);
-      setError(err.message);
+      setError({ general: err.message || "Error al crear la entrada" });
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchEntries();
-  }, []);
 
   return {
-    entries,
     loading,
     error,
+    unitId,
+    setUnitId,
     createEntry,
-    fetchEntries,
+    isPerishable,
+    setIsPerishable,
   };
 };
