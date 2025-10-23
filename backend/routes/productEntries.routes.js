@@ -10,7 +10,6 @@ const router = Router()
 router.post("/new", [
     authAuthorizePermissions("products-entries"),
     body("product_id").notEmpty().isInt().withMessage("product_id es obligatorio y debe ser un número entero"),
-    body("user_id").notEmpty().isInt().withMessage("user_id es obligatorio y debe ser un número entero"),
     body("unit_id").notEmpty().isInt().withMessage("unit_id es obligatorio y debe ser un número entero"),
     body("is_donation").notEmpty().isBoolean().withMessage("is_donation es obligatorio y debe ser booleano"),
     body("quantity").notEmpty().isFloat({ gt: 0 }).withMessage("quantity es obligatorio y debe ser un número positivo"),

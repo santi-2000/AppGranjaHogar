@@ -11,20 +11,21 @@ class ProductEntriesService {
    */
   async create(data) {
     const entryVO = new ProductEntryVO(data);
+    
+    const product = await productsModel.getById(entryVO.product_id);
+
+    if (!product) throw new Error("Producto no encontrado");
+    if (!product.is_active) throw new Error("El producto no está activo");
 
     const id = await productEntriesModel.create(entryVO);
     const entry = { id, ...entryVO };
-
-    const product = await productsModel.getById(entry.product_id);
-    if (!product) throw new Error("Producto no encontrado");
-    if (!product.is_active) throw new Error("El producto no está activo");
   
     const newStock = parseFloat(product.actual_stock || 0) + parseFloat(entry.quantity);
 
-    await productsModel.update(entry.product_id, { actual_stock: newStock });
+    await productsModel.update(entryVO.product_id, { actual_stock: newStock });
 
     return {
-      message: `Entrada creada por el usuario ${entry.user_id} y stock actualizado correctamente`,
+      message: `Entrada creada por el usuario ${entryVO.user_id} y stock actualizado correctamente`,
       entry,
       updated_stock: newStock
     };

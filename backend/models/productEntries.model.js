@@ -2,10 +2,11 @@ import db from "../models/index.js";
 
 class ProductEntriesModel {
   async create(entry) {
+    console.log(entry)
     const [result] = await db.query(
       `INSERT INTO product_entries 
-      (product_id, user_id, unit_id, is_donation, quantity, cost, exp_date, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      (product_id, user_id, unit_id, is_donation, quantity, cost, exp_date)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [
         entry.product_id,
         entry.user_id,
@@ -14,7 +15,6 @@ class ProductEntriesModel {
         entry.quantity,
         entry.cost,
         entry.exp_date,
-        entry.created_at,
       ]
     );
     return result.insertId;

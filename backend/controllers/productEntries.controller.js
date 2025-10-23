@@ -16,7 +16,7 @@ export class ProductEntriesController {
   async createEntry(req, res) {  
     const data = {
     ...req.body,
-    user_id: req.body.user_id };
+    user_id: req.user.id };
 
     const result = await productEntriesService.create(data);
 
