@@ -38,7 +38,7 @@ class ReportsController {
       'attachment; filename=' + `${initialDate}to${endDate}.xlsx`
     );
 
-    const workbook = await reportsService.postReportXLSXService({userId: 1, initialDate, endDate, type});
+    const workbook = await reportsService.postReportXLSXService({userId: req.user.id, initialDate, endDate, type});
 
     await workbook.xlsx.write(res);
     return res.end();
@@ -52,7 +52,7 @@ class ReportsController {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=${initialDate}to${endDate}.pdf`);
 
-    const docModified = await reportsService.postReportPDFService({doc, userId: 1, initialDate, endDate, type});
+    const docModified = await reportsService.postReportPDFService({doc, userId: req.user.id, initialDate, endDate, type});
     docModified.end();
   }
 }

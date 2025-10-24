@@ -10,8 +10,8 @@ router.post(
     "/",
     [
         authMiddlewareLogged,
-        body("product_id").isInt().withMessage("El ID del producto debe ser un número entero"),
         body("content").notEmpty().withMessage("El contenido de la notificación no puede estar vacío"),
+        body("type_id").isInt().withMessage("El ID del tipo de notificación debe ser un número entero"),
         validate
     ],
     notificationController.createNotification

@@ -1,29 +1,32 @@
 import NotificationVO from '../valueObjects/notifications/notification.vo.js';
 import { notificationsModel } from '../models/notifications.model.js';
 import { AppError } from '../utils/error.util.js';
+import { convertPermissionsArrayByNameToId } from '../utils/permissions.util.js';
 
 class NotificationService {
-    async addNotification(data) {
-        const id = await notificationsModel.createNotification(data);
+    async addNotification({ user_id, product_id, product_entry_id, product_out_id, content, type_id, permission_id }) {
+        const id = await notificationsModel.createNotification({ user_id, product_id, product_entry_id, product_out_id, content, type_id, permission_id });
+
         return new NotificationVO(
-            id,
-            data.product_id,
-            data.product_entry_id,
-            data.content,
-            data.notification_type,
-            new Date()
+            {
+                id,
+                user_id,
+                content,
+                type_id
+            }
         );
     }
-    async getNotifications() {
-        const rows = await notificationsModel.getAllNotifications();
+    async getNotifications(user) {
+        const permissions = convertPermissionsArrayByNameToId(user.permissions);
+        const rows = await notificationsModel.getAllNotifications(permissions);
         return rows.map(n => new NotificationVO(
-            n.id,
-            n.product_id,
-            n.product_entry_id,
-            n.content,
-            n.notification_type,
-            n.created_at
-
+            {
+                id: n.id,
+                user_id: n.user_id,
+                content: n.content,
+                type_id: n.type_id,
+                user_username: n.user_username
+            }
         ));
     }
     async getNotificationById(id) {
@@ -35,7 +38,7 @@ class NotificationService {
     async removeNotification(id) {
         const affectedRows = await deleteNotificationByIdModel(id);
         if (!affectedRows) throw new AppError('Notificación no encontrada o ya eliminada.', 404);
-        
+
         return { message: 'Notificación eliminada exitosamente.' };
     }
 }

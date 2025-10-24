@@ -68,7 +68,7 @@ class UserController {
    * @author Renata Loaiza
    */
   async createUser(req, res) {
-    const user = await usersService.createUser(req.body);
+    const user = await usersService.createUser({ ...req.body, user_id: req.user.id });
     return res.status(201).json({ ok: true, message: "Usuario creado", user });
   }
 
@@ -77,7 +77,7 @@ class UserController {
    */
   async putUser(req, res) {
     const { id } = req.params;
-    const user = await usersService.editUser({ id, ...req.body });
+    const user = await usersService.editUser({ id, ...req.body, user_id: req.user.id });
     return res.status(200).json({ ok: true, message: "Usuario actualizado", user });
   }
 
@@ -98,7 +98,7 @@ class UserController {
    */
   async deleteUser(req, res) {
     const { id } = req.params;
-    const result = await usersService.deleteUser({ id });
+    const result = await usersService.deleteUser({ id, user_id: req.user.id });
     return res.status(200).json({ ok: true, message: result.message });
   }
 

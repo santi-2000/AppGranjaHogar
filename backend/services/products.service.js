@@ -24,6 +24,8 @@ import { ProductInventoryVO } from "../valueObjects/products/productInventory.vo
 import { ProductsAvailableVO } from "../valueObjects/products/productsAvailable.vo.js";
 import { ProductVO } from "../valueObjects/products/product.vo.js";
 import { AppError } from "../utils/error.util.js";
+import { notificationsModel } from "../models/notifications.model.js";
+import { notificationService } from "./notifications.service.js";
 
 class ProductsService {
     /**
@@ -55,10 +57,23 @@ class ProductsService {
         return products.map(product => new ProductInventoryVO(product));
     }
 
-    async addProduct(category_id, unit_id, name, perishable, min_stock, max_stock) {
+    async addProduct(category_id, unit_id, name, perishable, min_stock, max_stock, user_id) {
         const [result] = await productsModel.createProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
 
-        if (!result || !result.insertId) throw new AppError('Product could not be created');
+        if (!result || !result.insertId) throw new AppError('El producto no pudo ser creado');
+
+
+        const notification = await notificationService.addNotification({
+            user_id: user_id,
+            product_id: result.insertId,
+            product_entry_id: null,
+            product_out_id: null,
+            content: `Se ha agregado un nuevo producto: ${name}`,
+            type_id: 1,
+            permission_id: 4
+        });
+
+        if (!notification) throw new AppError('La notificación no pudo ser creada');
 
         const newProduct = new ProductVO({
             category_id,
@@ -69,13 +84,25 @@ class ProductsService {
             max_stock,
         });
 
-        return { success: true, message: "Product created successfully", product: newProduct };
+        return { success: true, message: "Producto creado exitosamente", product: newProduct };
     }
 
     async removeProduct(id) {
         const [result] = await productsModel.deleteProduct(id);
 
         if (!result || !result.affectedRows) throw new AppError('Product could not be deleted');
+
+        const notification = await notificationService.addNotification({
+            user_id: user_id,
+            product_id: result.insertId,
+            product_entry_id: null,
+            product_out_id: null,
+            content: `Se ha eliminado un producto: ${existingProduct.name}`,
+            type_id: 2,
+            permission_id: 4
+        });
+
+        if (!notification) throw new AppError('La notificación no pudo ser creada');
 
         return { success: true, message: "Product deleted successfully" };
     }
@@ -97,6 +124,16 @@ class ProductsService {
             max_stock,
             actual_stock,
             is_active
+        });
+
+        const notification = await notificationService.addNotification({
+            user_id: user_id,
+            product_id: result.insertId,
+            product_entry_id: null,
+            product_out_id: null,
+            content: `Se ha editado un producto: ${existingProduct.name}`,
+            type_id: 3,
+            permission_id: 4
         });
 
         return new ProductVO(updatedProduct);

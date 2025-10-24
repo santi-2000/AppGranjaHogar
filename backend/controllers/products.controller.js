@@ -60,7 +60,8 @@ class ProductsController {
 
     async createProduct(req, res) {
         const { category_id, unit_id, name, perishable, min_stock, max_stock } = req.body;
-        const result = await productsService.addProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
+
+        const result = await productsService.addProduct(category_id, unit_id, name, perishable, min_stock, max_stock, req.user.id);
         res.json(result);
     }
 

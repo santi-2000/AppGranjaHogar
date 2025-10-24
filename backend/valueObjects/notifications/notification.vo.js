@@ -1,11 +1,10 @@
 export default class NotificationVO {
-  constructor(id, product_id, product_entry_id, content, notification_type, created_at) {
+  constructor({ id, user_id, content, type_id, user_username }) {
     this.id = id;
-    this.product_id = product_id;
-    this.product_entry_id = product_entry_id;
+    this.user_id = user_id;
     this.content = content;
-    this.notification_type = notification_type;
-    this.created_at = created_at;
+    this.type_id = type_id;
+    this.user_username = user_username
 
     Object.freeze(this);
   }
