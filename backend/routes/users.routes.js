@@ -50,7 +50,7 @@ router.post("/verify",
  */
 router.get("/", authAuthorizePermissions("manage-users"), usersController.getUsers);
 
-router.get("/:id", [
+router.get("/get/:id", [
   authAuthorizePermissions("manage-users"),
   param("id").isInt().withMessage("ID debe ser un número entero"),
   validate
@@ -81,7 +81,7 @@ router.post(
 /**
  * @author Yahir Alfredo Tapia Sifuentes
  */
-router.put("/:id", [
+router.put("/edit/:id", [
   authAuthorizePermissions("manage-users"),
   param("id").isInt().withMessage("ID debe ser un número entero"),
   body("name").trim().isLength({ min: 2 }).withMessage("name mínimo 2 caracteres").trim().escape().toLowerCase(),
@@ -113,7 +113,7 @@ router.put("/update-password", [
  * @author Renata Soto Bravo
  */
 router.delete(
-  "/:id",
+  "/delete/:id",
   [
     authAuthorizePermissions("manage-users"),
     param("id").isInt().withMessage("ID debe ser un número entero"),

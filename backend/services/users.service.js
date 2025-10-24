@@ -123,11 +123,14 @@ export class UsersService {
     const isCurrentPasswordValid = await bcrypt.compare(passwordUpdateVO.getCurrentPassword(), user.password_hash);
     if (!isCurrentPasswordValid) throw new AppError("La contraseña actual es incorrecta", 400);
 
+    if (passwordUpdateVO.getNewPassword() !== passwordUpdateVO.getConfirmPassword()) {
+      throw new AppError("La nueva contraseña y la confirmación no coinciden", 400);
+    }
+
     const newPassVO = new PasswordVO(passwordUpdateVO.getNewPassword());
 
     const salt = await bcrypt.genSalt(10);
     const newPasswordHash = await bcrypt.hash(newPassVO.value, salt);
-
 
     const result = await usersModel.updatePassword({
       userId,
