@@ -28,9 +28,11 @@ import OutReason from "../../../components/Products/Out/OutReason";
 import OutNotes from "../../../components/Products/Out/OutNotes";
 import ProductSearch from "../../../components/Products/Out/ProductSearch";
 import { useProductOuts } from "../../../hooks/useProductOuts";
+import { useUserStore } from "../../../stores/useUserStore";
 
 export default function OutScreen() {
   const { createProductOut, loading } = useProductOuts();
+  const user = useUserStore((state) => state.user);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState("");
@@ -40,35 +42,56 @@ export default function OutScreen() {
   const [reasonId, setReasonId] = useState(null);
   const [notes, setNotes] = useState("");
   const router = useRouter();
+  const [productStock, setProductStock] = useState(null);
 
   /**
-   * Handles form submission and sends the payload to the backend.
+   * Handles the submission process for registering a new product outflow.
+   *
+   * This function validates multiple conditions before sending data to the backend:
+   * - Ensures the current user session is active.
+   * - Checks that all required fields (product, quantity, unit, department, reason) are filled.
+   * - Validates that the entered quantity is not greater than the available product stock.
+   * - Builds the request payload.
+   * - Sends the data to the backend via `createProductOut`.
+   *
+   * If the request is successful, it displays a success alert and redirects the user to the product outflows screen.
+   * If the quantity exceeds the available stock or another error occurs, it displays an appropriate error message.
    *
    * @async
    * @function handleRegister
-   * @returns {Promise<void>}
+   * @returns {Promise<void>} Alerts the user if validation fails or confirms success upon completion.
    *
    * @example
-   * // Example payload sent to backend:
-   * {
-   *   "user_id": 3,
-   *   "product_id": 12,
-   *   "reason_id": 2,
-   *   "department_id": 1,
-   *   "unit_id": 3,
-   *   "quantity": 5,
-   *   "notes": "Salida de prueba"
+   * // Example frontend validation:
+   * if (productStock !== null && quantity > productStock) {
+   *   Alert.alert(
+   *     "Stock insuficiente",
+   *     `Solo hay ${productStock} unidades disponibles de este producto.`
+   *   );
+   *   return;
    * }
    */
   const handleRegister = async () => {
     try {
+      if (!user) {
+        Alert.alert("Error", "No se pudo obtener el usuario de la sesión actual.");
+        return;
+      }
       if (!selectedProduct || !quantity || !unitId || !departmentId || !reasonId) {
         Alert.alert("Campos incompletos", "Por favor llena todos los campos obligatorios.");
         return;
       }
 
+      if (productStock !== null && quantity > productStock) {
+        Alert.alert(
+          "Stock insuficiente",
+          `Solo hay ${productStock} unidades disponibles de este producto.`
+        );
+        return;
+      }
+
       const payload = {
-        user_id: 3,
+        user_id: user.id,
         product_id: selectedProduct,
         reason_id: reasonId,
         department_id: departmentId,
@@ -83,10 +106,13 @@ export default function OutScreen() {
       console.log("Respuesta del servidor:", result);
       router.back();
     } catch (err) {
-      console.error("Error al registrar salida:", err);
+    if (err.message && err.message.includes("Stock insuficiente")) {
+      Alert.alert("Stock insuficiente", err.message);
+    } else {
       Alert.alert("Error", err.message || "No se pudo registrar la salida");
     }
-  };
+  }
+};
 
   return (
     <SafeAreaView
@@ -115,6 +141,7 @@ export default function OutScreen() {
                     setSelectedProduct={setSelectedProduct}
                     setUnitId={setUnitId}
                     setUnitName={setUnitName}
+                    setProductStock={setProductStock}
                   />
                 </View>
                 <View className="mb-4">
