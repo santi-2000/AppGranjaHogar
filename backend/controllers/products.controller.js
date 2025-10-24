@@ -58,16 +58,20 @@ class ProductsController {
         res.json(result);
     }
 
-    async createProduct(req, res) {
-        const { category_id, unit_id, name, perishable, min_stock, max_stock } = req.body;
+    async getProduct(req, res) {
+        const { id } = req.params;
+        const result = await productsService.getProduct(id);
+        res.json(result);
+    }
 
-        const result = await productsService.addProduct(category_id, unit_id, name, perishable, min_stock, max_stock, req.user.id);
+    async createProduct(req, res) {
+        const result = await productsService.addProduct({...req.body, user_id: req.user.id});
         res.json(result);
     }
 
     async deleteProduct(req, res) {
         const { id } = req.params;
-        const result = await productsService.removeProduct(id);
+        const result = await productsService.removeProduct(id, req.user.id);
         res.json(result);
     }
 
@@ -76,8 +80,8 @@ class ProductsController {
      */
     async UpdateProduct (req, res) {
         const { id } = req.params;
-        const updateData = req.body;
-        const result = await productsService.editProduct(updateData, id);
+        console.log(req.body)
+        const result = await productsService.editProduct({...req.body, user_id: req.user.id, productId: id});
         res.json(result);
     }
 

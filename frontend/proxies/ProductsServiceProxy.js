@@ -8,6 +8,7 @@
  * @returns {Object} An object containing methods to create and delete products.
  * 
  * @author Carlos Alejandro Ortiz Caro
+ * @author Renata Loaiza
  * 
  * @example
  * const productsService = ProductsServiceProxy();
@@ -19,6 +20,22 @@ import { API_BASE_URL } from '@env';
 import * as SecureStore from 'expo-secure-store';
 
 const ProductsServiceProxy = () => {
+    async function getProduct(productId) {
+        const token = await SecureStore.getItemAsync('token');
+
+        const response = await fetch(`${API_BASE_URL}/v1/products/get/${productId}`, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+
+        return new ProductVO(data);
+    }
+
     const createProduct = async (productVO) => {
         const token = await SecureStore.getItemAsync('token');
 
@@ -35,6 +52,31 @@ const ProductsServiceProxy = () => {
         if (!response.ok) throw new Error(data.message || 'Error desconocido');
 
         return new ProductVO(data);
+    }
+
+    /**
+    * Edits an existing product
+    * @param {string} productId - The ID of the product to edit
+    * @param {ProductVO} productVO - The updated product data
+    * @returns {Promise<Object>} The updated product data
+    * @throws {Error} If the request fails
+    */
+    async function editProduct(productId, productVO) {
+        const token = await SecureStore.getItemAsync('token');
+
+        const response = await fetch(`${API_BASE_URL}/v1/products/editar/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(productVO)
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || 'Error desconocido');
+
+        return data.product;
     }
 
     const deleteProduct = async (productId) => {
@@ -54,8 +96,10 @@ const ProductsServiceProxy = () => {
     }
 
     return {
+        getProduct,
         createProduct,
         deleteProduct,
+        editProduct
     }
 };
 

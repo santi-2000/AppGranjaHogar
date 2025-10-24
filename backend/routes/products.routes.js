@@ -29,6 +29,14 @@ const router = Router()
  */
 router.get("/catalog", authMiddlewareLogged, productsController.getCatalog)
 
+router.get("/get/:id", [
+    authAuthorizePermissions("edit_catalog"),
+    param("id", "Product ID debería ser un número").isNumeric().isInt(),
+    validate
+],
+    productsController.getProduct
+)
+
 router.post("/create", [
     authAuthorizePermissions("edit_catalog"),
     body("name").isString().notEmpty().trim().escape().toLowerCase().withMessage("Name es requerido y debe ser un texto"),
@@ -64,8 +72,6 @@ router.put(
         body("perishable").notEmpty().isBoolean().withMessage("perishable debe ser un booleano"),
         body("min_stock").notEmpty().isInt().withMessage("min_stock debe ser un número entero"),
         body("max_stock").notEmpty().isInt().withMessage("max_stock debe ser un número entero"),
-        body("actual_stock").notEmpty().isInt().withMessage("actual_stock debe ser un número entero"),
-        body("is_active").notEmpty().isBoolean().withMessage("is_active debe ser un booleano"),
         validate
     ],
     productsController.UpdateProduct

@@ -10,7 +10,6 @@ import StockSection from "../../../../components/Products/ProductEditCreat/Stock
 import UnirSection from "../../../../components/Products/ProductEditCreat/PosisibleUnits";
 import ButtonRounded from "../../../../components/Form/ButtonRounded";
 import useEditProduct from '../../../../hooks/useEditProduct';
-import useGetCatalog from '../../../../hooks/useGetCatalog';
 
 
 /** 
@@ -26,70 +25,8 @@ import useGetCatalog from '../../../../hooks/useGetCatalog';
  * @author Santiago Estrada
  */
 export default function EditProductScreen() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const { editProduct, loading, error } = useEditProduct();
-  const { catalog, fetchCatalog } = useGetCatalog();
-
-  const [productData, setProductData] = useState({
-    name: '',
-    perishable: false,
-    category_id: null,
-    unit_id: null,
-    min_stock: 0,
-    max_stock: 0,
-    actual_stock: 0,
-    is_active: true,
-  });
-
-  const [initialLoading, setInitialLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProductData = async () => {
-      try {
-        await fetchCatalog();
-      } catch (err) {
-        console.error('Error al cargar el catálogo:', err);
-      } finally {
-        setInitialLoading(false);
-      }
-    };
-
-    loadProductData();
-  }, []);
-
-  useEffect(() => {
-    if (catalog && catalog.length > 0 && id) {
-      const product = catalog.find(p => p.id === parseInt(id));
-      if (product) {
-        setProductData({
-          name: product.name || '',
-          perishable: Boolean(product.perishable),
-          category_id: product.category_id || null,
-          unit_id: product.unit_id || null,
-          min_stock: product.min_stock || 0,
-          max_stock: product.max_stock || 0,
-          actual_stock: product.actual_stock || 0,
-          is_active: true,
-        });
-      }
-    }
-  }, [catalog, id]);
-
-  const handleChange = (key, value) => {
-    setProductData(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleEdit = async () => {
-    try {
-      const editedProduct = await editProduct(id, productData);
-      if (editedProduct) {
-        console.log("Producto editado:", editedProduct);
-      }
-    } catch (err) {
-      console.error("Error al editar el producto:", err);
-    }
-  };
+  const { productData, handleChange, initialLoading, handleEdit, editProduct, loading, error } = useEditProduct();
+  
 
   if (initialLoading) {
     return (
