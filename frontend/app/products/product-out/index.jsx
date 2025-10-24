@@ -19,7 +19,7 @@
 import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { router } from "expo-router";
+import { router, useRouter } from "expo-router";
 import TitleBar from "../../../components/TitleBar";
 import QuantitySectionOut from "../../../components/Products/Out/QuantitySectionOut";
 import DepartmentSectionOut from "../../../components/Products/Out/DepartmentSectionOut";
@@ -39,6 +39,7 @@ export default function OutScreen() {
   const [departmentId, setDepartmentId] = useState(null);
   const [reasonId, setReasonId] = useState(null);
   const [notes, setNotes] = useState("");
+  const router = useRouter();
 
   /**
    * Handles form submission and sends the payload to the backend.
@@ -80,8 +81,7 @@ export default function OutScreen() {
       console.log("Unidad mostrada:", unitName);
       const result = await createProductOut(payload);
       console.log("Respuesta del servidor:", result);
-      Alert.alert("Éxito", "Salida registrada correctamente 🎉");
-      router.replace("/products/product-out");
+      router.back();
     } catch (err) {
       console.error("Error al registrar salida:", err);
       Alert.alert("Error", err.message || "No se pudo registrar la salida");
