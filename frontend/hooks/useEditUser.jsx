@@ -2,7 +2,7 @@ import { Alert } from 'react-native';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import UsersProxy from '../proxies/UsersServiceProxy';
-import EditUserVO from '../valueobjects/users/EditUserVO';
+import { EditUserVO } from '../valueobjects/users/EditUserVO';
 
 /**
  * Custom hook for managing user editing and deletion operations.
@@ -40,8 +40,6 @@ const useEditUser = () => {
         lastName: '',
         permissions: []
     });
-
-    const [name, setName] = useState(user?.name);
     
     const [permissions, setPermissions] = useState([
         { label: 'Administrador', value: 'admin' },
@@ -58,7 +56,6 @@ const useEditUser = () => {
                 const userRes = await getUserById(id);
 
                 setUser(userRes);
-                console.log('User data:', userRes);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -80,9 +77,13 @@ const useEditUser = () => {
     const handleSave = async () => {
         const userVo = new EditUserVO(user);
         const response = await putUser(id, userVo);
-        console.log(response);
+        
         router.back();
     };
+
+    const changeValue = (field, value) => {
+        setUser(prev => ({ ...prev, [field]: value }));
+    }
 
     /**
      * @author Renata Soto Bravo
@@ -130,7 +131,7 @@ const useEditUser = () => {
         handleSave,
         togglePermission,
         user,
-        setName,
+        changeValue,
         permissions,
         loading,
         error

@@ -26,7 +26,7 @@ export default function EditUserScreen() {
     handleSave,
     togglePermission,
     user,
-    setName,
+    changeValue,
     permissions,
     loading,
     error
@@ -48,14 +48,14 @@ export default function EditUserScreen() {
           <TextInput
             placeholder="Nombre"
             value={user?.name}
-            onChangeText={setName}
+            onChangeText={(value) => changeValue('name', value)}
             className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
           />
           <Text className="text-lg mt-4 font-semibold mb-2">Apellidos</Text>
           <TextInput
             placeholder="Apellidos"
             value={user?.lastName}
-            onChangeText={setName}
+            onChangeText={(value) => changeValue('lastName', value)}
             className="bg-gray-50 rounded-xl px-4 py-4 text-gray-800"
           />
 
