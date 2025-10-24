@@ -30,7 +30,7 @@ const router = Router()
 router.get("/catalog", authMiddlewareLogged, productsController.getCatalog)
 
 router.get("/get/:id", [
-    authAuthorizePermissions("edit_catalog"),
+    authAuthorizePermissions("edit-catalog"),
     param("id", "Product ID debería ser un número").isNumeric().isInt(),
     validate
 ],
@@ -38,7 +38,7 @@ router.get("/get/:id", [
 )
 
 router.post("/create", [
-    authAuthorizePermissions("edit_catalog"),
+    authAuthorizePermissions("edit-catalog"),
     body("name").isString().notEmpty().trim().escape().toLowerCase().withMessage("Name es requerido y debe ser un texto"),
     body("category_id").isNumeric().isInt().notEmpty().withMessage("Category ID es requerido tiene que ser un número"),
     body("unit_id").isNumeric().isInt().notEmpty().withMessage("Unit ID es requerido tiene que ser un número"),
@@ -51,7 +51,7 @@ router.post("/create", [
 )
 
 router.delete("/delete/:id", [
-    authAuthorizePermissions("edit_catalog"),
+    authAuthorizePermissions("edit-catalog"),
     param("id", "Product ID debería ser un número").isNumeric().isInt(),
     validate
 ],
@@ -64,7 +64,7 @@ router.delete("/delete/:id", [
 router.put(
     "/editar/:id",
     [
-        authAuthorizePermissions("edit_catalog"),
+        authAuthorizePermissions("edit-catalog"),
         param("id").isInt().withMessage("ID debe ser un número entero"),
         body("name").notEmpty().withMessage("El nombre es requerido").trim().escape().toLowerCase(),
         body("category_id").notEmpty().isInt().withMessage("category_id debe ser un número entero"),

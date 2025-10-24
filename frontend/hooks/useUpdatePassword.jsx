@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import UsersServiceProxy from '../proxies/UsersServiceProxy';
 import { PasswordUpdate } from '../valueobjects/users/UpdatePasswordVO';
+import { Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 
 /**
  * @class useUpdatePassword
@@ -18,12 +20,46 @@ const useUpdatePassword = () => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const usersService = UsersServiceProxy();
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
 
+    const router = useRouter();
+
+    const handleChange = (key, value) => {
+        setPasswordData(prev => ({ ...prev, [key]: value }));
+    };
+
+    const handleUpdatePassword = async () => {
+        try {
+            await updatePassword(passwordData);
+            Alert.alert(
+                'Éxito',
+                'Contraseña actualizada correctamente',
+                [{
+                    text: 'OK', onPress: () => {
+                        setPasswordData({
+                            currentPassword: '',
+                            newPassword: '',
+                            confirmPassword: ''
+                        });
+                        resetState();
+                    }
+                }]
+            );
+            router.back();
+
+        } catch (err) {
+            Alert.alert('Error', err.message);
+        }
+    };
     const updatePassword = async (passwordData) => {
         setLoading(true);
         setError(null);
         setSuccess(false);
-        
+
         try {
             const passwordUpdateVO = new PasswordUpdate(passwordData);
             const result = await usersService.putUpdatePassword(passwordUpdateVO);
@@ -42,12 +78,16 @@ const useUpdatePassword = () => {
         setSuccess(false);
     };
 
-    return { 
-        updatePassword, 
-        loading, 
-        error, 
-        success, 
-        resetState 
+    return {
+        updatePassword,
+        handleUpdatePassword,
+        handleChange,
+        passwordData, 
+        setPasswordData,
+        loading,
+        error,
+        success,
+        resetState
     };
 };
 
