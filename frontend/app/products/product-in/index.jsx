@@ -47,6 +47,7 @@ export default function InScreen() {
             keyboardShouldPersistTaps="handled"
           >
             <View className="flex-1 px-6">
+              
               <Formik
                 initialValues={{ 
                   product_id: null, 
@@ -58,6 +59,7 @@ export default function InScreen() {
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => createEntry(values)}
+                
               >
                 {({
                   handleChange,
