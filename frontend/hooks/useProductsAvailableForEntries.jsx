@@ -16,7 +16,7 @@ export const useProductsAvailableForEntries = () => {
       setError(null);
 
       const result = await ProductsProxy.getAvailableProductsForEntries();
-
+      
       // Igual que en outs, maneja tanto `result.data` como el array directo
       setData(result.data || result);
     } catch (err) {

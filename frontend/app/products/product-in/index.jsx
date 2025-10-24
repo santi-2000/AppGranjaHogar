@@ -47,12 +47,12 @@ export default function InScreen() {
             <View className="flex-1 px-6">
               <Formik
                 initialValues={{ 
-                  product_id: 0, 
-                  unit_id: 0,
+                  product_id: null, 
+                  unit_id: null,
                   quantity: 0,
                   is_donation: true,
                   cost: 0,
-                  exp_date: "" 
+                  exp_date: ""
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => createEntry(values)}
