@@ -35,7 +35,7 @@ export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitI
   };
 
   const handleSelect = (item) => {
-    const productId = Number(item.id);
+    const productId = Number(item.id); 
     setFieldValue("product_id", parseInt(item.id));
     setFieldValue("is_perishable", Boolean(item.perishable));
     setFieldValue("unit_id", parseInt(item.unit_id));
