@@ -79,7 +79,7 @@ const UsersServiceProxy = () => {
 
     async function getUserById(userId) {
         const token = await SecureStore.getItemAsync('token');
-        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/v1/users/get/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const UsersServiceProxy = () => {
      */
     async function deleteUser(userId) {
         const token = await SecureStore.getItemAsync('token');
-        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/v1/users/delete/${userId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const UsersServiceProxy = () => {
     async function putUser(userId, EditUserVO) {
         const token = await SecureStore.getItemAsync('token');
 
-        const response = await fetch(`${API_BASE_URL}/v1/users/${userId}`, {
+        const response = await fetch(`${API_BASE_URL}/v1/users/edit/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

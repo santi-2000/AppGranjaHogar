@@ -8,38 +8,9 @@ import ButtonRounded from '../../../components/Form/ButtonRounded';
 import useUpdatePassword from '../../../hooks/useUpdatePassword';
 
 export default function ChangePasswordScreen() {
-  const { updatePassword, loading, error, success, resetState } = useUpdatePassword();
-  const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
+  const { passwordData, handleUpdatePassword,
+    handleChange, loading, error, success, resetState } = useUpdatePassword();
 
-  const handleChange = (key, value) => {
-    setPasswordData(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleUpdatePassword = async () => {
-    try {
-      await updatePassword(passwordData);
-      Alert.alert(
-        'Éxito',
-        'Contraseña actualizada correctamente',
-        [{
-          text: 'OK', onPress: () => {
-            setPasswordData({
-              currentPassword: '',
-              newPassword: '',
-              confirmPassword: ''
-            });
-            resetState();
-          }
-        }]
-      );
-    } catch (err) {
-      Alert.alert('Error', err.message);
-    }
-  };
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1, justifyContent: "space-between" }}>
@@ -66,7 +37,7 @@ export default function ChangePasswordScreen() {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-      <View className="px-4 pb-6">
+      <View className="px-4">
         <ButtonRounded
           text={loading ? "Actualizando..." : "Guardar"}
           disabled={loading}
