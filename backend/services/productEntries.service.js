@@ -1,6 +1,8 @@
 import { ProductEntryVO } from "../valueObjects/products/productEntries.vo.js";
 import { productEntriesModel } from "../models/productEntries.model.js";
 import { productsModel } from "../models/products.model.js"; 
+import { notificationsModel } from "../models/notifications.model.js";
+import { getUnitNameById } from "../utils/units.util.js";
 
 class ProductEntriesService {
   /**
@@ -23,6 +25,15 @@ class ProductEntriesService {
     const newStock = parseFloat(product.actual_stock || 0) + parseFloat(entry.quantity);
 
     await productsModel.update(entryVO.product_id, { actual_stock: newStock });
+
+    await notificationsModel.createNotification({
+      user_id: entryVO.user_id,
+      product_id: entryVO.product_id,
+      product_entry_id: id,
+      content: `Se ha registrado una nueva entrada de ${entryVO.quantity}${getUnitNameById(product.unit_id)} para el producto ${product.name}.`,
+      type_id: 4,
+      permission_id: 2
+    });
 
     return {
       message: `Entrada creada por el usuario ${entryVO.user_id} y stock actualizado correctamente`,

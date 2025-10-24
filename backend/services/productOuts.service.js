@@ -16,8 +16,10 @@
  * Samuel Isaac Lopez Mar
  */
 
+import { notificationsModel } from "../models/notifications.model.js";
 import { productOutModel } from "../models/productOuts.model.js";
 import { AppError } from "../utils/error.util.js";
+import { getUnitNameById } from "../utils/units.util.js";
 import { ProductOutVO } from "../valueObjects/products/productOuts.vo.js";
 
 /**
@@ -127,6 +129,15 @@ class ProductOutService {
 
     if (updatedStock.affectedRows === 0)
       throw new AppError("No se pudo actualizar el stock", 404);
+
+    await notificationsModel.createNotification({
+      user_id: data.user_id,
+      product_id: data.product_id,
+      product_out_id: result.insertId,
+      content: `Se ha registrado una nueva salida de ${data.quantity}${getUnitNameById(data.unit_id)} para el producto con ID ${data.product_id}.`,
+      type_id: 5,
+      permission_id: 3
+    });
 
     return {
       success: true,

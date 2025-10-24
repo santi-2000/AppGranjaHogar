@@ -17,6 +17,7 @@ import { reportsModel } from "../models/reports.model.js";
 import { ProductReportVO } from "../valueObjects/reports/productReport.vo.js";
 import { ProductEntrieReportVO } from "../valueObjects/reports/productEntrieReport.vo.js";
 import { ProductOutReportVO } from "../valueObjects/reports/productOutReport.vo.js";
+import { notificationService } from "./notifications.service.js";
 
 class ReportsService {
     /**
@@ -156,6 +157,13 @@ class ReportsService {
         if (type.includes(1)) await reportsModel.postReportInclude(report.insertId, 1);
         if (type.includes(2)) await reportsModel.postReportInclude(report.insertId, 2);
         if (type.includes(3)) await reportsModel.postReportInclude(report.insertId, 3);
+
+        await notificationService.addNotification({
+            user_id: userId,
+            content: `Nuevo reporte pdf entre fechas: ${initialDate} - ${endDate}`,
+            type_id: 13,
+            permission_id: 4
+        });
 
         return doc;
     }
@@ -316,6 +324,13 @@ class ReportsService {
         if (type.includes(1)) await reportsModel.postReportInclude(report.insertId, 1);
         if (type.includes(2)) await reportsModel.postReportInclude(report.insertId, 2);
         if (type.includes(3)) await reportsModel.postReportInclude(report.insertId, 3);
+
+        await notificationService.addNotification({
+            user_id: userId,
+            content: `Nuevo reporte de excel entre fechas: ${initialDate} - ${endDate}`,
+            type_id: 13,
+            permission_id: 4
+        });
 
         return workbook
     }

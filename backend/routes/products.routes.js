@@ -31,9 +31,9 @@ router.get("/catalog", authMiddlewareLogged, productsController.getCatalog)
 
 router.post("/create", [
     authAuthorizePermissions("edit_catalog"),
+    body("name").isString().notEmpty().trim().escape().toLowerCase().withMessage("Name es requerido y debe ser un texto"),
     body("category_id").isNumeric().isInt().notEmpty().withMessage("Category ID es requerido tiene que ser un número"),
     body("unit_id").isNumeric().isInt().notEmpty().withMessage("Unit ID es requerido tiene que ser un número"),
-    body("name").isString().notEmpty().trim().escape().toLowerCase().withMessage("Name es requerido y debe ser un texto"),
     body("perishable").isBoolean().notEmpty().withMessage("Perishable es requerido true/false"),
     body("min_stock").isNumeric().isInt().notEmpty().withMessage("Min stock es requerido tiene que ser un número"),
     body("max_stock").isNumeric().isInt().notEmpty().withMessage("Max stock es requerido tiene que ser un número"),

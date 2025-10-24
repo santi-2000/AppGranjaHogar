@@ -7,7 +7,7 @@
  *
  * @author Silvana Davila Garcia
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NotificationsProxy from '../proxies/NotificationsServiceProxy';
 
 const useNotifications = () => {
@@ -15,10 +15,15 @@ const useNotifications = () => {
     const [error, setError] = useState('');
     const { getNotifications } = NotificationsProxy();
 
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
     async function fetchNotifications() {
         setError('');
         try {
             const data = await getNotifications();
+            
             setNotifications(data);
         } catch (err) {
             console.error('Error fetching notifications:', err);

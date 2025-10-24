@@ -133,8 +133,7 @@ class UsersModel {
    */
   async delete(id) {
     const sql = `UPDATE users SET is_active = FALSE WHERE id = ? AND is_active = TRUE`;
-    const [result] = await db.query(sql, [id]);
-    return result;
+    return await db.query(sql, [id]);
   }
 }
 

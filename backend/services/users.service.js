@@ -22,6 +22,7 @@ import { PasswordUpdateVO } from "../valueObjects/users/passwordUpdate.vo.js";
 import { AppError } from "../utils/error.util.js";
 import jwt from 'jsonwebtoken'
 import { UserVO } from "../valueObjects/users/user.vo.js";
+import { notificationService } from "./notifications.service.js";
 
 
 export class UsersService {
@@ -81,7 +82,7 @@ export class UsersService {
   /**
    * @author Renata Loaiza
    */
-  async createUser({ name, lastName, username, password, permissions }) {
+  async createUser({ name, lastName, username, password, permissions, user_id }) {
     const passVO = new PasswordVO(password);
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(passVO.value, salt);
@@ -94,6 +95,13 @@ export class UsersService {
     });
 
     await usersModel.addPermissionsToUser(created.insertId, permissions);
+
+    await notificationService.addNotification({
+      user_id: user_id,
+      content: `Se ha creado un nuevo usuario: ${username}`,
+      type_id: 9,
+      permission_id: 6
+    });
 
     return created;
   };
@@ -134,7 +142,7 @@ export class UsersService {
   /**
    * @author Yahir Alfredo Tapia Sifuentes
    */
-  async editUser({ id, name, lastName, permissions }) {
+  async editUser({ id, name, lastName, permissions, user_id }) {
     console.log("Editing user:", id, name, lastName, permissions);
     const user = await usersModel.getUserById(id);
     if (!user) throw new AppError("Usuario no encontrado", 404);
@@ -142,6 +150,14 @@ export class UsersService {
     const updatedUser = await usersModel.updateUser({ id, name, last_name: lastName });
 
     await usersModel.updateUserPermissions(id, permissions);
+
+    await notificationService.addNotification({
+      user_id: user_id,
+      content: `Se ha editado un usuario: ${name}`,
+      type_id: 10,
+      permission_id: 6
+    });
+
 
     return new UserVO({
       ...updatedUser,
@@ -152,10 +168,18 @@ export class UsersService {
   /**
    * @author Renata Soto Bravo
    */
-  async deleteUser({ id }) {
+  async deleteUser({ id, user_id }) {
     const [result] = await usersModel.delete(id);
+    console.log(result);
 
     if (!result || !result.affectedRows) throw new AppError("Usuario no encontrado o no se pudo eliminar", 404);
+
+    await notificationService.addNotification({
+      user_id: user_id,
+      content: `Se ha eliminado el usuario: ${id}`,
+      type_id: 10,
+      permission_id: 6
+    });
 
     return { message: "Usuario eliminado exitosamente" };
   };

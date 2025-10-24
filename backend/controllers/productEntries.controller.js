@@ -7,25 +7,27 @@ export class ProductEntriesController {
     this.getAllEntries = catchAsync(this.getAllEntries.bind(this));
     this.getEntryById = catchAsync(this.getEntryById.bind(this));
   }
-   
+
   /**
    * @description Crea una nueva entrada en product_entries
    * y actualiza automáticamente el actual_stock del producto asociado.
    * @author Dania Sagarnaga Macías
    */
-  async createEntry(req, res) {  
+  async createEntry(req, res) {
     const data = {
-    ...req.body,
-    user_id: req.user.id };
+      ...req.body,
+      user_id: req.user.id,
+      username: req.user.username,
+    };
 
     const result = await productEntriesService.create(data);
 
     res.status(201).json({
       message: result.message,
       data: {
-      entry: result.entry,
-      updated_stock: result.updated_stock
-        
+        entry: result.entry,
+        updated_stock: result.updated_stock
+
       }
     });
   }

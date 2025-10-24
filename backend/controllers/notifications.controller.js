@@ -14,7 +14,7 @@ export class NotificationController {
     };
 
     async getNotifications(req, res) {
-        const notifications = await notificationService.getNotifications();
+        const notifications = await notificationService.getNotifications(req.user);
         res.json(notifications);
 
     };

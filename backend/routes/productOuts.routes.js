@@ -41,7 +41,9 @@ router.get('/:id',
  * Route to create a new product out record.
  * @middleware {function} authAuthorizePermissions - Requires "products-outs" permission.
  */
-router.post('/', authAuthorizePermissions("products-outs"), productOutController.create);
+router.post('/',
+  authAuthorizePermissions("products-outs"),
+  productOutController.create);
 
 
 export default router
