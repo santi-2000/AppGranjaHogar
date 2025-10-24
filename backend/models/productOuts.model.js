@@ -102,6 +102,22 @@ class ProductOutModel {
 
     return result;
   }
+  
+  /**
+   * Retrieves the current stock of a specific product.
+   *
+   * @async
+   * @memberof ProductOutModel
+   * @param {number} productId - The ID of the product.
+   * @returns {Promise<{ actual_stock: number }>} The product's current stock.
+   */
+  async getActualStock(productId) {
+    const [rows] = await db.query(
+      "SELECT actual_stock, name FROM products WHERE id = ?",
+      [productId]
+    );
+    return rows[0] || { actual_stock: 0 };
+  }
 
   /**
    * Updates a product's stock by subtracting a specific quantity.

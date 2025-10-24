@@ -80,9 +80,11 @@ class ProductOutService {
   /**
    * Creates a new product out record and updates the product's current stock.
    * 
-   * This method performs two main operations:
-   * 1. Inserts a new record into the `product_outs` table.
-   * 2. Decreases the corresponding product's `actual_stock` value in the `products` table.
+   * This method performs three main operations:
+   * 1. Retrieves the product's current stock using `getActualStock()` and validates that the quantity to be deducted does not exceed it.
+   *    If the stock is insufficient, an `AppError` is thrown and the process is aborted.
+   * 2. Inserts a new record into the `product_outs` table to register the outflow.
+   * 3. Updates the product's `actual_stock` value in the `products` table by subtracting the deducted quantity.
    * 
    * @async
    * @memberof ProductOutService
@@ -94,6 +96,8 @@ class ProductOutService {
    * @param {number} data.unit_id - The ID of the unit associated with the product.
    * @param {number} data.quantity - The quantity of product being deducted.
    * @param {string} [data.notes] - Optional notes or comments for the outflow record.
+   * 
+   * @throws {AppError} If the stock is insufficient, insertion fails, or stock update fails.
    * 
    * @returns {Promise<{ success: boolean, updatedStock: boolean, insertId: number, message: string }>}
    * Returns a confirmation object containing the operation result, including the insert ID.
@@ -118,9 +122,16 @@ class ProductOutService {
    * // }
    */
   async create(data) {
-    const product = await productsModel.getById(data.product_id);
+    
+    const stockInfo = await productOutModel.getActualStock(data.product_id);
+    const currentStock = stockInfo?.actual_stock ?? 0;
 
-    if (!product) throw new AppError("Producto no encontrado");
+    if (currentStock < data.quantity) {
+    throw new AppError(
+      `Stock insuficiente: disponibles ${currentStock}, solicitados ${data.quantity}.`,
+      400
+    );
+  }
     const result = await productOutModel.create(data);
     
     if (!result || !result.insertId)
@@ -138,7 +149,7 @@ class ProductOutService {
       user_id: data.user_id,
       product_id: data.product_id,
       product_out_id: result.insertId,
-      content: `Se ha registrado una nueva salida de ${data.quantity}${getUnitNameById(data.unit_id)} para el producto ${product.name}.`,
+      content: `Se ha registrado una nueva salida de ${data.quantity}${getUnitNameById(data.unit_id)} para el producto ${stockInfo.name}.`,
       type_id: 5,
       permission_id: 3
     });
