@@ -57,7 +57,14 @@ class ProductsService {
         return products.map(product => new ProductInventoryVO(product));
     }
 
-    async addProduct(category_id, unit_id, name, perishable, min_stock, max_stock, user_id) {
+    async getProduct(id) {
+        const product = await productsModel.getById(id);
+        if (!product) throw new AppError('Producto no encontrado');
+
+        return new ProductVO(product);
+    }
+
+    async addProduct({category_id, unit_id, name, perishable, min_stock, max_stock, user_id}) {
         const [result] = await productsModel.createProduct(category_id, unit_id, name, perishable, min_stock, max_stock);
 
         if (!result || !result.insertId) throw new AppError('El producto no pudo ser creado');
@@ -87,19 +94,19 @@ class ProductsService {
         return { success: true, message: "Producto creado exitosamente", product: newProduct };
     }
 
-    async removeProduct(id) {
+    async removeProduct(id, user_id) {
+        const product = await productsModel.getById(id);
+        if (!product) throw new AppError('Producto no encontrado');
         const [result] = await productsModel.deleteProduct(id);
 
         if (!result || !result.affectedRows) throw new AppError('Product could not be deleted');
 
         const notification = await notificationService.addNotification({
             user_id: user_id,
-            product_id: result.insertId,
-            product_entry_id: null,
-            product_out_id: null,
-            content: `Se ha eliminado un producto: ${existingProduct.name}`,
+            product_id: product.id,
+            content: `Se ha eliminado un producto: ${product.name}`,
             type_id: 2,
-            permission_id: 4
+            permission_id: 5
         });
 
         if (!notification) throw new AppError('La notificación no pudo ser creada');
@@ -110,10 +117,9 @@ class ProductsService {
     /**
      * @author Renata Loaiza
      */
-    async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active }, productId) {
+    async editProduct({ category_id, unit_id, name, perishable, min_stock, max_stock, actual_stock, is_active, productId, user_id }) {
         const existingProduct = await productsModel.getById(productId);
         if (!existingProduct) throw new AppError('Producto no encontrado');
-
 
         const updatedProduct = await productsModel.update(productId, {
             category_id,
@@ -126,17 +132,19 @@ class ProductsService {
             is_active
         });
 
+        if (!updatedProduct) throw new AppError('El producto no pudo ser editado');
+
         const notification = await notificationService.addNotification({
             user_id: user_id,
-            product_id: result.insertId,
-            product_entry_id: null,
-            product_out_id: null,
+            product_id: productId,
             content: `Se ha editado un producto: ${existingProduct.name}`,
             type_id: 3,
-            permission_id: 4
+            permission_id: 5
         });
 
-        return new ProductVO(updatedProduct);
+        if (!notification) throw new AppError('La notificación no pudo ser creada');
+
+        return { success: true, message: "Producto editado exitosamente", product: updatedProduct };
     }
 
     async getAvailableProducts() {

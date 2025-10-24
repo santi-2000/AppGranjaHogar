@@ -11,15 +11,6 @@ import { getUnitNameById } from '../../utils/unitMapper';
 export default function InventaryScreen() {
   const { setSearchTerm, searchTerm, filteredInventory, loading, error, refetch, formatQuantity } = useInventory();
   
-/* 
-  const handleProductSelect = (productId) => {
-    setSelectedProduct(productId);
-    const product = inventory.find(item => item.id === productId);
-    if (product) {
-      setSearchTerm(product.name);
-    }
-  };
- */
   if (loading) {
     return (
       <SafeAreaView style={{ backgroundColor: "#F2F3F5", flex: 1 }}>
