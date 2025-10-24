@@ -18,6 +18,7 @@
 
 import { notificationsModel } from "../models/notifications.model.js";
 import { productOutModel } from "../models/productOuts.model.js";
+import { productsModel } from "../models/products.model.js";
 import { AppError } from "../utils/error.util.js";
 import { getUnitNameById } from "../utils/units.util.js";
 import { ProductOutVO } from "../valueObjects/products/productOuts.vo.js";
@@ -117,6 +118,9 @@ class ProductOutService {
    * // }
    */
   async create(data) {
+    const product = await productsModel.getById(data.product_id);
+
+    if (!product) throw new AppError("Producto no encontrado");
     const result = await productOutModel.create(data);
     
     if (!result || !result.insertId)
@@ -134,7 +138,7 @@ class ProductOutService {
       user_id: data.user_id,
       product_id: data.product_id,
       product_out_id: result.insertId,
-      content: `Se ha registrado una nueva salida de ${data.quantity}${getUnitNameById(data.unit_id)} para el producto con ID ${data.product_id}.`,
+      content: `Se ha registrado una nueva salida de ${data.quantity}${getUnitNameById(data.unit_id)} para el producto ${product.name}.`,
       type_id: 5,
       permission_id: 3
     });
