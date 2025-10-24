@@ -8,7 +8,7 @@ import { useProductsAvailableForEntries } from "../../../hooks/useProductsAvaila
  * Muestra sugerencias de productos activos mientras el usuario escribe.
  * @author Dania Sagarnaga Macías
  */
-export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitId, error, touched }) {
+export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitId, setFieldTouched, setFieldError, error, touched }) {
   const [search, setSearch] = useState("");
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [showOptions, setShowOptions] = useState(false);
@@ -18,9 +18,11 @@ export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitI
   const handleSearch = (text) => {
     setSearch(text);
     setIsPerishable(false);
-    setFieldValue("product_id", "");
+    // Use null for product_id so it matches Yup.number() when empty
+    setFieldValue("product_id", null);
     setFieldValue("unit_id", 0);
     setFieldValue("is_perishable", false);
+    if (setFieldError) setFieldError("product_id", undefined);
 
     if (text.length > 0) {
       setFilteredOptions(options.filter((item) =>
@@ -33,9 +35,12 @@ export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitI
   };
 
   const handleSelect = (item) => {
+    const productId = Number(item.id);
     setFieldValue("product_id", parseInt(item.id));
     setFieldValue("is_perishable", Boolean(item.perishable));
     setFieldValue("unit_id", parseInt(item.unit_id));
+    if (setFieldTouched) setFieldTouched("product_id", true);
+    if (setFieldError) setFieldError("product_id", undefined);
     setIsPerishable(Boolean(item.perishable));
     setSearch(item.name);
     setShowOptions(false);
@@ -77,7 +82,7 @@ export default function SearchProduct({ setFieldValue, setIsPerishable, setUnitI
         />
       )}
 
-      {error && (
+      {error && touched && (
         <Text className="text-red-500 text-sm mt-1">{error}</Text>
       )}
     </View>
