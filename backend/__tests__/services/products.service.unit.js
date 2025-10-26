@@ -86,4 +86,65 @@ describe('Product Service', () => {
       expect(result.message).toBe('Product could not be deleted');
     });
   });
+
+  describe('getInventory', () => {
+    test('Given valid request, When getInventory, Then should return inventory list', async () => {
+      // GIVEN
+      const mockInventory = [
+        { id: 1, name: 'Product 1', quantity: 10, unit: 'kg' },
+        { id: 2, name: 'Product 2', quantity: 5, unit: 'liters' }
+      ];
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'getInventory').mockResolvedValue(mockInventory);
+
+      // WHEN
+      const result = await productsService.getInventory();
+
+      // THEN
+      expect(result).toHaveLength(2);
+      expect(result[0]).toHaveProperty('id', 1);
+      expect(result[0]).toHaveProperty('name', 'Product 1');
+      expect(result[1]).toHaveProperty('id', 2);
+      expect(result[1]).toHaveProperty('name', 'Product 2');
+    });
+
+    test('Given empty inventory, When getInventory, Then should return empty array', async () => {
+      // GIVEN
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'getInventory').mockResolvedValue([]);
+
+      // WHEN
+      const result = await productsService.getInventory();
+
+      // THEN
+      expect(result).toHaveLength(0);
+      expect(Array.isArray(result)).toBe(true);
+    });
+  });
+
+  describe('getProductQuantity', () => {
+    test('Given valid product ID, When getProductQuantity, Then should return product quantity', async () => {
+      // GIVEN
+      const mockProduct = { id: 1, name: 'Test Product', quantity: 15, unit: 'kg' };
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'getProductQuantity').mockResolvedValue(mockProduct);
+
+      // WHEN
+      const result = await productsService.getProductQuantity(1);
+
+      // THEN
+      expect(result).toHaveProperty('id', 1);
+      expect(result).toHaveProperty('name', 'Test Product');
+      expect(result).toHaveProperty('quantity', 15);
+    });
+
+    test('Given non-existent product ID, When getProductQuantity, Then should throw error', async () => {
+      // GIVEN
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'getProductQuantity').mockRejectedValue(new Error('Product not found'));
+
+      // WHEN/THEN
+      await expect(productsService.getProductQuantity(999)).rejects.toThrow('Product not found');
+    });
+  });
 });

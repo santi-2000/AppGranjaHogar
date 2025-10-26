@@ -13,16 +13,17 @@ import { jest } from '@jest/globals';
 
 const loginServiceMock = jest.fn();
 const verifyServiceMock = jest.fn();
+const updatePasswordServiceMock = jest.fn();
 
 jest.unstable_mockModule('../../services/users.service.js', () => ({
   loginService: loginServiceMock,
   verifyService: verifyServiceMock,
   createUserService: jest.fn(),
-  updatePasswordService: jest.fn(),
+  updatePasswordService: updatePasswordServiceMock,
   deleteUserService: jest.fn(),
 }));
 
-const { default: app, connection } = await import('../../app.js');
+import app, { connection } from '../../app.js';
 
 
 describe("User Controller Unit Tests", () => {
@@ -139,6 +140,123 @@ describe("User Controller Unit Tests", () => {
     test('Given no token, When verify, Then return 401 Unauthorized', async () => {
       // WHEN/THEN
       await request(app).post('/v1/users/verify').expect(401);
+    });
+  });
+
+  describe('PUT /v1/users/updatepassword', () => {
+    test('Given valid password data, When updatePassword, Then return 200 and success message', async () => {
+      // GIVEN
+      updatePasswordServiceMock.mockResolvedValue({ 
+        success: true, 
+        message: 'Contraseña actualizada exitosamente' 
+      });
+
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          currentPassword: 'currentpass123',
+          newPassword: 'newpass123',
+          confirmPassword: 'newpass123'
+        })
+        .expect(200)
+        .expect(res => {
+          expect(res.body.ok).toBe(true);
+          expect(res.body.message).toBe('Contraseña actualizada exitosamente');
+        });
+    });
+
+    test('Given incorrect current password, When updatePassword, Then return 500', async () => {
+      // GIVEN
+      updatePasswordServiceMock.mockRejectedValue(new Error('La contraseña actual es incorrecta'));
+
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          currentPassword: 'wrongpassword',
+          newPassword: 'newpass123',
+          confirmPassword: 'newpass123'
+        })
+        .expect(500);
+    });
+
+    test('Given non-matching password confirmation, When updatePassword, Then return 500', async () => {
+      // GIVEN
+      updatePasswordServiceMock.mockRejectedValue(new Error('La nueva contraseña y la confirmación no coinciden'));
+
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          currentPassword: 'currentpass123',
+          newPassword: 'newpass123',
+          confirmPassword: 'differentpass123'
+        })
+        .expect(500);
+    });
+
+    test('Given missing currentPassword, When updatePassword, Then return 400 for validation error', async () => {
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          newPassword: 'newpass123',
+          confirmPassword: 'newpass123'
+        })
+        .expect(400);
+
+      // THEN
+      expect(updatePasswordServiceMock).not.toHaveBeenCalled();
+    });
+
+    test('Given missing newPassword, When updatePassword, Then return 400 for validation error', async () => {
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          currentPassword: 'currentpass123',
+          confirmPassword: 'newpass123'
+        })
+        .expect(400);
+
+      // THEN
+      expect(updatePasswordServiceMock).not.toHaveBeenCalled();
+    });
+
+    test('Given missing confirmPassword, When updatePassword, Then return 400 for validation error', async () => {
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .set('Authorization', 'Bearer valid.token')
+        .send({
+          currentPassword: 'currentpass123',
+          newPassword: 'newpass123'
+        })
+        .expect(400);
+
+      // THEN
+      expect(updatePasswordServiceMock).not.toHaveBeenCalled();
+    });
+
+    test('Given no authorization token, When updatePassword, Then return 401', async () => {
+      // WHEN/THEN
+      await request(app)
+        .put('/v1/users/updatepassword')
+        .send({
+          currentPassword: 'currentpass123',
+          newPassword: 'newpass123',
+          confirmPassword: 'newpass123'
+        })
+        .expect(401);
+
+      // THEN
+      expect(updatePasswordServiceMock).not.toHaveBeenCalled();
     });
   });
 });
