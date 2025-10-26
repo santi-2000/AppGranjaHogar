@@ -10,17 +10,19 @@ import { ProductVO } from '../../valueObjects/products/product.vo.js';
  * 
  * @author Roberto Santiago Estrada Orozco
  * @author Carlos Alejandro Ortiz Caro
+ * @author Renata Loaiza
  */
 
 const productServiceMock = {
   createProductService: jest.fn(),
   deleteProductService: jest.fn(),
+  editProduct: jest.fn(),
 };
 
 jest.unstable_mockModule('../../services/products.service.js', () => productServiceMock);
 
 import app from '../../app.js';
-const { createProductService, deleteProductService } = await import('../../services/products.service.js');
+const { createProductService, deleteProductService, editProduct } = await import('../../services/products.service.js');
 
 describe("Product Controller unit tests", () => {
 
@@ -199,6 +201,95 @@ describe("Product Controller unit tests", () => {
       await request(app)
         .get('/v1/products/quantity/')
         .expect(404);
+    });
+  });
+
+  /**
+   * @author Renata Loaiza
+   */
+  describe('PUT /v1/products/editar/:id', () => {
+    test('Given valid product data When edit Then status 200', async () => {
+      const mockUpdatedProduct = new ProductVO(1, 1, 1, 'Updated Product', true, 20, 200);
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'editProduct').mockResolvedValue({
+        success: true,
+        message: 'Producto editado exitosamente',
+        product: mockUpdatedProduct,
+      });
+
+      await request(app)
+        .put('/v1/products/editar/1')
+        .send({
+          category_id: 1,
+          unit_id: 1,
+          name: 'updated product',
+          perishable: true,
+          min_stock: 20,
+          max_stock: 200,
+        })
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.success).toBe(true);
+          expect(res.body.message).toBe('Producto editado exitosamente');
+        });
+    });
+
+    test('Given invalid product data When edit Then error 400', async () => {
+      await request(app)
+        .put('/v1/products/editar/1')
+        .send({
+          category_id: 'invalid',
+          unit_id: 1,
+          name: '',
+          perishable: 'not a boolean',
+          min_stock: -10,
+          max_stock: 100,
+        })
+        .expect(400);
+    });
+
+    test('Given missing required fields When edit Then error 400', async () => {
+      await request(app)
+        .put('/v1/products/editar/1')
+        .send({
+          category_id: 1,
+          name: 'Updated Product',
+        })
+        .expect(400);
+    });
+
+    test('Given invalid product ID When edit Then error 400', async () => {
+      await request(app)
+        .put('/v1/products/editar/invalid')
+        .send({
+          category_id: 1,
+          unit_id: 1,
+          name: 'updated product',
+          perishable: true,
+          min_stock: 20,
+          max_stock: 200,
+        })
+        .expect(400);
+    });
+
+    test('Given non-existent product ID When edit Then error 500', async () => {
+      const { productsService } = await import('../../services/products.service.js');
+      jest.spyOn(productsService, 'editProduct').mockResolvedValue({
+        success: false,
+        message: 'Producto no encontrado',
+      });
+
+      await request(app)
+        .put('/v1/products/editar/9999')
+        .send({
+          category_id: 1,
+          unit_id: 1,
+          name: 'updated product',
+          perishable: true,
+          min_stock: 20,
+          max_stock: 200,
+        })
+        .expect(500);
     });
   });
 });

@@ -9,10 +9,14 @@ import { ProductVO } from '../../valueObjects/products/product.vo.js';
  * 
  * @author Carlos Alejandro Ortiz Caro
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Loaiza
  */
 
 const createProductModelMock = jest.fn();
 const deleteProductModelMock = jest.fn();
+const updateProductModelMock = jest.fn();
+const getByIdModelMock = jest.fn();
+const addNotificationMock = jest.fn();
 
 jest.unstable_mockModule('../../models/products.model.js', () => ({
   getCatalogModel: jest.fn(),
@@ -20,6 +24,14 @@ jest.unstable_mockModule('../../models/products.model.js', () => ({
   getInventoryModel: jest.fn(),
   createProductModel: createProductModelMock,
   deleteProductModel: deleteProductModelMock,
+  update: updateProductModelMock,
+  getById: getByIdModelMock,
+}));
+
+jest.unstable_mockModule('../../services/notifications.service.js', () => ({
+  notificationService: {
+    addNotification: addNotificationMock
+  }
 }));
 
 const { createProductService, deleteProductService } = await import('../../services/products.service.js');
@@ -153,6 +165,81 @@ describe('Product Service', () => {
 
       // WHEN/THEN
       await expect(productsService.getProductQuantity(999)).rejects.toThrow('Product not found');
+    });
+  });
+
+  /**
+   * @author Renata Loaiza
+   */
+  describe('editProduct', () => {
+    test('Given valid product data When edit Then returns success and updated product', async () => {
+      // GIVEN
+      const existingProduct = { id: 1, name: 'Original Product', category_id: 1, unit_id: 1 };
+      const updatedProduct = { id: 1, name: 'Updated Product', category_id: 2, unit_id: 2, perishable: true, min_stock: 20, max_stock: 200 };
+      
+      getByIdModelMock.mockResolvedValue(existingProduct);
+      updateProductModelMock.mockResolvedValue(updatedProduct);
+      addNotificationMock.mockResolvedValue({ id: 1 });
+
+      const { productsService } = await import('../../services/products.service.js');
+      
+      // WHEN
+      const result = await productsService.editProduct({
+        category_id: 2,
+        unit_id: 2,
+        name: 'Updated Product',
+        perishable: true,
+        min_stock: 20,
+        max_stock: 200,
+        productId: 1,
+        user_id: 1
+      });
+
+      // THEN
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Producto editado exitosamente');
+      expect(getByIdModelMock).toHaveBeenCalledWith(1);
+      expect(updateProductModelMock).toHaveBeenCalled();
+    });
+
+    test('Given non-existent product ID When edit Then throws error', async () => {
+      // GIVEN
+      getByIdModelMock.mockResolvedValue(null);
+
+      const { productsService } = await import('../../services/products.service.js');
+      
+      // WHEN/THEN
+      await expect(productsService.editProduct({
+        category_id: 1,
+        unit_id: 1,
+        name: 'Updated Product',
+        perishable: true,
+        min_stock: 20,
+        max_stock: 200,
+        productId: 999,
+        user_id: 1
+      })).rejects.toThrow('Producto no encontrado');
+    });
+
+    test('Given failed update When edit Then throws error', async () => {
+      // GIVEN
+      const existingProduct = { id: 1, name: 'Original Product' };
+      getByIdModelMock.mockResolvedValue(existingProduct);
+      updateProductModelMock.mockResolvedValue(null);
+
+      const { productsService } = await import('../../services/products.service.js');
+      
+      // WHEN/THEN
+      await expect(productsService.editProduct({
+        category_id: 1,
+        unit_id: 1,
+        name: 'Updated Product',
+        perishable: true,
+        min_stock: 20,
+        max_stock: 200,
+        productId: 1,
+        user_id: 1
+      })).rejects.toThrow('El producto no pudo ser editado');
     });
   });
 });
