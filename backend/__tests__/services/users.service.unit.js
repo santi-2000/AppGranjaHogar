@@ -9,6 +9,7 @@ import { jest } from '@jest/globals';
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Renata Loaiza Bailon
+ * @author Roberto Santiago Estrada Orozco
  */
 
 const loginModelMock = jest.fn();
@@ -77,7 +78,6 @@ describe('User Service Unit Tests', () => {
       jwtSignMock.mockReturnValue('fake.jwt.token');
 
       // WHEN
-      const token = await usersService.login(req.body);
       const token = await usersService.login(req.body);
 
       // THEN
@@ -153,6 +153,9 @@ describe('User Service Unit Tests', () => {
     });
   });
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   describe('updatePasswordService', () => {
     test('Given valid password data, When updatePassword, Then should return success message', async () => {
       // GIVEN
@@ -225,6 +228,9 @@ describe('User Service Unit Tests', () => {
     });
   });
 
+  /**
+   * @author Renata Loaiza Bailon 
+   */
   describe('createUser', () => {
     test('Given valid user data, When create user, Then should create user successfully', async () => {
       // GIVEN
@@ -272,7 +278,7 @@ describe('User Service Unit Tests', () => {
         name: 'Camila',
         lastName: 'Beltran',
         username: 'camilabeltran',
-        password: '123', // muy corto
+        password: '123',
         permissions: ['products-entries'],
         user_id: 1
       };
