@@ -10,6 +10,7 @@ import { jest } from '@jest/globals';
  * 
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Renata Loaiza Bailon
+ * @author Renata Soto Bravo
  */
 
 const loginServiceMock = jest.fn();
@@ -259,6 +260,64 @@ describe("User Controller Unit Tests", () => {
         .set('Cookie', 'session=valid_session_token')
         .send(validUserData)
         .expect(500);
+    });
+  });
+
+  /**
+   * @author Renata Soto Bravo
+   */
+  describe('DELETE /v1/users/:id', () => {
+    const mockToken = 'Bearer valid.jwt.token';
+
+    test('Given valid user ID, When delete user, Then return 200 and success message', async () => {
+      // GIVEN
+      deleteUserServiceMock.mockResolvedValue({ message: 'Usuario eliminado exitosamente' });
+
+      // WHEN/THEN
+      await request(app)
+        .delete('/v1/users/1')
+        .set('Authorization', mockToken)
+        .expect(200)
+        .expect(res => {
+          expect(res.body.ok).toBe(true);
+          expect(res.body.success).toBe(true);
+          expect(res.body.message).toBe('Usuario eliminado exitosamente');
+        });
+
+      expect(deleteUserServiceMock).toHaveBeenCalledWith({ id: '1' });
+    });
+
+    test('Given non-existent user ID, When delete user, Then return 404', async () => {
+      // GIVEN
+      const AppError = (await import('../../utils/error.util.js')).AppError;
+      deleteUserServiceMock.mockRejectedValue(new AppError('Usuario no encontrado o no se pudo eliminar', 404));
+
+      // WHEN/THEN
+      await request(app)
+        .delete('/v1/users/999')
+        .set('Authorization', mockToken)
+        .expect(404)
+        .expect(res => {
+          expect(res.body.success).toBe(false);
+          expect(res.body.message).toBe('Usuario no encontrado o no se pudo eliminar');
+        });
+
+      expect(deleteUserServiceMock).toHaveBeenCalledWith({ id: '999' });
+    });
+
+    test('Given invalid ID format (not a number), When delete user, Then return 400 for validation error', async () => {
+      // WHEN/THEN
+      await request(app)
+        .delete('/v1/users/abc')
+        .set('Authorization', mockToken)
+        .expect(400)
+        .expect(res => {
+          expect(res.body.success).toBe(false);
+          expect(res.body.message).toBe('Request inválido');
+        });
+
+      // THEN
+      expect(deleteUserServiceMock).not.toHaveBeenCalled();
     });
   });
 });
