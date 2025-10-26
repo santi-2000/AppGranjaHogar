@@ -1,3 +1,8 @@
+/**
+ * @file Controller para gestionar las entradas de productos.
+ * @author Dania Sagarnaga Macías
+ */
+
 import { catchAsync } from "../middlewares/catchAsync.middleware.js";
 import { productEntriesService } from "../services/productEntries.service.js";
 
@@ -7,7 +12,7 @@ export class ProductEntriesController {
     this.getAllEntries = catchAsync(this.getAllEntries.bind(this));
     this.getEntryById = catchAsync(this.getEntryById.bind(this));
   }
-
+  
   /**
    * @description Crea una nueva entrada en product_entries
    * y actualiza automáticamente el actual_stock del producto asociado.

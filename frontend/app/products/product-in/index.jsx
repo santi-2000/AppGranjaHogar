@@ -1,4 +1,8 @@
-//esto no está LISTO pausa 
+/**
+ * Pantalla para registrar una nueva entrada de producto.
+ * @author Dania Sagarnaga Macías
+ */
+
 import { View, Alert, Keyboard, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
@@ -19,6 +23,9 @@ import ExpirationDate from '../../../components/Products/In/ExpirationDate';
 import { useUserStore } from '../../../stores/useUserStore';
 
 const validationSchema = Yup.object().shape({
+  /**
+   * Esquema de validación para el formulario de entrada de productos.
+   */
   product_id: Yup.number().required('El producto es obligatorio'),
   unit_id: Yup.number().required('La unidad es obligatoria'),
   quantity: Yup.number().positive('La cantidad debe ser un número positivo').required('La cantidad es obligatoria'),
@@ -28,6 +35,10 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function InScreen() {
+  /**
+   * Pantalla principal para registrar una nueva entrada de producto.
+   * @return {JSX.Element} Componente de React que representa la pantalla de entrada de productos.
+   */
   const { isPerishable, setIsPerishable, unitId, setUnitId, createEntry, loading } = useProductEntries();
 
   return (
@@ -55,7 +66,7 @@ export default function InScreen() {
                   quantity: 0,
                   is_donation: true,
                   cost: 0,
-                  exp_date: ""
+                  exp_date: null
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => createEntry(values)}
