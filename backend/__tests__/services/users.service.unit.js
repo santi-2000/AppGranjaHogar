@@ -18,14 +18,18 @@ const jwtSignMock = jest.fn();
 const jwtVerifyMock = jest.fn();
 const createModelMock = jest.fn();
 const addPermissionsToUserModelMock = jest.fn();
-const bcryptGenSaltMock = jest.fn();
-const bcryptHashMock = jest.fn();
 const addNotificationServiceMock = jest.fn();
 const deleteModelMock = jest.fn();
+const getUserByIdMock = jest.fn();
+const updatePasswordMock = jest.fn();
+const bcryptHashMock = jest.fn();
+const bcryptGenSaltMock = jest.fn();
 
 jest.unstable_mockModule('../../models/users.model.js', () => ({
   usersModel: {
     loginModel: loginModelMock,
+  getUserById: getUserByIdMock,
+  updatePassword: updatePasswordMock,
     create: createModelMock,
     addPermissionsToUser: addPermissionsToUserModelMock,
     delete: deleteModelMock,
@@ -35,8 +39,8 @@ jest.unstable_mockModule('../../models/users.model.js', () => ({
 jest.unstable_mockModule('bcryptjs', () => ({
   default: { 
     compare: bcryptCompareMock,
-    genSalt: bcryptGenSaltMock,
-    hash: bcryptHashMock
+    hash: bcryptHashMock,
+    genSalt: bcryptGenSaltMock
   }
 }));
 
@@ -58,9 +62,7 @@ jest.unstable_mockModule('../../valueObjects/users/password.vo.js', () => ({
   }
 }));
 
-const {
-  usersService,
-} = await import('../../services/users.service.js');
+import { usersService } from '../../services/users.service.js';
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -79,6 +81,7 @@ describe('User Service Unit Tests', () => {
 
       // WHEN
       const token = await usersService.login(req.body);
+      const token = await usersService.login(req.body);
 
       // THEN
       expect(token).toBe('fake.jwt.token');
@@ -92,7 +95,7 @@ describe('User Service Unit Tests', () => {
       loginModelMock.mockResolvedValue([[]]);
 
       // WHEN/THEN
-      await expect(usersService.login(req)).rejects.toThrow('Datos Incorrectos');
+      await expect(usersService.login(req.body)).rejects.toThrow('Datos Incorrectos');
     });
 
     test('Given incorrect password, When login, Then should throw error', async () => {
@@ -103,24 +106,125 @@ describe('User Service Unit Tests', () => {
       bcryptCompareMock.mockResolvedValue(false);
 
       // WHEN/THEN
-      await expect(usersService.login(req)).rejects.toThrow('Contraseña incorrecta');
+      await expect(usersService.login(req.body)).rejects.toThrow('Contraseña incorrecta');
     });
   });
 
   describe('verifyService', () => {
+    test('Given valid token, When verify, Then should return user object', () => {
+      // GIVEN
+      const token = 'valid.fake.token';
+      const mockUser = { id: 1, username: 'testuser' };
+      jwtVerifyMock.mockReturnValue(mockUser);
+
+      // WHEN
+      const result = usersService.verify({ token });
+
+      // THEN
+      expect(result).toEqual(mockUser);
+      expect(jwtVerifyMock).toHaveBeenCalledWith(token, expect.any(String));
+    });
+
+    test('Given invalid token, When verify, Then should return false', () => {
+      // GIVEN
+      const token = 'invalid.fake.token';
+      jwtVerifyMock.mockImplementation(() => {
+        throw new Error('Invalid token');
+      });
+
+      // WHEN
+      const result = usersService.verify({ token });
+
+      // THEN
+      expect(result).toBe(false);
+      expect(jwtVerifyMock).toHaveBeenCalled();
+    });
+
     test('When service is called, Then it should call jwt.verify with the token', () => {
-        // GIVEN
-        const token = 'any.fake.token';
+      // GIVEN
+      const token = 'any.fake.token';
+      jwtVerifyMock.mockReturnValue({});
 
         // WHEN
         usersService.verify({ token });
 
-        // THEN
-        expect(jwtVerifyMock).toHaveBeenCalledWith(
-          token,
-          expect.any(String),
-          expect.any(Function)
-        );
+      // THEN
+      expect(jwtVerifyMock).toHaveBeenCalledWith(
+        token,
+        expect.any(String)
+      );
+    });
+  });
+
+  describe('updatePasswordService', () => {
+    test('Given valid password data, When updatePassword, Then should return success message', async () => {
+      // GIVEN
+      const mockUser = { id: 1, password_hash: 'hashedpassword' };
+      const updateData = {
+        userId: 1,
+        currentPassword: 'currentpass123',
+        newPassword: 'newpass123',
+        confirmPassword: 'newpass123'
+      };
+      
+      getUserByIdMock.mockResolvedValue(mockUser);
+      bcryptCompareMock.mockResolvedValue(true);
+      bcryptGenSaltMock.mockResolvedValue('salt123');
+      bcryptHashMock.mockResolvedValue('newhashedpassword');
+      updatePasswordMock.mockResolvedValue({ affectedRows: 1 });
+
+      // WHEN
+      const result = await usersService.updatePassword(updateData);
+
+      // THEN
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Contraseña actualizada exitosamente');
+      expect(getUserByIdMock).toHaveBeenCalledWith(1);
+      expect(bcryptCompareMock).toHaveBeenCalledWith('currentpass123', 'hashedpassword');
+      expect(updatePasswordMock).toHaveBeenCalledWith({
+        userId: 1,
+        newPasswordHash: 'newhashedpassword'
+      });
+    });
+
+    test('Given incorrect current password, When updatePassword, Then should throw error', async () => {
+      // GIVEN
+      const mockUser = { id: 1, password_hash: 'hashedpassword' };
+      const updateData = {
+        userId: 1,
+        currentPassword: 'wrongpassword',
+        newPassword: 'newpass123',
+        confirmPassword: 'newpass123'
+      };
+      
+      getUserByIdMock.mockResolvedValue(mockUser);
+      bcryptCompareMock.mockResolvedValue(false);
+
+      // WHEN/THEN
+      await expect(usersService.updatePassword(updateData)).rejects.toThrow('La contraseña actual es incorrecta');
+      expect(getUserByIdMock).toHaveBeenCalledWith(1);
+      expect(bcryptCompareMock).toHaveBeenCalledWith('wrongpassword', 'hashedpassword');
+      expect(updatePasswordMock).not.toHaveBeenCalled();
+    });
+
+    test('Given non-matching password confirmation, When updatePassword, Then should throw error', async () => {
+      // GIVEN
+      const mockUser = { id: 1, password_hash: 'hashedpassword' };
+      const updateData = {
+        userId: 1,
+        currentPassword: 'currentpass123',
+        newPassword: 'newpass123',
+        confirmPassword: 'differentpass123'
+      };
+      
+      getUserByIdMock.mockResolvedValue(mockUser);
+      bcryptCompareMock.mockResolvedValue(true);
+
+      // WHEN/THEN
+      await expect(usersService.updatePassword(updateData)).rejects.toThrow('La nueva contraseña y la confirmación no coinciden');
+      expect(getUserByIdMock).toHaveBeenCalledWith(1);
+      expect(bcryptCompareMock).toHaveBeenCalledWith('currentpass123', 'hashedpassword');
+      expect(updatePasswordMock).not.toHaveBeenCalled();
     });
   });
 
