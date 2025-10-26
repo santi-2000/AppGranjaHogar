@@ -2,6 +2,15 @@ import request from 'supertest';
 import { jest } from '@jest/globals';
 import { ProductVO } from '../../valueObjects/products/product.vo.js';
 
+/**
+ * Products Controller Unit Test
+ * @module ProductsControllerUnitTest
+ * @description This module contains unit tests for the ProductsController.
+ *              It uses `jest` and `supertest` for mocking services and testing HTTP endpoints.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ */
+
 const productServiceMock = {
   createProductService: jest.fn(),
   deleteProductService: jest.fn(),
