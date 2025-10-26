@@ -10,6 +10,7 @@ import { jest } from '@jest/globals';
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Renata Loaiza Bailon
  * @author Roberto Santiago Estrada Orozco
+ * @author Renata Soto Bravo
  */
 
 const loginModelMock = jest.fn();
@@ -19,6 +20,7 @@ const jwtVerifyMock = jest.fn();
 const createModelMock = jest.fn();
 const addPermissionsToUserModelMock = jest.fn();
 const addNotificationServiceMock = jest.fn();
+const deleteModelMock = jest.fn();
 const getUserByIdMock = jest.fn();
 const updatePasswordMock = jest.fn();
 const bcryptHashMock = jest.fn();
@@ -31,6 +33,7 @@ jest.unstable_mockModule('../../models/users.model.js', () => ({
   updatePassword: updatePasswordMock,
     create: createModelMock,
     addPermissionsToUser: addPermissionsToUserModelMock,
+    delete: deleteModelMock,
   }
 }));
 
@@ -326,6 +329,44 @@ describe('User Service Unit Tests', () => {
 
       // WHEN/THEN
       await expect(usersService.createUser(userData)).rejects.toThrow('Permission error');
+    });
+  });
+
+  /**
+   * @author Renata Soto Bravo
+   */
+
+  describe('deleteUser', () => {
+    test('Given valid user ID, When delete user, Then should return success message', async () => {
+      // GIVEN
+      const mockResult = { affectedRows: 1 };
+      deleteModelMock.mockResolvedValue([mockResult]);
+      addNotificationServiceMock.mockResolvedValue({ id: 1 });
+
+      // WHEN
+      const result = await usersService.deleteUser({ id: 1, user_id: 2 });
+
+      // THEN
+      expect(result.message).toBe('Usuario eliminado exitosamente');
+      expect(deleteModelMock).toHaveBeenCalledWith(1);
+      expect(addNotificationServiceMock).toHaveBeenCalledWith({
+        user_id: 2,
+        content: 'Se ha eliminado el usuario: 1',
+        type_id: 10,
+        permission_id: 6
+      });
+    });
+
+    test('Given non-existent user, When delete user, Then should throw error', async () => {
+      // GIVEN
+      const mockResult = { affectedRows: 0 };
+      deleteModelMock.mockResolvedValue([mockResult]);
+
+      // WHEN/THEN
+      await expect(usersService.deleteUser({ id: 999, user_id: 2 })).rejects.toThrow(
+        'Usuario no encontrado o no se pudo eliminar'
+      );
+      expect(deleteModelMock).toHaveBeenCalledWith(999);
     });
   });
 });
