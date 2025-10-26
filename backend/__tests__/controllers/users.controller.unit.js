@@ -11,6 +11,7 @@ import { jest } from '@jest/globals';
  * @author Jared Alejandro Marquez Muñoz Grado
  * @author Renata Loaiza Bailon
  * @author Renata Soto Bravo
+ * @author Roberto Santiago Estrada Orozco  
  */
 
 const loginServiceMock = jest.fn();
@@ -147,6 +148,10 @@ describe("User Controller Unit Tests", () => {
     });
   });
 
+  /**
+   * @author Reoberto Santiago Estrada Orozco
+   */
+
   describe('PUT /v1/users/updatepassword', () => {
     test('Given valid password data, When updatePassword, Then return 200 and success message', async () => {
       // GIVEN
@@ -264,7 +269,9 @@ describe("User Controller Unit Tests", () => {
     });
   });
 
-  //Pruebas para el Endpoint de Crear Usuario
+  /**
+   * @author Renata Loaiza Bailon
+   */
   describe('POST /v1/users/new', () => {
     const mockRequest = {
       user: { id: 1, username: 'admin', permissions: ['manage-users'] }
@@ -285,7 +292,7 @@ describe("User Controller Unit Tests", () => {
       // WHEN/THEN
       await request(app)
         .post('/v1/users/new')
-        .set('Cookie', 'session=valid_session_token') // Simular sesión válida
+        .set('Cookie', 'session=valid_session_token') 
         .send(validUserData)
         .expect(201)
         .expect(res => {
@@ -300,7 +307,7 @@ describe("User Controller Unit Tests", () => {
       const invalidUserData = {
         name: 'Camila',
         lastName: 'Beltran',
-        username: 'ca', // muy corto
+        username: 'ca', 
         password: 'password123',
         permissions: ['products-entries']
       };
@@ -322,7 +329,7 @@ describe("User Controller Unit Tests", () => {
         name: 'Camila',
         lastName: 'Beltran',
         username: 'camilabeltran',
-        password: '123', // muy corto
+        password: '123', 
         permissions: ['products-entries']
       };
 

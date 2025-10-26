@@ -8,6 +8,7 @@ import { ProductVO } from '../../valueObjects/products/product.vo.js';
  * @description This module contains unit tests for the ProductsController.
  *              It uses `jest` and `supertest` for mocking services and testing HTTP endpoints.
  * 
+ * @author Roberto Santiago Estrada Orozco
  * @author Carlos Alejandro Ortiz Caro
  */
 
@@ -113,6 +114,9 @@ describe("Product Controller unit tests", () => {
     });
   });
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   describe('GET /v1/products/inventory', () => {
     test('Given valid request, When getInventory, Then return 200 and inventory list', async () => {
       const mockInventory = [
@@ -157,6 +161,9 @@ describe("Product Controller unit tests", () => {
     });
   });
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   describe('GET /v1/products/quantity/:id', () => {
     test('Given valid product ID, When getProductQuantity, Then return 200 and product quantity', async () => {
       const mockProduct = { id: 1, name: 'Test Product', quantity: 15, unit: 'kg' };

@@ -8,6 +8,7 @@ import { ProductVO } from '../../valueObjects/products/product.vo.js';
  *              It uses `jest` for mocking services and assertions.
  * 
  * @author Carlos Alejandro Ortiz Caro
+ * @author Roberto Santiago Estrada Orozco
  */
 
 const createProductModelMock = jest.fn();
@@ -87,6 +88,10 @@ describe('Product Service', () => {
     });
   });
 
+  /**
+   *  @author Roberto Santiago Estrada Orozco
+   */
+
   describe('getInventory', () => {
     test('Given valid request, When getInventory, Then should return inventory list', async () => {
       // GIVEN
@@ -122,6 +127,9 @@ describe('Product Service', () => {
     });
   });
 
+  /**
+   * @author Roberto Santiago Estrada Orozco
+   */
   describe('getProductQuantity', () => {
     test('Given valid product ID, When getProductQuantity, Then should return product quantity', async () => {
       // GIVEN
