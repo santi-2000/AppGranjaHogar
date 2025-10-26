@@ -1,13 +1,14 @@
+/**
+ * Hook para manejar las entradas de productos.
+ * @author Dania Sagarnaga Macías
+ */
+
 import { useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { ProductsEntriesProxy } from "../proxies/ProductEntriesProxy";
 import { CreateProductEntrieVo } from "../valueobjects/product-entries/CreateProductEntrieVo";
 import { useRouter } from "expo-router";
 
-/**
- * Hook personalizado para manejar las entradas de productos.
- * @author Dania Sagarnaga Macías
- */
 export const useProductEntries = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,6 +18,13 @@ export const useProductEntries = () => {
   const router = useRouter()
 
   const createEntry = async (entryData) => {
+    /**
+     * Crea una nueva entrada de producto.
+     * @param {Object} entryData - Datos de la entrada del producto.
+     * @returns {Promise<void>} - Promesa que se resuelve cuando la entrada es creada.
+     * @throws {Error} - Si ocurre un error al crear la entrada.
+     */
+
     try {
       setLoading(true);
 
@@ -35,7 +43,6 @@ export const useProductEntries = () => {
       setLoading(false);
     }
   };
-
 
   return {
     loading,

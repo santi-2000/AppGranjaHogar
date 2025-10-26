@@ -1,15 +1,16 @@
-import { API_BASE_URL } from '@env';
-import * as SecureStore from 'expo-secure-store';
-
 /**
  * Proxy para las entradas de productos con servicios HTTP
  * @author Dania Sagarnaga Macías
  */
+
+import { API_BASE_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
+
 export const ProductsEntriesProxy = {
   /**
    * Crea una nueva entrada de producto
    * @param {Object} data - Datos de la nueva entrada
-   * @returns {Promise<Object>} Entrada creada + stock actualizado
+   * @returns {Promise<Object>} Entrada creada y stock actualizado
    */
   async createEntry(dataVO) {
     

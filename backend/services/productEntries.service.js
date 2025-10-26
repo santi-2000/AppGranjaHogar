@@ -1,3 +1,8 @@
+/**
+ * @file Servicio para gestionar las entradas de productos.
+ * @author Dania Sagarnaga Macías
+ */
+
 import { ProductEntryVO } from "../valueObjects/products/productEntries.vo.js";
 import { productEntriesModel } from "../models/productEntries.model.js";
 import { productsModel } from "../models/products.model.js"; 
@@ -5,19 +10,21 @@ import { notificationsModel } from "../models/notifications.model.js";
 import { getUnitNameById } from "../utils/units.util.js";
 
 class ProductEntriesService {
-  /**
-   * Crea una nueva entrada y actualiza el stock del producto.
-   * @param {Object} data - Datos de la nueva entrada
-   * @returns {Object} Resultado con mensaje, entrada creada y stock actualizado
-   * @author Dania Sagarnaga Macías
-   */
+ 
   async create(data) {
+    /**
+     * Crea una nueva entrada de producto y actualiza el stock del producto asociado.
+     * @param {Object} data - Datos de la entrada de producto.
+     * @returns {Object} Resultado con mensaje, entrada creada y stock actualizado.
+     */
+
     const entryVO = new ProductEntryVO(data);
     
     const product = await productsModel.getById(entryVO.product_id);
 
     if (!product) throw new Error("Producto no encontrado");
     if (!product.is_active) throw new Error("El producto no está activo");
+
 
     const id = await productEntriesModel.create(entryVO);
     const entry = { id, ...entryVO };
@@ -42,17 +49,20 @@ class ProductEntriesService {
     };
   }
 
-  /**
-   * Obtiene todas las entradas registradas.
-   */
   async getAll() {
+    /**
+     * Obtiene todas las entradas de productos.
+     * @returns {Array} Lista de entradas de productos.
+     */
     return await productEntriesModel.getAll();
   }
 
-  /**
-   * Obtiene una entrada específica por su ID.
-   */
   async getById(id) {
+    /**
+     * Obtiene una entrada de producto por su ID.
+     * @param {number} id - ID de la entrada de producto.
+     * @returns {Object} Entrada de producto correspondiente al ID.
+     */
     const entry = await productEntriesModel.getById(id);
     if (!entry) throw new Error("Entrada no encontrada");
     return entry;
