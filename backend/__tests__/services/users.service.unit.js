@@ -105,19 +105,48 @@ describe('User Service Unit Tests', () => {
   });
 
   describe('verifyService', () => {
+    test('Given valid token, When verify, Then should return user object', () => {
+      // GIVEN
+      const token = 'valid.fake.token';
+      const mockUser = { id: 1, username: 'testuser' };
+      jwtVerifyMock.mockReturnValue(mockUser);
+
+      // WHEN
+      const result = usersService.verify({ token });
+
+      // THEN
+      expect(result).toEqual(mockUser);
+      expect(jwtVerifyMock).toHaveBeenCalledWith(token, expect.any(String));
+    });
+
+    test('Given invalid token, When verify, Then should return false', () => {
+      // GIVEN
+      const token = 'invalid.fake.token';
+      jwtVerifyMock.mockImplementation(() => {
+        throw new Error('Invalid token');
+      });
+
+      // WHEN
+      const result = usersService.verify({ token });
+
+      // THEN
+      expect(result).toBe(false);
+      expect(jwtVerifyMock).toHaveBeenCalled();
+    });
+
     test('When service is called, Then it should call jwt.verify with the token', () => {
-        // GIVEN
-        const token = 'any.fake.token';
+      // GIVEN
+      const token = 'any.fake.token';
+      jwtVerifyMock.mockReturnValue({});
 
-        // WHEN
-        usersService.verify({ token });
+      // WHEN
+      usersService.verify({ token });
 
-        // THEN
-        expect(jwtVerifyMock).toHaveBeenCalledWith(
-          token,
-          expect.any(String),
-          expect.any(Function)
-        );
+      // THEN
+      expect(jwtVerifyMock).toHaveBeenCalledWith(
+        token,
+        expect.any(String)
+      );
     });
   });
 
