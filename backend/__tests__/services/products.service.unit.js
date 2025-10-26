@@ -1,6 +1,15 @@
 import { jest } from '@jest/globals';
 import { ProductVO } from '../../valueObjects/products/product.vo.js';
 
+/**
+ * Products Service Test
+ * @module ProductsServiceTest
+ * @description This module contains unit tests for the ProductsService.
+ *              It uses `jest` for mocking services and assertions.
+ * 
+ * @author Carlos Alejandro Ortiz Caro
+ */
+
 const createProductModelMock = jest.fn();
 const deleteProductModelMock = jest.fn();
 
@@ -19,7 +28,7 @@ afterEach(() => {
 });
 
 describe('Product Service', () => {
-  describe('createProductService', () => {
+  describe(' ', () => {
     test('Given valid data When create Then returns success and product', async () => {
       // GIVEN
       const inputData = [1, 1, 'Test Product', false, 10, 100];
