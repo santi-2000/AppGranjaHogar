@@ -6,6 +6,15 @@ import { ProductReportVO } from "../../valueObjects/reports/productReport.vo.js"
 import { ProductEntrieReportVO } from "../../valueObjects/reports/productEntrieReport.vo.js";
 import { ProductOutReportVO } from "../../valueObjects/reports/productOutReport.vo.js";
 
+/**
+ * Users Service Test
+ * @module Reports.Service.Unit
+ * @description This module contains unit tests for the ReportsService.
+ *              It uses `jest` for mocking services and assertions.
+ * 
+ * @author Yahir Alfredo Tapia Sifuentes
+ */
+
 const MOCK_LARGE_ROWS = Array.from({ length: 5000 }, (_, i) => ({
   name: `Product ${i}`,
   perishable: i % 2,
