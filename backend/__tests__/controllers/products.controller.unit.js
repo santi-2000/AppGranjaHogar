@@ -94,7 +94,7 @@ describe("Product Controller unit tests", () => {
         });
     });
 
-    test('Given invlaid product ID When delete Then error 400', async () => {
+    test('Given invalid product ID When delete Then error 400', async () => {
       await request(app)
         .delete('/v1/products/delete/invalid')
         .expect(400);

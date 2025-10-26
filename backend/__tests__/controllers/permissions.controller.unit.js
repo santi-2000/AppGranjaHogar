@@ -4,7 +4,7 @@ import app from '../../app.js';
 
 afterAll(async () => {
   await new Promise(resolve => setTimeout(resolve, 500));
-  process.exit(0);
+  //process.exit(0);
 });
 
 describe("Permission Controller integration tests", () => {
