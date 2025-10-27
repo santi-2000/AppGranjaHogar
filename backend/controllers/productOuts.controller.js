@@ -67,7 +67,7 @@ export class ProductOutController {
    * @returns {Promise<void>} Returns a single product out as JSON.
    * @example
    * // Request
-   * GET /api/v1/product-outs/10
+   * GET /v1/product-outs/10
    * * // Response (200)
    * {
    * "success": true,
@@ -102,7 +102,7 @@ export class ProductOutController {
    *
    * @example
    * // Request
-   * POST /api/v1/product-outs
+   * POST /v1/product-outs
    * {
    *   "user_id": 3,
    *   "product_id": 12,
